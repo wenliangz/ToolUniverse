@@ -136,7 +136,7 @@ class APIToolTemplate(BaseTool):
                 response.raise_for_status()
                 return response
                 
-            except (requests.ConnectionError, requests.Timeout) as e:
+            except (requests.ConnectionError, requests.Timeout):
                 if attempt == max_retries - 1:
                     raise
                 wait_time = 2 ** attempt  # Exponential backoff: 1s, 2s, 4s
