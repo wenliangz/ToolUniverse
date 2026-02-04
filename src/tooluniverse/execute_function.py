@@ -984,6 +984,19 @@ class ToolUniverse:
                     )
                     continue
 
+            # Check API key requirements for AgenticTool type
+            if each.get("type") == "AgenticTool":
+                from .agentic_tool import AgenticTool
+
+                if not AgenticTool.has_any_api_keys():
+                    self.logger.debug(
+                        f"Skipping agentic tool '{tool_name}' due to missing LLM API keys"
+                    )
+                    all_missing_keys.add(
+                        "LLM API keys (AZURE_OPENAI_API_KEY, OPENROUTER_API_KEY, or GEMINI_API_KEY)"
+                    )
+                    continue
+
             # Handle duplicates
             if tool_name not in tool_name_list:
                 tool_name_list.append(tool_name)
