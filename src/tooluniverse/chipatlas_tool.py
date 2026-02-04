@@ -40,10 +40,13 @@ class ChIPAtlasTool(BaseTool):
                 return self._search_datasets(arguments)
 
             else:
-                return {"status": "error", "error": f"Unknown operation: {operation}"}
+                return {
+                    "status": "error",
+                    "data": {"error": f"Unknown operation: {operation}"},
+                }
 
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "data": {"error": str(e)}}
 
     def _enrichment_analysis(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -65,9 +68,10 @@ class ChIPAtlasTool(BaseTool):
             # Note: The actual API endpoint needs to be discovered from ChIP-Atlas documentation
             # For now, we provide information about how to use it
 
+            result_data = {}
+
             if bed_data:
-                return {
-                    "status": "success",
+                result_data = {
                     "message": "ChIP-Atlas Enrichment Analysis requires web form submission",
                     "instruction": f"Submit BED data to: {CHIPATLAS_BASE_URL}/enrichment_analysis",
                     "parameters": {
@@ -78,89 +82,84 @@ class ChIPAtlasTool(BaseTool):
                     },
                     "note": "ChIP-Atlas enrichment API requires form-based submission. Use Python 'requests' library for programmatic access.",
                 }
+                return {"status": "success", "data": result_data}
             elif motif:
-                return {
-                    "status": "success",
+                result_data = {
                     "message": "Submit motif for enrichment analysis",
                     "motif": motif,
                     "url": f"{CHIPATLAS_BASE_URL}/enrichment_analysis",
                     "note": "Motif should be in IUPAC nucleic acid notation (ATGCWSMKRYBDHVN)",
                 }
+                return {"status": "success", "data": result_data}
             elif gene_list:
-                return {
-                    "status": "success",
+                result_data = {
                     "message": "Submit gene list for enrichment analysis",
                     "genes": gene_list if isinstance(gene_list, list) else [gene_list],
                     "distance_from_tss": distance,
                     "url": f"{CHIPATLAS_BASE_URL}/enrichment_analysis",
                     "note": "Use official gene symbols (HGNC, MGI, RGD, FlyBase, WormBase, SGD)",
                 }
+                return {"status": "success", "data": result_data}
             else:
                 return {
                     "status": "error",
-                    "error": "One of bed_data, motif, or gene_list must be provided",
+                    "data": {
+                        "error": "One of bed_data, motif, or gene_list must be provided"
+                    },
                 }
 
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "data": {"error": str(e)}}
 
     def _get_experiment_list(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
-        """Get metadata for all ChIP-Atlas experiments."""
+        """Get metadata for all ChIP-Atlas experiments.
+
+        Note: The experimentList.tab file is 344MB+ (433k+ experiments).
+        This method provides guidance on accessing the data rather than downloading.
+        """
         try:
-            # Download experimentList.tab
-            url = f"{CHIPATLAS_DATA_URL}/metadata/experimentList.tab"
-            response = requests.get(url, timeout=30)
-            response.raise_for_status()
-
-            # Parse TSV
-            lines = response.text.strip().split("\n")
-            experiments = []
-
-            # Filter by genome if specified
             genome = arguments.get("genome")
             antigen = arguments.get("antigen")
             cell_type = arguments.get("cell_type")
-            limit = arguments.get("limit", 100)
+            arguments.get("limit", 100)
 
-            for line in lines:
-                fields = line.split("\t")
-                if len(fields) >= 9:
-                    exp = {
-                        "experiment_id": fields[0],
-                        "genome": fields[1],
-                        "track_type_class": fields[2],
-                        "track_type": fields[3],
-                        "cell_type_class": fields[4],
-                        "cell_type": fields[5],
-                        "cell_type_description": fields[6],
-                        "processing_logs": fields[7],
-                        "title": fields[8],
-                    }
+            # The file is too large (344MB) to download efficiently
+            # Provide guidance instead
+            metadata_url = f"{CHIPATLAS_DATA_URL}/metadata/experimentList.tab"
+            web_search_url = f"{CHIPATLAS_BASE_URL}/search"
 
-                    # Apply filters
-                    if genome and exp["genome"] != genome:
-                        continue
-                    if antigen and antigen.lower() not in exp["track_type"].lower():
-                        continue
-                    if cell_type and cell_type.lower() not in exp["cell_type"].lower():
-                        continue
+            message = (
+                "ChIP-Atlas experimentList.tab is 344MB+ with 433,000+ experiments. "
+                "For efficient searching, use: (1) ChIPAtlas_search_datasets tool "
+                "for antigen/cell-type search, or (2) Download the file directly for "
+                "local analysis."
+            )
 
-                    experiments.append(exp)
+            filters = {}
+            if genome:
+                filters["genome"] = genome
+            if antigen:
+                filters["antigen"] = antigen
+            if cell_type:
+                filters["cell_type"] = cell_type
 
-                    if len(experiments) >= limit:
-                        break
-
-            return {
-                "status": "success",
-                "num_experiments": len(experiments),
-                "experiments": experiments,
-                "message": f"Showing first {limit} experiments"
-                if len(experiments) >= limit
-                else None,
+            result_data = {
+                "message": message,
+                "metadata_file_url": metadata_url,
+                "web_search_url": web_search_url,
+                "file_size": "344MB",
+                "total_experiments": "433,000+",
+                "filters_requested": filters if filters else "none",
+                "recommendation": (
+                    "Use ChIPAtlas_search_datasets tool for filtered searches by "
+                    "antigen or cell type, or download the metadata file for local analysis."
+                ),
             }
 
+            return {"status": "success", "data": result_data}
+
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "data": {"error": str(e)}}
 
     def _get_peak_data(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Get URL for peak-call data (BigWig or BED format)."""
@@ -171,7 +170,10 @@ class ChIPAtlasTool(BaseTool):
             format_type = arguments.get("format", "bigwig")
 
             if not experiment_id:
-                return {"status": "error", "error": "experiment_id is required"}
+                return {
+                    "status": "error",
+                    "data": {"error": "experiment_id is required"},
+                }
 
             if format_type.lower() == "bigwig":
                 url = f"{CHIPATLAS_DATA_URL}/{genome}/eachData/bw/{experiment_id}.bw"
@@ -182,11 +184,12 @@ class ChIPAtlasTool(BaseTool):
             else:
                 return {
                     "status": "error",
-                    "error": f"Invalid format: {format_type}. Use 'bigwig', 'bed', or 'bigbed'",
+                    "data": {
+                        "error": f"Invalid format: {format_type}. Use 'bigwig', 'bed', or 'bigbed'"
+                    },
                 }
 
-            return {
-                "status": "success",
+            result_data = {
                 "experiment_id": experiment_id,
                 "genome": genome,
                 "format": format_type,
@@ -194,8 +197,10 @@ class ChIPAtlasTool(BaseTool):
                 "message": "Use this URL to download peak data",
             }
 
+            return {"status": "success", "data": result_data}
+
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "data": {"error": str(e)}}
 
     def _search_datasets(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Search for datasets by antigen or cell type."""
@@ -207,10 +212,11 @@ class ChIPAtlasTool(BaseTool):
             if not antigen and not cell_type:
                 return {
                     "status": "error",
-                    "error": "Either antigen or cell_type must be provided",
+                    "data": {"error": "Either antigen or cell_type must be provided"},
                 }
 
             # Download antigenList.tab or celltypeList.tab
+            # These files are ~10MB each - reasonable to download fully
             if antigen:
                 url = f"{CHIPATLAS_DATA_URL}/metadata/antigenList.tab"
                 search_key = "antigen"
@@ -220,6 +226,7 @@ class ChIPAtlasTool(BaseTool):
                 search_key = "cell_type"
                 search_value = cell_type
 
+            # Download file (10MB, should complete in seconds)
             response = requests.get(url, timeout=30)
             response.raise_for_status()
 
@@ -231,8 +238,10 @@ class ChIPAtlasTool(BaseTool):
                 fields = line.split("\t")
                 if len(fields) >= 5:
                     if antigen:
+                        # Check genome match and search value
+                        # Format: Genome | Antigen_class | Antigen | Num_data | ID
                         if (
-                            fields[1] == genome
+                            fields[0] == genome
                             and search_value.lower() in fields[2].lower()
                         ):
                             results.append(
@@ -243,10 +252,12 @@ class ChIPAtlasTool(BaseTool):
                                     "num_experiments": fields[3],
                                     "experiment_ids": fields[4].split(",")[
                                         :10
-                                    ],  # Show first 10
+                                    ],  # Show first 10 IDs
                                 }
                             )
                     else:
+                        # Check genome match and search value for cell type
+                        # Format: Genome | Cell_type_class | Cell_type | Num_data | ID
                         if (
                             fields[0] == genome
                             and search_value.lower() in fields[2].lower()
@@ -259,12 +270,11 @@ class ChIPAtlasTool(BaseTool):
                                     "num_experiments": fields[3],
                                     "experiment_ids": fields[4].split(",")[
                                         :10
-                                    ],  # Show first 10
+                                    ],  # Show first 10 IDs
                                 }
                             )
 
-            return {
-                "status": "success",
+            result_data = {
                 "search_key": search_key,
                 "search_value": search_value,
                 "genome": genome,
@@ -272,5 +282,14 @@ class ChIPAtlasTool(BaseTool):
                 "results": results,
             }
 
+            return {"status": "success", "data": result_data}
+
+        except requests.exceptions.Timeout:
+            return {
+                "status": "error",
+                "data": {
+                    "error": "Request timeout - ChIP-Atlas server may be slow. Try again later."
+                },
+            }
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "data": {"error": str(e)}}

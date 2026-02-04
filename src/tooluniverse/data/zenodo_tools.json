@@ -126,45 +126,33 @@
     },
     "return_schema": {
       "type": "object",
-      "description": "ToolUniverse wrapper around Zenodo record response.",
+      "description": "Complete record metadata.",
       "additionalProperties": true,
       "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {
-          "type": ["object", "null"],
-          "description": "Complete record metadata.",
-          "additionalProperties": true,
+        "id": {"type": "integer"},
+        "doi": {"type": "string"},
+        "conceptdoi": {"type": "string"},
+        "metadata": {
+          "type": "object",
           "properties": {
-            "id": {"type": "integer"},
-            "doi": {"type": "string"},
-            "conceptdoi": {"type": "string"},
-            "metadata": {
-              "type": "object",
-              "properties": {
-                "title": {"type": "string"},
-                "description": {"type": "string"},
-                "creators": {"type": "array"},
-                "publication_date": {"type": "string"},
-                "keywords": {"type": "array"},
-                "license": {"type": "object"},
-                "upload_type": {"type": "string"},
-                "access_right": {"type": "string"},
-                "related_identifiers": {"type": "array"},
-                "version": {"type": "string"}
-              }
-            },
-            "links": {"type": "object"},
-            "files": {"type": "array"},
-            "created": {"type": "string"},
-            "updated": {"type": "string"}
+            "title": {"type": "string"},
+            "description": {"type": "string"},
+            "creators": {"type": "array"},
+            "publication_date": {"type": "string"},
+            "keywords": {"type": "array"},
+            "license": {"type": "object"},
+            "upload_type": {"type": "string"},
+            "access_right": {"type": "string"},
+            "related_identifiers": {"type": "array"},
+            "version": {"type": "string"}
           }
         },
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+        "links": {"type": "object"},
+        "files": {"type": "array"},
+        "created": {"type": "string"},
+        "updated": {"type": "string"},
+        "status": {"type": "string"}
+      }
     },
     "test_examples": [
       {"record_id": 1234567},
@@ -191,37 +179,24 @@
       "extract_path": "files"
     },
     "return_schema": {
-      "type": "object",
-      "description": "ToolUniverse wrapper around Zenodo files response.",
-      "additionalProperties": true,
-      "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {
-          "type": ["array", "null"],
-          "description": "List of files with download URLs.",
-          "items": {
+      "type": "array",
+      "description": "List of files with download URLs.",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "key": {"type": "string", "description": "File name"},
+          "size": {"type": "integer", "description": "File size in bytes"},
+          "checksum": {"type": "string", "description": "MD5 checksum"},
+          "type": {"type": "string", "description": "MIME type"},
+          "links": {
             "type": "object",
-            "additionalProperties": true,
             "properties": {
-              "key": {"type": "string", "description": "File name"},
-              "size": {"type": "integer", "description": "File size in bytes"},
-              "checksum": {"type": "string", "description": "MD5 checksum"},
-              "type": {"type": "string", "description": "MIME type"},
-              "links": {
-                "type": "object",
-                "properties": {
-                  "self": {"type": "string", "description": "Download URL"}
-                }
-              }
+              "self": {"type": "string", "description": "Download URL"}
             }
           }
-        },
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+        }
+      }
     },
     "test_examples": [
       {"record_id": 1234567},
@@ -249,41 +224,39 @@
       }
     },
     "fields": {
-      "endpoint": "https://zenodo.org/api/licenses",
+      "endpoint": "https://zenodo.org/api/vocabularies/licenses",
       "method": "GET"
     },
     "return_schema": {
       "type": "object",
-      "description": "ToolUniverse wrapper around Zenodo licenses response.",
+      "description": "Zenodo licenses search response.",
       "additionalProperties": true,
       "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {
-          "type": ["array", "null"],
-          "description": "List of available licenses.",
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "id": {"type": "string"},
-              "title": {"type": "string"},
-              "url": {"type": "string"},
-              "description": {"type": "string"},
-              "maintainer": {"type": "string"},
-              "domain_content": {"type": "boolean"},
-              "domain_data": {"type": "boolean"},
-              "domain_software": {"type": "boolean"},
-              "status": {"type": "string"}
-            }
+        "hits": {
+          "type": "object",
+          "properties": {
+            "hits": {
+              "type": "array",
+              "description": "List of available licenses.",
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "id": {"type": "string"},
+                  "title": {"type": "object"},
+                  "description": {"type": "object"},
+                  "props": {"type": "object"},
+                  "tags": {"type": "array"}
+                }
+              }
+            },
+            "total": {"type": "integer"}
           }
         },
-        "count": {"type": ["integer", "null"]},
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+        "sortBy": {"type": "string"},
+        "page": {"type": "integer"},
+        "links": {"type": "object"}
+      }
     },
     "test_examples": [
       {},
@@ -306,44 +279,30 @@
       "required": ["license_id"]
     },
     "fields": {
-      "endpoint": "https://zenodo.org/api/licenses/{license_id}",
+      "endpoint": "https://zenodo.org/api/vocabularies/licenses/{license_id}",
       "method": "GET"
     },
     "return_schema": {
       "type": "object",
-      "description": "ToolUniverse wrapper around Zenodo license response.",
+      "description": "Detailed license information.",
       "additionalProperties": true,
       "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {
-          "type": ["object", "null"],
-          "description": "Detailed license information.",
-          "additionalProperties": true,
-          "properties": {
-            "id": {"type": "string"},
-            "title": {"type": "string"},
-            "url": {"type": "string"},
-            "description": {"type": "string"},
-            "maintainer": {"type": "string"},
-            "domain_content": {"type": "boolean"},
-            "domain_data": {"type": "boolean"},
-            "domain_software": {"type": "boolean"},
-            "status": {"type": "string"},
-            "od_conformance": {"type": "string"},
-            "osd_conformance": {"type": "string"}
-          }
-        },
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+        "id": {"type": "string"},
+        "title": {"type": "object"},
+        "description": {"type": "object"},
+        "props": {"type": "object"},
+        "tags": {"type": "array"},
+        "created": {"type": "string"},
+        "updated": {"type": "string"},
+        "links": {"type": "object"},
+        "revision_id": {"type": "integer"},
+        "type": {"type": "string"}
+      }
     },
     "test_examples": [
       {"license_id": "cc-by-4.0"},
-      {"license_id": "MIT"},
-      {"license_id": "Apache-2.0"}
+      {"license_id": "mit"},
+      {"license_id": "apache-2.0"}
     ]
   }
 ]

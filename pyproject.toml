@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tooluniverse"
-version = "1.0.16.1"
+version = "1.0.17"
 description = "A comprehensive collection of scientific tools for Agentic AI, offering integration with the ToolUniverse SDK and MCP Server to support advanced scientific workflows."
 authors = [
     { name = "Shanghua Gao", email = "shanghuagao@gmail.com" }
@@ -125,8 +125,11 @@ space = [
     "pyyaml>=6.0.0",
     "requests>=2.32.0",
 ]
+bioinformatics = [
+    "biopython>=1.80",
+]
 all = [
-    "tooluniverse[dev,docs,graph,visualization,space,embedding,ml]",
+    "tooluniverse[dev,docs,graph,visualization,space,embedding,ml,bioinformatics]",
 ]
 build = [
     "pyinstaller>=6.0.0",

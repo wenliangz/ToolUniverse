@@ -33,7 +33,7 @@
     ],
     "test_examples": [
       {
-        "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+        "smiles": ["CC(=O)OC1=CC=CC=C1C(=O)O"]
       }
     ],
     "return_schema": {
@@ -157,7 +157,7 @@
     ],
     "test_examples": [
       {
-        "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+        "smiles": ["CC(=O)OC1=CC=CC=C1C(=O)O"]
       }
     ],
     "return_schema": {
@@ -274,7 +274,7 @@
     ],
     "test_examples": [
       {
-        "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+        "smiles": ["CC(=O)OC1=CC=CC=C1C(=O)O"]
       }
     ],
     "return_schema": {
@@ -397,7 +397,7 @@
     ],
     "test_examples": [
       {
-        "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+        "smiles": ["CC(=O)OC1=CC=CC=C1C(=O)O"]
       }
     ],
     "return_schema": {
@@ -518,7 +518,7 @@
     ],
     "test_examples": [
       {
-        "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+        "smiles": ["CC(=O)OC1=CC=CC=C1C(=O)O"]
       }
     ],
     "return_schema": {
@@ -639,7 +639,7 @@
     ],
     "test_examples": [
       {
-        "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+        "smiles": ["CC(=O)OC1=CC=CC=C1C(=O)O"]
       }
     ],
     "return_schema": {
@@ -762,7 +762,7 @@
     ],
     "test_examples": [
       {
-        "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+        "smiles": ["CC(=O)OC1=CC=CC=C1C(=O)O"]
       }
     ],
     "return_schema": {
@@ -883,7 +883,7 @@
     ],
     "test_examples": [
       {
-        "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+        "smiles": ["CC(=O)OC1=CC=CC=C1C(=O)O"]
       }
     ],
     "return_schema": {
@@ -1002,7 +1002,7 @@
     ],
     "test_examples": [
       {
-        "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O"
+        "smiles": ["CC(=O)OC1=CC=CC=C1C(=O)O"]
       }
     ],
     "return_schema": {

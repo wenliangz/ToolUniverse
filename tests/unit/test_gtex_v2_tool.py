@@ -66,11 +66,13 @@ class TestGTExV2Tools:
         assert result.get("status") == "success" or "error" in result
         
         if result.get("status") == "success":
-            assert "datasets" in result
-            assert isinstance(result["datasets"], list)
+            # Check if data is nested or flat
+            datasets = result.get("data", result.get("datasets"))
+            assert datasets is not None
+            assert isinstance(datasets, list)
             
-            if result["datasets"]:
-                dataset = result["datasets"][0]
+            if datasets:
+                dataset = datasets[0]
                 assert "datasetId" in dataset
                 assert "gencodeVersion" in dataset
                 assert "genomeBuild" in dataset

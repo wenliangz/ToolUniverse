@@ -55,7 +55,7 @@
                                 "description": "The unique identifier (UUID) for the project. This ID is used to retrieve file manifests."
                             },
                             "organ": {
-                                "type": "array",
+                                "type": ["array", "null"],
                                 "description": "A list of organs associated with the project."
                             },
                             "disease": {

@@ -230,12 +230,11 @@
     },
     "test_examples": [
       {
-        "query": "machine learning optimization",
+        "query": "machine learning",
         "exact_match": false,
-        "sort": "relevance",
+        "sort": "filingDate desc",
         "offset": 0,
-        "limit": 1,
-        "rangeFilters": "[]"
+        "limit": 1
       }
     ]
   },
@@ -442,7 +441,7 @@
     },
     "test_examples": [
       {
-        "applicationNumberText": "The quick brown fox jumps over the lazy dog."
+        "applicationNumberText": "16123456"
       }
     ]
   },
@@ -526,7 +525,7 @@
     },
     "test_examples": [
       {
-        "applicationNumberText": "The quick brown fox jumps over the lazy dog."
+        "applicationNumberText": "16123456"
       }
     ]
   },
@@ -676,7 +675,7 @@
     },
     "test_examples": [
       {
-        "applicationNumberText": "The quick brown fox jumps over the lazy dog."
+        "applicationNumberText": "16123456"
       }
     ]
   },
@@ -758,7 +757,7 @@
     },
     "test_examples": [
       {
-        "applicationNumberText": "The quick brown fox jumps over the lazy dog."
+        "applicationNumberText": "16123456"
       }
     ]
   },
@@ -858,7 +857,7 @@
     },
     "test_examples": [
       {
-        "applicationNumberText": "The quick brown fox jumps over the lazy dog."
+        "applicationNumberText": "16123456"
       }
     ]
   }

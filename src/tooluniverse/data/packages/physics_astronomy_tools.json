@@ -29,23 +29,23 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Home page URL"
         },
         "documentation": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Documentation URL"
         },
         "repository": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Source code repository"
         },
         "python_versions": {
@@ -82,7 +82,7 @@
           "description": "Source of information (pypi or local)"
         },
         "usage_example": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Code snippet demonstrating basic usage"
         },
         "quick_start": {
@@ -125,23 +125,23 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Home page URL"
         },
         "documentation": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Documentation URL"
         },
         "repository": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Source code repository"
         },
         "python_versions": {
@@ -178,7 +178,7 @@
           "description": "Source of information (pypi or local)"
         },
         "usage_example": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Code snippet demonstrating basic usage"
         },
         "quick_start": {
@@ -221,23 +221,23 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Home page URL"
         },
         "documentation": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Documentation URL"
         },
         "repository": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Source code repository"
         },
         "python_versions": {
@@ -274,7 +274,7 @@
           "description": "Source of information (pypi or local)"
         },
         "usage_example": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Code snippet demonstrating basic usage"
         },
         "quick_start": {
@@ -317,23 +317,23 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Home page URL"
         },
         "documentation": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Documentation URL"
         },
         "repository": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Source code repository"
         },
         "python_versions": {
@@ -370,7 +370,7 @@
           "description": "Source of information (pypi or local)"
         },
         "usage_example": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Code snippet demonstrating basic usage"
         },
         "quick_start": {
@@ -413,23 +413,23 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Home page URL"
         },
         "documentation": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Documentation URL"
         },
         "repository": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Source code repository"
         },
         "python_versions": {
@@ -466,7 +466,7 @@
           "description": "Source of information (pypi or local)"
         },
         "usage_example": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Code snippet demonstrating basic usage"
         },
         "quick_start": {

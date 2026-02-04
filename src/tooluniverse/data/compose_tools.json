@@ -209,10 +209,7 @@
         }
       },
       "required": [
-        "tool_configs",
-        "tool_type_mappings",
-        "add_existing_tooluniverse_labels",
-        "max_new_tooluniverse_labels"
+        "tool_configs"
       ]
     },
     "auto_load_dependencies": true,
@@ -242,8 +239,8 @@
       }
     ],
     "return_schema": {
-      "type": "object",
-      "description": "Output of the tool execution.",
+      "type": ["object", "array"],
+      "description": "Output of the tool execution - can be object or array of tool metadata configs",
       "properties": {}
     }
   },
@@ -277,10 +274,7 @@
         }
       },
       "required": [
-        "tool_configs",
-        "max_tools",
-        "output_path",
-        "save_intermediate_every"
+        "tool_configs"
       ]
     },
     "auto_load_dependencies": true,
@@ -305,7 +299,7 @@
       }
     ],
     "return_schema": {
-      "type": "object",
+      "type": ["object", "null"],
       "description": "Output of the tool execution.",
       "properties": {}
     }

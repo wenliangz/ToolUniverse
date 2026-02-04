@@ -2,7 +2,7 @@
   {
     "type": "NCBIBlastTool",
     "name": "BLAST_nucleotide_search",
-    "description": "Search nucleotide sequences using NCBI BLAST blastn against nucleotide databases",
+    "description": "Search nucleotide sequences using NCBI BLAST blastn against nucleotide databases. Requires Biopython (install with: pip install biopython)",
     "parameter": {
       "type": "object",
       "properties": {
@@ -57,7 +57,7 @@
   {
     "type": "NCBIBlastTool",
     "name": "BLAST_protein_search",
-    "description": "Search protein sequences using NCBI BLAST blastp against protein databases",
+    "description": "Search protein sequences using NCBI BLAST blastp against protein databases. Requires Biopython (install with: pip install biopython)",
     "parameter": {
       "type": "object",
       "properties": {

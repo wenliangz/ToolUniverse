@@ -21,37 +21,19 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "description": "InterPro API response for protein domains",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Status of the request (success or error)"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of InterPro entries matching the protein",
-          "items": {
+      "type": "array",
+      "description": "List of InterPro entries matching the protein",
+      "items": {
+        "type": "object",
+        "properties": {
+          "metadata": {
             "type": "object",
-            "properties": {
-              "metadata": {
-                "type": "object",
-                "description": "Entry metadata including accession, name, type, description"
-              }
-            }
+            "description": "Entry metadata including accession, name, type, description"
+          },
+          "proteins": {
+            "type": "array",
+            "description": "List of protein information"
           }
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of entries found"
-        },
-        "url": {
-          "type": "string",
-          "description": "The API URL that was called"
-        },
-        "error": {
-          "type": "string",
-          "description": "Error message if request failed"
         }
       }
     },
@@ -90,37 +72,15 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "description": "InterPro API search response",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Status of the request (success or error)"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of matching InterPro entries",
-          "items": {
+      "type": "array",
+      "description": "List of matching InterPro entries",
+      "items": {
+        "type": "object",
+        "properties": {
+          "metadata": {
             "type": "object",
-            "properties": {
-              "metadata": {
-                "type": "object",
-                "description": "Entry metadata including accession, name, type, description"
-              }
-            }
+            "description": "Entry metadata including accession, name, type, description"
           }
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of entries returned (not total count)"
-        },
-        "url": {
-          "type": "string",
-          "description": "The API URL that was called"
-        },
-        "error": {
-          "type": "string",
-          "description": "Error message if request failed"
         }
       }
     },

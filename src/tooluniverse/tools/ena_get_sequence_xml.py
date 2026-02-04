@@ -14,7 +14,7 @@ def ena_get_sequence_xml(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> str:
     """
     Get metadata in XML format from ENA for Study, Sample, Run, Experiment, Analysis, or Taxon record...
 
@@ -31,7 +31,7 @@ def ena_get_sequence_xml(
 
     Returns
     -------
-    dict[str, Any]
+    str
     """
     # Handle mutable defaults to avoid B006 linting error
 

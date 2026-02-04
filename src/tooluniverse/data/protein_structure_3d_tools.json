@@ -1,8 +1,11 @@
 [
   {
     "name": "visualize_protein_structure_3d",
-    "description": "Visualize 3D protein structures using py3Dmol. Supports PDB IDs, PDB file content, and various visualization styles including cartoon, surface, and stick representations.",
+    "description": "Visualize 3D protein structures using py3Dmol. Supports PDB IDs, PDB file content, and various visualization styles including cartoon, surface, and stick representations. Prerequisites: Requires 'py3Dmol' package (install: pip install tooluniverse[visualization]).",
     "type": "ProteinStructure3DTool",
+    "required_packages": [
+      "py3Dmol"
+    ],
     "parameter": {
       "type": "object",
       "properties": {

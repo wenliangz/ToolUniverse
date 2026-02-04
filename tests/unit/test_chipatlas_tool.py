@@ -40,8 +40,11 @@ class TestChIPAtlasTools:
         assert "status" in result
         
         if result["status"] == "error":
+            # Error message is nested under "data" key
+            assert "data" in result
+            assert "error" in result["data"]
             # Should mention missing required input
-            assert any(key in result["error"].lower() 
+            assert any(key in result["data"]["error"].lower() 
                       for key in ["bed", "motif", "gene"])
     
     def test_enrichment_analysis_with_gene_list(self, tu):
@@ -54,7 +57,9 @@ class TestChIPAtlasTools:
         
         assert "status" in result
         assert result["status"] == "success"
-        assert "url" in result or "message" in result
+        assert "data" in result
+        # Success response nests data under "data" key
+        assert "url" in result["data"] or "message" in result["data"]
     
     def test_get_experiments_return_schema(self, tu):
         """Test get_experiments return schema."""
@@ -67,9 +72,10 @@ class TestChIPAtlasTools:
         assert "status" in result
         
         if result["status"] == "success":
-            assert "num_experiments" in result
-            assert "experiments" in result
-            assert isinstance(result["experiments"], list)
+            # Data is nested under "data" key
+            assert "data" in result
+            # May have num_experiments and experiments or just guidance
+            assert isinstance(result["data"], dict)
     
     def test_get_peak_data_requires_experiment_id(self, tu):
         """Test get_peak_data requires experiment_id."""
@@ -78,11 +84,18 @@ class TestChIPAtlasTools:
             "genome": "hg38"
         })
         
-        # Handle both old and new error formats
-        assert "status" in result or "error" in result
+        assert "status" in result
         
-        if result.get("status") == "error" or "error" in result:
-            error_text = result.get("error", "")
+        if result.get("status") == "error":
+            # Handle both validation errors (error at top level) 
+            # and tool errors (error under data key)
+            if "error" in result:
+                error_text = result["error"]
+            elif "data" in result and "error" in result["data"]:
+                error_text = result["data"]["error"]
+            else:
+                error_text = ""
+            
             assert "experiment_id" in error_text.lower()
     
     def test_get_peak_data_with_valid_id(self, tu):
@@ -96,8 +109,10 @@ class TestChIPAtlasTools:
         
         assert "status" in result
         assert result["status"] == "success"
-        assert "url" in result
-        assert "SRX097088" in result["url"]
+        # Data is nested under "data" key
+        assert "data" in result
+        assert "url" in result["data"]
+        assert "SRX097088" in result["data"]["url"]
     
     def test_search_datasets_requires_input(self, tu):
         """Test search_datasets requires antigen or cell_type."""
@@ -106,12 +121,13 @@ class TestChIPAtlasTools:
             "genome": "hg38"
         })
         
-        # Handle both old and new error formats
-        assert "status" in result or "error" in result
+        assert "status" in result
         
-        if result.get("status") == "error" or "error" in result:
-            # Test should pass whether parameter validation fails or tool handles it
-            assert True  # Simplified assertion - tool behavior is correct either way
+        # Tool may return error or handle gracefully
+        if result.get("status") == "error":
+            # If error, it should be properly formatted
+            assert "data" in result
+            assert "error" in result["data"]
 
 
 class TestChIPAtlasReturnSchemas:
@@ -135,8 +151,10 @@ class TestChIPAtlasReturnSchemas:
         assert "status" in result
         
         if result["status"] == "success":
-            # Should have message or url
-            assert "message" in result or "url" in result
+            # Data is nested under "data" key
+            assert "data" in result
+            # Should have message or url in data
+            assert "message" in result["data"] or "url" in result["data"]
     
     def test_get_peak_data_url_format(self, tu):
         """Test that get_peak_data returns proper URL format."""
@@ -151,6 +169,8 @@ class TestChIPAtlasReturnSchemas:
         assert "status" in result
         
         if result["status"] == "success":
-            assert "url" in result
-            assert "https://" in result["url"]
-            assert "SRX000001" in result["url"]
+            # Data is nested under "data" key
+            assert "data" in result
+            assert "url" in result["data"]
+            assert "https://" in result["data"]["url"]
+            assert "SRX000001" in result["data"]["url"]

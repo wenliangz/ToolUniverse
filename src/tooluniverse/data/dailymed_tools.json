@@ -122,14 +122,13 @@
         }
       },
       "required": [
-        "setid",
-        "format"
+        "setid"
       ]
     },
     "test_examples": [
       {
         "setid": "030d9bca-a934-6ef9-e063-6394a90a8277",
-        "format": "json"
+        "format": "xml"
       }
     ],
     "return_schema": {

@@ -1,7 +1,7 @@
 """
 ToolUniverse Tools
 
-Type-safe Python interface to 1079 scientific tools.
+Type-safe Python interface to 1091 scientific tools.
 Each tool is in its own module for minimal import overhead.
 
 Usage:
@@ -62,7 +62,6 @@ from .BiGG_get_model_reactions import BiGG_get_model_reactions
 from .BiGG_get_reaction import BiGG_get_reaction
 from .BiGG_list_models import BiGG_list_models
 from .BiGG_search import BiGG_search
-from .BioGRID_get_interactions import BioGRID_get_interactions
 from .BioModels_download_model import BioModels_download_model
 from .BioModels_get_model import BioModels_get_model
 from .BioModels_list_files import BioModels_list_files
@@ -612,10 +611,12 @@ from .HPA_get_rna_expression_in_specific_tissues import (
 from .HPA_get_subcellular_location import HPA_get_subcellular_location
 from .HPA_search_genes_by_query import HPA_search_genes_by_query
 from .HypothesisGenerator import HypothesisGenerator
+from .IntentAnalyzerAgent import IntentAnalyzerAgent
 from .InterPro_get_domain_details import InterPro_get_domain_details
 from .InterPro_get_protein_domains import InterPro_get_protein_domains
 from .InterPro_search_domains import InterPro_search_domains
 from .JASPAR_get_transcription_factors import JASPAR_get_transcription_factors
+from .KeywordExtractorAgent import KeywordExtractorAgent
 from .LabelGenerator import LabelGenerator
 from .LiteratureContextReviewer import LiteratureContextReviewer
 from .LiteratureSearchTool import LiteratureSearchTool
@@ -646,6 +647,7 @@ from .MetabolomicsWorkbench_search_compound_by_name import (
     MetabolomicsWorkbench_search_compound_by_name,
 )
 from .MethodologyRigorReviewer import MethodologyRigorReviewer
+from .MultiAgentLiteratureSearch import MultiAgentLiteratureSearch
 from .MyChem_get_chemical_annotation import MyChem_get_chemical_annotation
 from .MyChem_query_chemicals import MyChem_query_chemicals
 from .MyGene_batch_query import MyGene_batch_query
@@ -831,6 +833,7 @@ from .OpenTargets_search_category_counts_by_query_string import (
 )
 from .OpenTargets_target_disease_evidence import OpenTargets_target_disease_evidence
 from .OutputSummarizationComposer import OutputSummarizationComposer
+from .OverallSummaryAgent import OverallSummaryAgent
 from .PDB_search_similar_structures import PDB_search_similar_structures
 from .PMC_search_papers import PMC_search_papers
 from .PRIDE_get_project import PRIDE_get_project
@@ -870,6 +873,7 @@ from .PubMed_search_articles import PubMed_search_articles
 from .PubTator3_EntityAutocomplete import PubTator3_EntityAutocomplete
 from .PubTator3_LiteratureSearch import PubTator3_LiteratureSearch
 from .PyPIPackageInspector import PyPIPackageInspector
+from .QualityCheckerAgent import QualityCheckerAgent
 from .QuestionRephraser import QuestionRephraser
 from .RNAcentral_get_by_accession import RNAcentral_get_by_accession
 from .RNAcentral_search import RNAcentral_search
@@ -901,6 +905,7 @@ from .Reactome_query_by_ids import Reactome_query_by_ids
 from .ReferenceInfoAnalyzer import ReferenceInfoAnalyzer
 from .RegulomeDB_query_variant import RegulomeDB_query_variant
 from .ReproducibilityTransparencyReviewer import ReproducibilityTransparencyReviewer
+from .ResultSummarizerAgent import ResultSummarizerAgent
 from .ResultsInterpretationReviewer import ResultsInterpretationReviewer
 from .Rfam_accession_to_id import Rfam_accession_to_id
 from .Rfam_get_alignment import Rfam_get_alignment
@@ -1012,6 +1017,8 @@ from .cancer_biomarkers_disease_target_score import (
 from .cancer_gene_census_disease_target_score import (
     cancer_gene_census_disease_target_score,
 )
+from .cdc_data_get_dataset import cdc_data_get_dataset
+from .cdc_data_search_datasets import cdc_data_search_datasets
 from .cellosaurus_get_cell_line_info import cellosaurus_get_cell_line_info
 from .cellosaurus_query_converter import cellosaurus_query_converter
 from .cellosaurus_search_cell_lines import cellosaurus_search_cell_lines
@@ -1422,6 +1429,7 @@ from .get_xarray_info import get_xarray_info
 from .get_xesmf_info import get_xesmf_info
 from .get_xgboost_info import get_xgboost_info
 from .get_zarr_info import get_zarr_info
+from .ghost_tool import ghost_tool
 from .gnomad_get_gene import gnomad_get_gene
 from .gnomad_get_gene_constraints import gnomad_get_gene_constraints
 from .gnomad_get_region import gnomad_get_region
@@ -1444,6 +1452,10 @@ from .gwas_search_snps import gwas_search_snps
 from .gwas_search_studies import gwas_search_studies
 from .hca_get_file_manifest import hca_get_file_manifest
 from .hca_search_projects import hca_search_projects
+from .health_disparities_get_county_rankings_info import (
+    health_disparities_get_county_rankings_info,
+)
+from .health_disparities_get_svi_info import health_disparities_get_svi_info
 from .humanbase_ppi_analysis import humanbase_ppi_analysis
 from .icd_search_codes import icd_search_codes
 from .iedb_get_epitope_antigens import iedb_get_epitope_antigens
@@ -1493,6 +1505,8 @@ from .metabolights_get_study_protocols import metabolights_get_study_protocols
 from .metabolights_get_study_samples import metabolights_get_study_samples
 from .metabolights_list_studies import metabolights_list_studies
 from .metabolights_search_studies import metabolights_search_studies
+from .nhanes_get_dataset_info import nhanes_get_dataset_info
+from .nhanes_search_datasets import nhanes_search_datasets
 from .odphp_itemlist import odphp_itemlist
 from .odphp_myhealthfinder import odphp_myhealthfinder
 from .odphp_outlink_fetch import odphp_outlink_fetch
@@ -1585,7 +1599,6 @@ __all__ = [
     "BiGG_get_reaction",
     "BiGG_list_models",
     "BiGG_search",
-    "BioGRID_get_interactions",
     "BioModels_download_model",
     "BioModels_get_model",
     "BioModels_list_files",
@@ -1911,10 +1924,12 @@ __all__ = [
     "HPA_get_subcellular_location",
     "HPA_search_genes_by_query",
     "HypothesisGenerator",
+    "IntentAnalyzerAgent",
     "InterPro_get_domain_details",
     "InterPro_get_protein_domains",
     "InterPro_search_domains",
     "JASPAR_get_transcription_factors",
+    "KeywordExtractorAgent",
     "LabelGenerator",
     "LiteratureContextReviewer",
     "LiteratureSearchTool",
@@ -1937,6 +1952,7 @@ __all__ = [
     "MetabolomicsWorkbench_search_by_mz",
     "MetabolomicsWorkbench_search_compound_by_name",
     "MethodologyRigorReviewer",
+    "MultiAgentLiteratureSearch",
     "MyChem_get_chemical_annotation",
     "MyChem_query_chemicals",
     "MyGene_batch_query",
@@ -2014,6 +2030,7 @@ __all__ = [
     "OpenTargets_search_category_counts_by_query_string",
     "OpenTargets_target_disease_evidence",
     "OutputSummarizationComposer",
+    "OverallSummaryAgent",
     "PDB_search_similar_structures",
     "PMC_search_papers",
     "PRIDE_get_project",
@@ -2047,6 +2064,7 @@ __all__ = [
     "PubTator3_EntityAutocomplete",
     "PubTator3_LiteratureSearch",
     "PyPIPackageInspector",
+    "QualityCheckerAgent",
     "QuestionRephraser",
     "RNAcentral_get_by_accession",
     "RNAcentral_search",
@@ -2074,6 +2092,7 @@ __all__ = [
     "ReferenceInfoAnalyzer",
     "RegulomeDB_query_variant",
     "ReproducibilityTransparencyReviewer",
+    "ResultSummarizerAgent",
     "ResultsInterpretationReviewer",
     "Rfam_accession_to_id",
     "Rfam_get_alignment",
@@ -2169,6 +2188,8 @@ __all__ = [
     "call_agentic_human",
     "cancer_biomarkers_disease_target_score",
     "cancer_gene_census_disease_target_score",
+    "cdc_data_get_dataset",
+    "cdc_data_search_datasets",
     "cellosaurus_get_cell_line_info",
     "cellosaurus_query_converter",
     "cellosaurus_search_cell_lines",
@@ -2511,6 +2532,7 @@ __all__ = [
     "get_xesmf_info",
     "get_xgboost_info",
     "get_zarr_info",
+    "ghost_tool",
     "gnomad_get_gene",
     "gnomad_get_gene_constraints",
     "gnomad_get_region",
@@ -2533,6 +2555,8 @@ __all__ = [
     "gwas_search_studies",
     "hca_get_file_manifest",
     "hca_search_projects",
+    "health_disparities_get_county_rankings_info",
+    "health_disparities_get_svi_info",
     "humanbase_ppi_analysis",
     "icd_search_codes",
     "iedb_get_epitope_antigens",
@@ -2578,6 +2602,8 @@ __all__ = [
     "metabolights_get_study_samples",
     "metabolights_list_studies",
     "metabolights_search_studies",
+    "nhanes_get_dataset_info",
+    "nhanes_search_datasets",
     "odphp_itemlist",
     "odphp_myhealthfinder",
     "odphp_outlink_fetch",

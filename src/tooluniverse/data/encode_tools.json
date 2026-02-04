@@ -52,7 +52,7 @@
                 "properties": {
                   "accession": {"type": "string"},
                   "assay_title": {"type": "string"},
-                  "target": {"type": "object"},
+                  "target": {"type": ["object", "string"]},
                   "organism": {"type": "string"},
                   "status": {"type": "string"}
                 }
@@ -159,29 +159,17 @@
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {
-          "type": ["object", "null"],
-          "additionalProperties": true,
-          "properties": {
-            "accession": {"type": "string"},
-            "assay_title": {"type": "string"},
-            "description": {"type": "string"},
-            "biosample_summary": {"type": "string"},
-            "target": {"type": "object"},
-            "replicates": {"type": "array"},
-            "files": {"type": "array"},
-            "status": {"type": "string"},
-            "lab": {"type": "object"},
-            "award": {"type": "string"}
-          }
-        },
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+        "accession": {"type": "string"},
+        "assay_title": {"type": "string"},
+        "description": {"type": "string"},
+        "biosample_summary": {"type": "string"},
+        "target": {"type": ["object", "string"]},
+        "replicates": {"type": "array"},
+        "files": {"type": "array"},
+        "status": {"type": "string"},
+        "lab": {"type": ["object", "string"]},
+        "award": {"type": "string"}
+      }
     },
     "test_examples": [
       {"accession": "ENCSR000AKS"},
@@ -210,31 +198,19 @@
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {
-          "type": ["object", "null"],
-          "additionalProperties": true,
-          "properties": {
-            "accession": {"type": "string"},
-            "file_format": {"type": "string"},
-            "file_type": {"type": "string"},
-            "output_type": {"type": "string"},
-            "dataset": {"type": "string"},
-            "file_size": {"type": "integer"},
-            "md5sum": {"type": "string"},
-            "href": {"type": "string"},
-            "assembly": {"type": "string"},
-            "biological_replicates": {"type": "array"},
-            "technical_replicates": {"type": "array"},
-            "status": {"type": "string"}
-          }
-        },
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+        "accession": {"type": "string"},
+        "file_format": {"type": "string"},
+        "file_type": {"type": "string"},
+        "output_type": {"type": "string"},
+        "dataset": {"type": "string"},
+        "file_size": {"type": "integer"},
+        "md5sum": {"type": "string"},
+        "href": {"type": "string"},
+        "assembly": {"type": "string"},
+        "biological_replicates": {"type": "array"},
+        "technical_replicates": {"type": "array"},
+        "status": {"type": "string"}
+      }
     },
     "test_examples": [
       {"accession": "ENCFF001JXO"},
@@ -289,7 +265,7 @@
                 "type": "object",
                 "properties": {
                   "accession": {"type": "string"},
-                  "biosample_ontology": {"type": "object"},
+                  "biosample_ontology": {"type": ["object", "string"]},
                   "organism": {"type": "string"},
                   "life_stage": {"type": "string"},
                   "summary": {"type": "string"}
@@ -328,32 +304,20 @@
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {
-          "type": ["object", "null"],
-          "additionalProperties": true,
-          "properties": {
-            "accession": {"type": "string"},
-            "biosample_ontology": {"type": "object"},
-            "organism": {"type": "string"},
-            "life_stage": {"type": "string"},
-            "age": {"type": "string"},
-            "age_units": {"type": "string"},
-            "sex": {"type": "string"},
-            "donor": {"type": "object"},
-            "treatments": {"type": "array"},
-            "genetic_modifications": {"type": "array"},
-            "description": {"type": "string"},
-            "summary": {"type": "string"},
-            "status": {"type": "string"}
-          }
-        },
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+        "accession": {"type": "string"},
+        "biosample_ontology": {"type": ["object", "string"]},
+        "organism": {"type": "string"},
+        "life_stage": {"type": "string"},
+        "age": {"type": "string"},
+        "age_units": {"type": "string"},
+        "sex": {"type": "string"},
+        "donor": {"type": ["object", "string"]},
+        "treatments": {"type": "array"},
+        "genetic_modifications": {"type": "array"},
+        "description": {"type": "string"},
+        "summary": {"type": "string"},
+        "status": {"type": "string"}
+      }
     },
     "test_examples": [
       {"accession": "ENCBS000AAA"},

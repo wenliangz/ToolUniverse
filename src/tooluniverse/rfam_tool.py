@@ -133,22 +133,24 @@ class RfamTool(BaseTool):
         family_id = arguments.get("family_id")
 
         if not family_id:
-            return {"status": "error", "error": "family_id is required"}
+            return {"status": "error", "data": {"error": "family_id is required"}}
 
         url = f"{RFAM_BASE_URL}/family/{family_id}/acc"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            return {
-                "status": "success",
+            result = {
                 "accession": response.text.strip(),
                 "family_id": family_id,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get accession for {family_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get accession for {family_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_family_id(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -156,22 +158,27 @@ class RfamTool(BaseTool):
         accession = arguments.get("accession")
 
         if not accession:
-            return {"status": "error", "error": "accession is required (e.g., RF00360)"}
+            return {
+                "status": "error",
+                "data": {"error": "accession is required (e.g., RF00360)"},
+            }
 
         url = f"{RFAM_BASE_URL}/family/{accession}/id"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            return {
-                "status": "success",
+            result = {
                 "family_id": response.text.strip(),
                 "accession": accession,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get ID for accession {accession}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get ID for accession {accession}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_covariance_model(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -179,23 +186,25 @@ class RfamTool(BaseTool):
         family_id = arguments.get("family_id")
 
         if not family_id:
-            return {"status": "error", "error": "family_id is required"}
+            return {"status": "error", "data": {"error": "family_id is required"}}
 
         url = f"{RFAM_BASE_URL}/family/{family_id}/cm"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            return {
-                "status": "success",
+            result = {
                 "covariance_model": response.text,
                 "family_id": family_id,
                 "format": "Infernal CM format",
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get covariance model for {family_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get covariance model for {family_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_alignment(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -205,7 +214,7 @@ class RfamTool(BaseTool):
         gzip = arguments.get("gzip", False)
 
         if not family_id:
-            return {"status": "error", "error": "family_id is required"}
+            return {"status": "error", "data": {"error": "family_id is required"}}
 
         # Build URL
         if format_type == "stockholm":
@@ -219,8 +228,7 @@ class RfamTool(BaseTool):
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            return {
-                "status": "success",
+            result = {
                 "alignment": response.text
                 if not gzip
                 else response.content.decode("utf-8", errors="ignore"),
@@ -228,11 +236,14 @@ class RfamTool(BaseTool):
                 "family_id": family_id,
                 "compressed": gzip,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get alignment for {family_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get alignment for {family_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_tree_data(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -240,23 +251,25 @@ class RfamTool(BaseTool):
         family_id = arguments.get("family_id")
 
         if not family_id:
-            return {"status": "error", "error": "family_id is required"}
+            return {"status": "error", "data": {"error": "family_id is required"}}
 
         url = f"{RFAM_BASE_URL}/family/{family_id}/tree/"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            return {
-                "status": "success",
+            result = {
                 "tree_data": response.text,
                 "format": "NHX (New Hampshire eXtended)",
                 "family_id": family_id,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get tree data for {family_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get tree data for {family_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_sequence_regions(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -279,29 +292,31 @@ class RfamTool(BaseTool):
 
         if response.status_code == 200:
             if format_type == "json":
-                return {
-                    "status": "success",
-                    "data": response.json(),
-                    "family_id": family_id,
-                }
+                result = response.json()
+                result["family_id"] = family_id
+                return {"status": "success", "data": result}
             else:
-                return {
-                    "status": "success",
+                result = {
                     "regions": response.text,
                     "format": format_type,
                     "family_id": family_id,
                 }
+                return {"status": "success", "data": result}
         elif response.status_code == 403:
             return {
                 "status": "error",
-                "error": "Too many regions to list for this family",
-                "message": "This family has a very large number of regions. Use API with pagination or download full data.",
+                "data": {
+                    "error": "Too many regions to list for this family",
+                    "message": "This family has a very large number of regions. Use API with pagination or download full data.",
+                },
             }
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get regions for {family_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get regions for {family_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_structure_mapping(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -391,12 +406,12 @@ class RfamTool(BaseTool):
 
                 if result_response.status_code == 200:
                     # Search complete
-                    return {
-                        "status": "success",
+                    result = {
                         "job_id": job_id,
                         "results": result_response.json(),
                         "elapsed_seconds": elapsed,
                     }
+                    return {"status": "success", "data": result}
                 elif result_response.status_code == 202:
                     # Still running
                     continue

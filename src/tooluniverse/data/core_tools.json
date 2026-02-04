@@ -61,7 +61,7 @@
             "description": "Publication year"
           },
           "doi": {
-            "type": "string",
+            "type": ["string", "null"],
             "description": "Digital Object Identifier (DOI) of the paper"
           },
           "url": {

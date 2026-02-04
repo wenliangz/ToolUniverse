@@ -20,7 +20,7 @@ def GTEx_get_gene_expression(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> list[Any]:
     """
     Get gene expression data at individual sample level (not aggregated). Returns normalized expressi...
 
@@ -49,7 +49,7 @@ def GTEx_get_gene_expression(
 
     Returns
     -------
-    dict[str, Any]
+    list[Any]
     """
     # Handle mutable defaults to avoid B006 linting error
 

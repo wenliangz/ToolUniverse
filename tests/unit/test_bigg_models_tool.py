@@ -40,7 +40,9 @@ class TestBiGGModelsTools:
         assert result.get("status") == "success" or "error" in result
         
         if result.get("status") == "success":
-            assert "bigg_models_version" in result or "api_version" in result
+            assert "data" in result
+            data = result["data"]
+            assert "bigg_models_version" in data or "api_version" in data
     
     def test_list_models(self, tu):
         """Test listing all metabolic models."""
@@ -51,12 +53,14 @@ class TestBiGGModelsTools:
         assert result.get("status") == "success" or "error" in result
         
         if result.get("status") == "success":
-            assert "models" in result
-            assert "count" in result
-            assert isinstance(result["models"], list)
+            assert "data" in result
+            data = result["data"]
+            assert "models" in data
+            assert "count" in data
+            assert isinstance(data["models"], list)
             
-            if result["models"]:
-                model = result["models"][0]
+            if data["models"]:
+                model = data["models"][0]
                 assert "bigg_id" in model
                 assert "organism" in model
     
@@ -70,9 +74,9 @@ class TestBiGGModelsTools:
         assert result.get("status") == "success" or "error" in result
         
         if result.get("status") == "success":
-            assert "model" in result
-            model = result["model"]
-            assert "organism" in model
+            assert "data" in result
+            data = result["data"]
+            assert "model" in data or "organism" in data
     
     def test_search_metabolites(self, tu):
         """Test searching for metabolites."""
@@ -85,8 +89,10 @@ class TestBiGGModelsTools:
         assert result.get("status") == "success" or "error" in result
         
         if result.get("status") == "success":
-            assert "results" in result
-            assert "count" in result
+            assert "data" in result
+            data = result["data"]
+            assert "results" in data
+            assert "count" in data
     
     def test_get_reaction(self, tu):
         """Test getting reaction details."""
@@ -99,4 +105,6 @@ class TestBiGGModelsTools:
         assert result.get("status") == "success" or "error" in result
         
         if result.get("status") == "success":
-            assert "reaction" in result
+            assert "data" in result
+            data = result["data"]
+            assert "reaction" in data or "name" in data

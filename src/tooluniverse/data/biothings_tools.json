@@ -82,7 +82,7 @@
                                 "description": "Full gene name"
                             },
                             "entrezgene": {
-                                "type": "integer",
+                                "type": ["integer", "string"],
                                 "description": "Entrez Gene ID"
                             },
                             "ensembl": {
@@ -153,7 +153,7 @@
                     "description": "Full gene name"
                 },
                 "entrezgene": {
-                    "type": "integer",
+                    "type": ["integer", "string"],
                     "description": "Entrez Gene ID"
                 },
                 "ensembl": {
@@ -277,7 +277,7 @@
                                 "type": "string"
                             },
                             "entrezgene": {
-                                "type": "integer"
+                                "type": ["integer", "string"]
                             },
                             "notfound": {
                                 "type": "boolean",

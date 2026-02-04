@@ -46,30 +46,19 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Request status: 'success' or 'error'"
-        },
-        "hitCount": {
-          "type": "integer",
-          "description": "Total number of matching results"
-        },
-        "data": {
-          "type": "array",
-          "description": "Array of search result entries",
-          "items": {
-            "type": "object"
+      "type": "array",
+      "description": "Array of search result entries",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Entry ID"
+          },
+          "source": {
+            "type": "string",
+            "description": "Source database"
           }
-        },
-        "facets": {
-          "type": "object",
-          "description": "Faceted search results if available"
-        },
-        "url": {
-          "type": "string",
-          "description": "Full API request URL"
         }
       }
     },
@@ -94,7 +83,7 @@
   {
     "type": "EBISearchRESTTool",
     "name": "ebi_search_with_facets",
-    "description": "Search EBI domain with faceted filtering. Facets allow filtering results by categories. IMPORTANT: Available facets vary by domain. First run a search without facets to see what facets are available in the response, or use ebi_get_domain_info. Common facets may include 'taxonomy_name', 'database', 'type', but check the domain-specific response first. Returns search results with facet information for advanced filtering.",
+    "description": "Search EBI domain with faceted filtering and returns facet information. Use facetcount to request facets (returned automatically). To filter results BY facet values, use the 'facets' parameter with format 'FACET_NAME:value' (e.g., 'TAXONOMY:9606' for human). First run ebi_search_domain to see available facet IDs in the response, or use ebi_get_domain_info. Returns search results with facet categories for advanced filtering.",
     "parameter": {
       "type": "object",
       "properties": {
@@ -108,11 +97,11 @@
         },
         "facets": {
           "type": "string",
-          "description": "Comma-separated list of facet names to include (e.g., 'organism,database'). IMPORTANT: Check available facets first using ebi_get_domain_info, as facets vary by domain. Invalid facet names will cause errors."
+          "description": "Optional filter for results using facet values in format 'FACET_NAME:value' (e.g., 'TAXONOMY:9606' for human, 'keyword_id:KW-0418' for kinase). Multiple filters can be comma-separated. IMPORTANT: This is for FILTERING results, not selecting which facets to return. Facets are returned automatically when facetcount > 0."
         },
         "facetcount": {
           "type": "integer",
-          "description": "Number of facet values to return per facet (default: 10)",
+          "description": "Number of facet values to return per facet category (default: 10). Set to 0 to disable facet return.",
           "default": 10
         },
         "size": {
@@ -162,7 +151,8 @@
       {
         "domain": "uniprot",
         "query": "kinase",
-        "facets": "organism",
+        "facets": "TAXONOMY:9606",
+        "facetcount": 5,
         "size": 10
       }
     ]
@@ -329,15 +319,10 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of available fields with metadata"
-        }
+      "type": "array",
+      "description": "List of available fields with metadata",
+      "items": {
+        "type": "object"
       }
     },
     "test_examples": [
@@ -383,17 +368,19 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "description": "Entries with cross-reference information"
-        },
-        "hitCount": {
-          "type": "integer"
+      "type": "array",
+      "description": "Entries with cross-reference information",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Entry ID"
+          },
+          "source": {
+            "type": "string",
+            "description": "Source database"
+          }
         }
       }
     },

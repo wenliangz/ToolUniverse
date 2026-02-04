@@ -26,44 +26,29 @@
     },
     "return_schema": {
       "type": "object",
-      "description": "ToolUniverse wrapper around a gnomAD GraphQL query result.",
-      "required": ["status"],
+      "description": "gnomAD GraphQL response containing gene constraint data.",
+      "required": ["data"],
       "properties": {
-        "status": { "type": "string", "enum": ["success", "error"] },
         "data": {
-          "type": ["object", "null"],
-          "required": ["data"],
+          "type": "object",
+          "required": ["gene"],
           "properties": {
-            "data": {
-              "type": "object",
-              "required": ["gene"],
+            "gene": {
+              "type": ["object", "null"],
+              "required": ["symbol", "gene_id"],
               "properties": {
-                "gene": {
-                  "type": ["object", "null"],
-                  "required": ["symbol", "gene_id"],
-                  "properties": {
-                    "symbol": { "type": "string" },
-                    "gene_id": { "type": "string" },
-                    "exac_constraint": { "type": ["object", "null"], "additionalProperties": true },
-                    "gnomad_constraint": { "type": ["object", "null"], "additionalProperties": true }
-                  },
-                  "additionalProperties": true
-                }
+                "symbol": { "type": "string" },
+                "gene_id": { "type": "string" },
+                "exac_constraint": { "type": ["object", "null"], "additionalProperties": true },
+                "gnomad_constraint": { "type": ["object", "null"], "additionalProperties": true }
               },
               "additionalProperties": true
             }
           },
           "additionalProperties": true
-        },
-        "url": { "type": ["string", "null"] },
-        "status_code": { "type": ["integer", "null"] },
-        "detail": {
-          "description": "Optional error detail (GraphQL errors array or HTTP response text snippet).",
-          "type": ["array", "object", "string", "null"]
-        },
-        "error": { "type": ["string", "null"] },
-        "gene_symbol": { "type": ["string", "null"] }
-      }
+        }
+      },
+      "additionalProperties": true
     },
     "test_examples": [
       { "gene_symbol": "BRCA1", "reference_genome": "GRCh38" }
@@ -100,43 +85,29 @@
     },
     "return_schema": {
       "type": "object",
-      "required": ["status"],
+      "description": "gnomAD GraphQL response containing gene search results.",
+      "required": ["data"],
       "properties": {
-        "status": { "type": "string", "enum": ["success", "error"] },
         "data": {
-          "type": ["object", "null"],
-          "required": ["data"],
+          "type": "object",
+          "required": ["gene_search"],
           "properties": {
-            "data": {
-              "type": "object",
-              "required": ["gene_search"],
-              "properties": {
-                "gene_search": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": ["ensembl_id", "symbol"],
-                    "properties": {
-                      "ensembl_id": { "type": "string" },
-                      "ensembl_version": { "type": ["string", "integer", "null"] },
-                      "symbol": { "type": "string" }
-                    },
-                    "additionalProperties": true
-                  }
-                }
-              },
-              "additionalProperties": true
+            "gene_search": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["ensembl_id", "symbol"],
+                "properties": {
+                  "ensembl_id": { "type": "string" },
+                  "ensembl_version": { "type": ["string", "integer", "null"] },
+                  "symbol": { "type": "string" }
+                },
+                "additionalProperties": true
+              }
             }
           },
           "additionalProperties": true
-        },
-        "url": { "type": ["string", "null"] },
-        "status_code": { "type": ["integer", "null"] },
-        "detail": {
-          "description": "Optional error detail (GraphQL errors array or HTTP response text snippet).",
-          "type": ["array", "object", "string", "null"]
-        },
-        "error": { "type": ["string", "null"] }
+        }
       },
       "additionalProperties": true
     },
@@ -178,44 +149,30 @@
     },
     "return_schema": {
       "type": "object",
-      "required": ["status"],
+      "description": "gnomAD GraphQL response containing gene metadata.",
+      "required": ["data"],
       "properties": {
-        "status": { "type": "string", "enum": ["success", "error"] },
         "data": {
-          "type": ["object", "null"],
-          "required": ["data"],
+          "type": "object",
+          "required": ["gene"],
           "properties": {
-            "data": {
-              "type": "object",
-              "required": ["gene"],
+            "gene": {
+              "type": ["object", "null"],
               "properties": {
-                "gene": {
-                  "type": ["object", "null"],
-                  "properties": {
-                    "gene_id": { "type": "string" },
-                    "symbol": { "type": "string" },
-                    "name": { "type": ["string", "null"] },
-                    "chrom": { "type": ["string", "null"] },
-                    "start": { "type": ["integer", "null"] },
-                    "stop": { "type": ["integer", "null"] },
-                    "strand": { "type": ["string", "null"] },
-                    "canonical_transcript_id": { "type": ["string", "null"] }
-                  },
-                  "additionalProperties": true
-                }
+                "gene_id": { "type": "string" },
+                "symbol": { "type": "string" },
+                "name": { "type": ["string", "null"] },
+                "chrom": { "type": ["string", "null"] },
+                "start": { "type": ["integer", "null"] },
+                "stop": { "type": ["integer", "null"] },
+                "strand": { "type": ["string", "null"] },
+                "canonical_transcript_id": { "type": ["string", "null"] }
               },
               "additionalProperties": true
             }
           },
           "additionalProperties": true
-        },
-        "url": { "type": ["string", "null"] },
-        "status_code": { "type": ["integer", "null"] },
-        "detail": {
-          "description": "Optional error detail (GraphQL errors array or HTTP response text snippet).",
-          "type": ["array", "object", "string", "null"]
-        },
-        "error": { "type": ["string", "null"] }
+        }
       },
       "additionalProperties": true
     },
@@ -252,50 +209,36 @@
     },
     "return_schema": {
       "type": "object",
-      "required": ["status"],
+      "description": "gnomAD GraphQL response containing transcript metadata.",
+      "required": ["data"],
       "properties": {
-        "status": { "type": "string", "enum": ["success", "error"] },
         "data": {
-          "type": ["object", "null"],
-          "required": ["data"],
+          "type": "object",
+          "required": ["transcript"],
           "properties": {
-            "data": {
-              "type": "object",
-              "required": ["transcript"],
+            "transcript": {
+              "type": ["object", "null"],
               "properties": {
-                "transcript": {
+                "transcript_id": { "type": "string" },
+                "gene_id": { "type": ["string", "null"] },
+                "gene": {
                   "type": ["object", "null"],
                   "properties": {
-                    "transcript_id": { "type": "string" },
                     "gene_id": { "type": ["string", "null"] },
-                    "gene": {
-                      "type": ["object", "null"],
-                      "properties": {
-                        "gene_id": { "type": ["string", "null"] },
-                        "symbol": { "type": ["string", "null"] }
-                      },
-                      "additionalProperties": true
-                    },
-                    "chrom": { "type": ["string", "null"] },
-                    "start": { "type": ["integer", "null"] },
-                    "stop": { "type": ["integer", "null"] },
-                    "strand": { "type": ["string", "null"] }
+                    "symbol": { "type": ["string", "null"] }
                   },
                   "additionalProperties": true
-                }
+                },
+                "chrom": { "type": ["string", "null"] },
+                "start": { "type": ["integer", "null"] },
+                "stop": { "type": ["integer", "null"] },
+                "strand": { "type": ["string", "null"] }
               },
               "additionalProperties": true
             }
           },
           "additionalProperties": true
-        },
-        "url": { "type": ["string", "null"] },
-        "status_code": { "type": ["integer", "null"] },
-        "detail": {
-          "description": "Optional error detail (GraphQL errors array or HTTP response text snippet).",
-          "type": ["array", "object", "string", "null"]
-        },
-        "error": { "type": ["string", "null"] }
+        }
       },
       "additionalProperties": true
     },
@@ -327,39 +270,25 @@
     },
     "return_schema": {
       "type": "object",
-      "required": ["status"],
+      "description": "gnomAD GraphQL response containing variant search results.",
+      "required": ["data"],
       "properties": {
-        "status": { "type": "string", "enum": ["success", "error"] },
         "data": {
-          "type": ["object", "null"],
-          "required": ["data"],
+          "type": "object",
+          "required": ["variant_search"],
           "properties": {
-            "data": {
-              "type": "object",
-              "required": ["variant_search"],
-              "properties": {
-                "variant_search": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": ["variant_id"],
-                    "properties": { "variant_id": { "type": "string" } },
-                    "additionalProperties": true
-                  }
-                }
-              },
-              "additionalProperties": true
+            "variant_search": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["variant_id"],
+                "properties": { "variant_id": { "type": "string" } },
+                "additionalProperties": true
+              }
             }
           },
           "additionalProperties": true
-        },
-        "url": { "type": ["string", "null"] },
-        "status_code": { "type": ["integer", "null"] },
-        "detail": {
-          "description": "Optional error detail (GraphQL errors array or HTTP response text snippet).",
-          "type": ["array", "object", "string", "null"]
-        },
-        "error": { "type": ["string", "null"] }
+        }
       },
       "additionalProperties": true
     },
@@ -392,42 +321,28 @@
     },
     "return_schema": {
       "type": "object",
-      "required": ["status"],
+      "description": "gnomAD GraphQL response containing variant metadata.",
+      "required": ["data"],
       "properties": {
-        "status": { "type": "string", "enum": ["success", "error"] },
         "data": {
-          "type": ["object", "null"],
-          "required": ["data"],
+          "type": "object",
+          "required": ["variant"],
           "properties": {
-            "data": {
-              "type": "object",
-              "required": ["variant"],
+            "variant": {
+              "type": ["object", "null"],
               "properties": {
-                "variant": {
-                  "type": ["object", "null"],
-                  "properties": {
-                    "variant_id": { "type": "string" },
-                    "chrom": { "type": ["string", "null"] },
-                    "pos": { "type": ["integer", "null"] },
-                    "ref": { "type": ["string", "null"] },
-                    "alt": { "type": ["string", "null"] },
-                    "rsid": { "type": ["string", "null"] }
-                  },
-                  "additionalProperties": true
-                }
+                "variant_id": { "type": "string" },
+                "chrom": { "type": ["string", "null"] },
+                "pos": { "type": ["integer", "null"] },
+                "ref": { "type": ["string", "null"] },
+                "alt": { "type": ["string", "null"] },
+                "rsid": { "type": ["string", "null"] }
               },
               "additionalProperties": true
             }
           },
           "additionalProperties": true
-        },
-        "url": { "type": ["string", "null"] },
-        "status_code": { "type": ["integer", "null"] },
-        "detail": {
-          "description": "Optional error detail (GraphQL errors array or HTTP response text snippet).",
-          "type": ["array", "object", "string", "null"]
-        },
-        "error": { "type": ["string", "null"] }
+        }
       },
       "additionalProperties": true
     },
@@ -468,58 +383,44 @@
     },
     "return_schema": {
       "type": "object",
-      "required": ["status"],
+      "description": "gnomAD GraphQL response containing region metadata.",
+      "required": ["data"],
       "properties": {
-        "status": { "type": "string", "enum": ["success", "error"] },
         "data": {
-          "type": ["object", "null"],
-          "required": ["data"],
+          "type": "object",
+          "required": ["region"],
           "properties": {
-            "data": {
-              "type": "object",
-              "required": ["region"],
+            "region": {
+              "type": ["object", "null"],
               "properties": {
-                "region": {
-                  "type": ["object", "null"],
-                  "properties": {
-                    "chrom": { "type": ["string", "null"] },
-                    "start": { "type": ["integer", "null"] },
-                    "stop": { "type": ["integer", "null"] },
-                    "genes": {
-                      "type": ["array", "null"],
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "gene_id": { "type": ["string", "null"] },
-                          "symbol": { "type": ["string", "null"] }
-                        },
-                        "additionalProperties": true
-                      }
+                "chrom": { "type": ["string", "null"] },
+                "start": { "type": ["integer", "null"] },
+                "stop": { "type": ["integer", "null"] },
+                "genes": {
+                  "type": ["array", "null"],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "gene_id": { "type": ["string", "null"] },
+                      "symbol": { "type": ["string", "null"] }
                     },
-                    "variants": {
-                      "type": ["array", "null"],
-                      "items": {
-                        "type": "object",
-                        "properties": { "variant_id": { "type": "string" } },
-                        "additionalProperties": true
-                      }
-                    }
-                  },
-                  "additionalProperties": true
+                    "additionalProperties": true
+                  }
+                },
+                "variants": {
+                  "type": ["array", "null"],
+                  "items": {
+                    "type": "object",
+                    "properties": { "variant_id": { "type": "string" } },
+                    "additionalProperties": true
+                  }
                 }
               },
               "additionalProperties": true
             }
           },
           "additionalProperties": true
-        },
-        "url": { "type": ["string", "null"] },
-        "status_code": { "type": ["integer", "null"] },
-        "detail": {
-          "description": "Optional error detail (GraphQL errors array or HTTP response text snippet).",
-          "type": ["array", "object", "string", "null"]
-        },
-        "error": { "type": ["string", "null"] }
+        }
       },
       "additionalProperties": true
     },

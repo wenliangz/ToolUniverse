@@ -73,8 +73,8 @@
                                 "type": "string"
                             },
                             "score": {
-                                "type": "integer",
-                                "description": "Combined confidence score"
+                                "type": "number",
+                                "description": "Combined confidence score (0-1)"
                             }
                         }
                     }

@@ -99,19 +99,15 @@
     },
     "test_examples": [
       {
-        "input": {
-          "query": "python requests library",
-          "max_results": 5
-        },
+        "query": "python requests library",
+        "max_results": 5,
         "expected_output_type": "object",
         "description": "Search for Python requests library information"
       },
       {
-        "input": {
-          "query": "machine learning APIs",
-          "search_type": "api_documentation",
-          "max_results": 3
-        },
+        "query": "machine learning APIs",
+        "search_type": "api_documentation",
+        "max_results": 3,
         "expected_output_type": "object",
         "description": "Search for machine learning API documentation"
       }
@@ -214,29 +210,23 @@
     },
     "test_examples": [
       {
-        "input": {
-          "query": "pandas",
-          "focus": "api_docs",
-          "max_results": 5
-        },
+        "query": "pandas",
+        "focus": "api_docs",
+        "max_results": 5,
         "expected_output_type": "object",
         "description": "Search for pandas API documentation"
       },
       {
-        "input": {
-          "query": "requests",
-          "focus": "python_packages",
-          "max_results": 3
-        },
+        "query": "requests",
+        "focus": "python_packages",
+        "max_results": 3,
         "expected_output_type": "object",
         "description": "Search for requests Python package information"
       },
       {
-        "input": {
-          "query": "scikit-learn",
-          "focus": "github_repos",
-          "max_results": 3
-        },
+        "query": "scikit-learn",
+        "focus": "github_repos",
+        "max_results": 3,
         "expected_output_type": "object",
         "description": "Search for scikit-learn GitHub repositories"
       }

@@ -28,22 +28,8 @@
       "return_format": "TEXT"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "string",
-          "description": "Database entry in requested format"
-        },
-        "content_type": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string"
-        }
-      }
+      "type": "string",
+      "description": "Database entry in requested format (FASTA, XML, JSON, etc.)"
     },
     "test_examples": [
       {
@@ -53,8 +39,8 @@
       },
       {
         "db": "pdb",
-        "id": "1A2B",
-        "format": "xml"
+        "id": "1GAG",
+        "format": "fasta"
       }
     ]
   },
@@ -86,20 +72,8 @@
       "return_format": "TEXT"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "string",
-          "description": "Batch of database entries"
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of entries retrieved"
-        }
-      }
+      "type": "string",
+      "description": "Batch of database entries in requested format"
     },
     "test_examples": [
       {
@@ -112,7 +86,7 @@
   {
     "type": "DbfetchRESTTool",
     "name": "dbfetch_list_databases",
-    "description": "List all available databases in Dbfetch service. Returns list of database names and descriptions.",
+    "description": "List all available databases in Dbfetch service. Note: This returns a static list of common database names as the API endpoint for listing is web-only.",
     "parameter": {
       "type": "object",
       "properties": {},
@@ -123,16 +97,8 @@
       "return_format": "TEXT"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "string",
-          "description": "List of available databases"
-        }
-      }
+      "type": "string",
+      "description": "List of available databases"
     },
     "test_examples": [
       {}
@@ -141,7 +107,7 @@
   {
     "type": "DbfetchRESTTool",
     "name": "dbfetch_list_formats",
-    "description": "List available output formats for a specific database. Returns supported formats for the database.",
+    "description": "List available output formats for a specific database. Note: This returns common format names as the API endpoint for listing is web-only.",
     "parameter": {
       "type": "object",
       "properties": {
@@ -157,16 +123,8 @@
       "return_format": "TEXT"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "string",
-          "description": "List of available formats"
-        }
-      }
+      "type": "string",
+      "description": "List of available formats for the database"
     },
     "test_examples": [
       {

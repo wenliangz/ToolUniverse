@@ -35,10 +35,13 @@ class FourDNTool(BaseTool):
             elif operation == "download_file_url":
                 return self._download_file_url(arguments)
             else:
-                return {"status": "error", "error": f"Unknown operation: {operation}"}
+                return {
+                    "status": "error",
+                    "data": {"error": f"Unknown operation: {operation}"},
+                }
 
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "data": {"error": str(e)}}
 
     def _search(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Search 4DN data portal for files or experiments."""
@@ -62,19 +65,21 @@ class FourDNTool(BaseTool):
             response = requests.get(url, params=params, timeout=30)
             response.raise_for_status()
 
-            data = response.json()
-            results = data.get("@graph", [])
+            api_data = response.json()
+            results = api_data.get("@graph", [])
 
-            return {
+            result = {
                 "status": "success",
                 "num_results": len(results),
-                "total": data.get("total", 0),
+                "total": api_data.get("total", 0),
                 "results": results[:limit],
                 "search_url": response.url,
             }
 
+            return {"status": "success", "data": result}
+
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "data": {"error": str(e)}}
 
     def _get_file_metadata(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Get metadata for a specific file."""
@@ -83,17 +88,20 @@ class FourDNTool(BaseTool):
             include_full_metadata = arguments.get("include_full_metadata", False)
 
             if not file_accession:
-                return {"status": "error", "error": "file_accession is required"}
+                return {
+                    "status": "error",
+                    "data": {"error": "file_accession is required"},
+                }
 
             # Use frame=object for smaller response (84% reduction)
             url = f"{FOURDN_BASE_URL}/{file_accession}/?format=json&frame=object"
             response = requests.get(url, timeout=30)
             response.raise_for_status()
 
-            data = response.json()
+            api_data = response.json()
 
             # Handle file_format - can be dict or string with frame=object
-            file_format = data.get("file_format")
+            file_format = api_data.get("file_format")
             if isinstance(file_format, dict):
                 file_format = file_format.get("display_title")
             elif isinstance(file_format, str):
@@ -105,25 +113,25 @@ class FourDNTool(BaseTool):
             result = {
                 "status": "success",
                 "accession": file_accession,
-                "file_type": data.get("file_type"),
+                "file_type": api_data.get("file_type"),
                 "file_format": file_format,
-                "file_size": data.get("file_size"),
-                "description": data.get("description"),
-                "data_status": data.get("status"),
-                "biosource": data.get("biosource"),
-                "experiment": data.get("experiment"),
+                "file_size": api_data.get("file_size"),
+                "description": api_data.get("description"),
+                "data_status": api_data.get("status"),
+                "biosource": api_data.get("biosource"),
+                "experiment": api_data.get("experiment"),
                 "download_url": (f"{FOURDN_BASE_URL}/{file_accession}/@@download"),
             }
 
             # Only include full metadata if explicitly requested
             # This reduces response size by ~97% in typical cases
             if include_full_metadata:
-                result["metadata"] = data
+                result["metadata"] = api_data
 
-            return result
+            return {"status": "success", "data": result}
 
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "data": {"error": str(e)}}
 
     def _get_experiment_metadata(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Get metadata for a specific experiment."""
@@ -132,18 +140,21 @@ class FourDNTool(BaseTool):
             include_full_metadata = arguments.get("include_full_metadata", False)
 
             if not experiment_accession:
-                return {"status": "error", "error": "experiment_accession is required"}
+                return {
+                    "status": "error",
+                    "data": {"error": "experiment_accession is required"},
+                }
 
             # Use frame=object for smaller response
             url = f"{FOURDN_BASE_URL}/{experiment_accession}/?format=json&frame=object"
             response = requests.get(url, timeout=30)
             response.raise_for_status()
 
-            data = response.json()
+            api_data = response.json()
 
             # Extract biosource from biosample
             # (biosource is nested inside biosample)
-            biosample = data.get("biosample", {})
+            biosample = api_data.get("biosample", {})
             # Handle biosample - can be dict or string with frame=object
             if isinstance(biosample, str):
                 biosample = {"@id": biosample}
@@ -154,12 +165,12 @@ class FourDNTool(BaseTool):
                 biosource_summary = biosample.get("biosource_summary", "")
 
             # Combine files from different possible fields
-            files = data.get("files", [])
+            files = api_data.get("files", [])
             if not files:
-                files = data.get("processed_files", [])
+                files = api_data.get("processed_files", [])
 
             # Handle experiment_type - can be dict or string
-            exp_type = data.get("experiment_type")
+            exp_type = api_data.get("experiment_type")
             if isinstance(exp_type, dict):
                 exp_type_name = exp_type.get("display_title")
             elif isinstance(exp_type, str):
@@ -179,19 +190,19 @@ class FourDNTool(BaseTool):
                 "biosample": biosample,
                 "biosource": biosource_list,
                 "biosource_summary": biosource_summary,
-                "description": data.get("description"),
-                "data_status": data.get("status"),
+                "description": api_data.get("description"),
+                "data_status": api_data.get("status"),
                 "files": files,
             }
 
             # Only include full metadata if explicitly requested
             if include_full_metadata:
-                result["metadata"] = data
+                result["metadata"] = api_data
 
-            return result
+            return {"status": "success", "data": result}
 
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "data": {"error": str(e)}}
 
     def _download_file_url(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Get download URL for file (requires authentication)."""
@@ -199,12 +210,15 @@ class FourDNTool(BaseTool):
             file_accession = arguments.get("file_accession")
 
             if not file_accession:
-                return {"status": "error", "error": "file_accession is required"}
+                return {
+                    "status": "error",
+                    "data": {"error": "file_accession is required"},
+                }
 
             # Get DRS API information
             drs_url = f"{FOURDN_BASE_URL}/ga4gh/drs/v1/objects/{file_accession}"
 
-            return {
+            result = {
                 "status": "success",
                 "accession": file_accession,
                 "download_url": (f"{FOURDN_BASE_URL}/{file_accession}/@@download"),
@@ -217,5 +231,7 @@ class FourDNTool(BaseTool):
                 "instruction": ("Create access key at https://data.4dnucleome.org/me"),
             }
 
+            return {"status": "success", "data": result}
+
         except Exception as e:
-            return {"status": "error", "error": str(e)}
+            return {"status": "error", "data": {"error": str(e)}}

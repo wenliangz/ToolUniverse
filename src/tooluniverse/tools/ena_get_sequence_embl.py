@@ -14,7 +14,7 @@ def ena_get_sequence_embl(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> str:
     """
     Get nucleotide sequence in EMBL format from ENA by accession number. Supports EMBL/GenBank access...
 
@@ -31,7 +31,7 @@ def ena_get_sequence_embl(
 
     Returns
     -------
-    dict[str, Any]
+    str
     """
     # Handle mutable defaults to avoid B006 linting error
 

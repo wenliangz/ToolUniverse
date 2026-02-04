@@ -26,11 +26,6 @@
     "return_schema": {
       "type": "object",
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": ["success", "error"],
-          "description": "Status of the inspection operation"
-        },
         "package_name": {
           "type": "string",
           "description": "Name of the inspected package"
@@ -39,36 +34,36 @@
           "type": "object",
           "description": "Complete PyPI metadata including version, author, license, dependencies, release history",
           "properties": {
-            "name": {"type": "string"},
-            "version": {"type": "string"},
-            "summary": {"type": "string"},
-            "author": {"type": "string"},
-            "license": {"type": "string"},
-            "requires_python": {"type": "string"},
-            "github_url": {"type": "string"},
-            "total_releases": {"type": "integer"},
-            "days_since_last_release": {"type": "integer"},
-            "releases_last_year": {"type": "integer"}
+            "name": {"type": ["string", "null"]},
+            "version": {"type": ["string", "null"]},
+            "summary": {"type": ["string", "null"]},
+            "author": {"type": ["string", "null"]},
+            "license": {"type": ["string", "null"]},
+            "requires_python": {"type": ["string", "null"]},
+            "github_url": {"type": ["string", "null"]},
+            "total_releases": {"type": ["integer", "null"]},
+            "days_since_last_release": {"type": ["integer", "null"]},
+            "releases_last_year": {"type": ["integer", "null"]}
           }
         },
         "download_stats": {
           "type": "object",
           "description": "Download statistics from pypistats.org",
           "properties": {
-            "downloads_last_day": {"type": "integer"},
-            "downloads_last_week": {"type": "integer"},
-            "downloads_last_month": {"type": "integer"}
+            "downloads_last_day": {"type": ["integer", "null"]},
+            "downloads_last_week": {"type": ["integer", "null"]},
+            "downloads_last_month": {"type": ["integer", "null"]}
           }
         },
         "github_stats": {
           "type": "object",
           "description": "GitHub repository statistics",
           "properties": {
-            "stars": {"type": "integer"},
-            "forks": {"type": "integer"},
-            "open_issues": {"type": "integer"},
-            "days_since_last_push": {"type": "integer"},
-            "archived": {"type": "boolean"},
+            "stars": {"type": ["integer", "null"]},
+            "forks": {"type": ["integer", "null"]},
+            "open_issues": {"type": ["integer", "null"]},
+            "days_since_last_push": {"type": ["integer", "null"]},
+            "archived": {"type": ["boolean", "null"]},
             "topics": {"type": "array", "items": {"type": "string"}}
           }
         },
@@ -111,33 +106,21 @@
           "description": "Error message if inspection failed"
         }
       },
-      "required": ["status", "package_name"]
+      "required": ["package_name"]
     },
     "test_examples": [
       {
-        "input": {
-          "package_name": "requests",
-          "include_github": true,
-          "include_downloads": true
-        },
-        "expected_output_type": "object",
-        "description": "Inspect the popular 'requests' HTTP library for quality metrics"
+        "package_name": "requests",
+        "include_github": true,
+        "include_downloads": true
       },
       {
-        "input": {
-          "package_name": "numpy"
-        },
-        "expected_output_type": "object",
-        "description": "Inspect NumPy with default settings (GitHub and downloads enabled)"
+        "package_name": "numpy"
       },
       {
-        "input": {
-          "package_name": "pandas",
-          "include_github": false,
-          "include_downloads": false
-        },
-        "expected_output_type": "object",
-        "description": "Inspect Pandas with only PyPI metadata (faster, no external API calls)"
+        "package_name": "pandas",
+        "include_github": false,
+        "include_downloads": false
       }
     ],
     "metadata": {

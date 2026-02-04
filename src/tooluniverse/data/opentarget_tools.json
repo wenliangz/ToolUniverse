@@ -865,10 +865,7 @@
       "type": "object",
       "properties": {
         "chemblId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
+          "type": "string",
           "description": "The chemblId of a drug."
         }
       },
@@ -1287,7 +1284,7 @@
                             }
                           },
                           "maxPhaseForIndication": {
-                            "type": "integer"
+                            "type": "number"
                           },
                           "references": {
                             "type": "array",
@@ -2092,7 +2089,7 @@
     "test_examples": [
       {
         "ensemblId": "ENSG00000141510",
-        "page": 1
+        "page": {"index": 0, "size": 10}
       }
     ],
     "return_schema": {
@@ -2639,7 +2636,7 @@
     "test_examples": [
       {
         "chemblId": "CHEMBL25",
-        "page": 1
+        "page": {"index": 0, "size": 10}
       }
     ],
     "return_schema": {
@@ -3292,9 +3289,6 @@
         "chemblId": "CHEMBL25"
       },
       {
-        "chemblId": "CHEMBL1200746"
-      },
-      {
         "chemblId": "CHEMBL1201581"
       }
     ],
@@ -3387,7 +3381,7 @@
     "type": "OpenTarget",
     "test_examples": [
       {
-        "targetId": "ENSG00000157764"
+        "ensemblId": "ENSG00000157764"
       }
     ],
     "return_schema": {
@@ -3509,7 +3503,7 @@
     "test_examples": [
       {
         "chemblId": "CHEMBL25",
-        "page": 1
+        "page": {"index": 0, "size": 10}
       }
     ],
     "return_schema": {
@@ -3949,7 +3943,7 @@
       {
         "queryString": "gene:TP53",
         "entityNames": [],
-        "page": 1
+        "page": {"index": 0, "size": 10}
       }
     ],
     "return_schema": {
@@ -4116,7 +4110,7 @@
     "type": "OpenTarget",
     "test_examples": [
       {
-        "goIds": "1"
+        "goIds": ["GO:0005515"]
       }
     ],
     "return_schema": {
@@ -4334,8 +4328,7 @@
     "type": "OpenTarget",
     "test_examples": [
       {
-        "entityId": "1",
-        "additionalIds": "1",
+        "entityId": "EFO_0000384",
         "startYear": 2023,
         "startMonth": 0,
         "endYear": 2023,
@@ -4532,8 +4525,7 @@
     "type": "OpenTarget",
     "test_examples": [
       {
-        "entityId": "1",
-        "additionalIds": "1",
+        "entityId": "ENSG00000141510",
         "startYear": 2023,
         "startMonth": 0,
         "endYear": 2023,
@@ -4730,8 +4722,7 @@
     "type": "OpenTarget",
     "test_examples": [
       {
-        "entityId": "1",
-        "additionalIds": "1",
+        "entityId": "CHEMBL25",
         "startYear": 2023,
         "startMonth": 0,
         "endYear": 2023,

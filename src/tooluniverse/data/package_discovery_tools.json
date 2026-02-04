@@ -47,12 +47,8 @@
     },
     "test_examples": [
       {
-        "input": {
-          "requirements": "data analysis and visualization",
-          "functionality": "create charts and graphs"
-        },
-        "expected_output_type": "object",
-        "description": "Search for data visualization packages"
+        "requirements": "data analysis and visualization",
+        "functionality": "create charts and graphs"
       }
     ],
     "metadata": {

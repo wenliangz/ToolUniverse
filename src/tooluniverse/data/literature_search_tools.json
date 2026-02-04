@@ -39,9 +39,8 @@
       }
     ],
     "return_schema": {
-      "type": "object",
-      "description": "Output of the tool execution.",
-      "properties": {}
+      "type": ["string", "null"],
+      "description": "LLM-generated response containing intent analysis and search plans"
     }
   },
   {
@@ -98,9 +97,8 @@
       }
     ],
     "return_schema": {
-      "type": "object",
-      "description": "Output of the tool execution.",
-      "properties": {}
+      "type": ["string", "null"],
+      "description": "LLM-generated response containing refined search keywords"
     }
   },
   {
@@ -158,15 +156,14 @@
       {
         "plan_title": "Literature review on COVID-19 treatments",
         "plan_description": "Systematic review of antiviral therapies",
-        "paper_count": 1,
+        "paper_count": "1",
         "papers_text": "The quick brown fox jumps over the lazy dog.",
         "context": "The quick brown fox jumps over the lazy dog."
       }
     ],
     "return_schema": {
-      "type": "object",
-      "description": "Output of the tool execution.",
-      "properties": {}
+      "type": ["string", "null"],
+      "description": "LLM-generated response containing comprehensive summary of search results"
     }
   },
   {
@@ -209,9 +206,8 @@
       }
     ],
     "return_schema": {
-      "type": "object",
-      "description": "Output of the tool execution.",
-      "properties": {}
+      "type": ["string", "null"],
+      "description": "LLM-generated response containing quality assessment and improvement suggestions"
     }
   },
   {
@@ -289,9 +285,8 @@
       }
     ],
     "return_schema": {
-      "type": "object",
-      "description": "Output of the tool execution.",
-      "properties": {}
+      "type": ["string", "null"],
+      "description": "LLM-generated comprehensive summary of all literature search results in markdown format"
     }
   },
   {
@@ -355,9 +350,8 @@
       }
     ],
     "return_schema": {
-      "type": "object",
-      "description": "Output of the tool execution.",
-      "properties": {}
+      "type": ["object", "null"],
+      "description": "Multi-agent search results with session_id and results summary"
     }
   }
 ]

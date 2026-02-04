@@ -70,9 +70,9 @@
     },
     "test_examples": [
       {
-        "action": "create",
+        "action": "create_from_docs",
         "database_name": "biomedical_tools",
-        "documents": [],
+        "documents": ["Sample document for testing embeddings"],
         "metadata": [],
         "provider": "openai",
         "model": "all-MiniLM-L6-v2",
@@ -151,9 +151,9 @@
     },
     "test_examples": [
       {
-        "action": "create",
+        "action": "add_docs",
         "database_name": "biomedical_tools",
-        "documents": [],
+        "documents": ["Sample document to add"],
         "metadata": [],
         "provider": "openai",
         "model": "all-MiniLM-L6-v2"
@@ -231,7 +231,7 @@
     },
     "test_examples": [
       {
-        "action": "create",
+        "action": "search",
         "database_name": "biomedical_tools",
         "query": "machine learning optimization",
         "top_k": 5,
@@ -301,7 +301,7 @@
     },
     "test_examples": [
       {
-        "action": "create",
+        "action": "upload",
         "database_name": "biomedical_tools",
         "repository": "username/biomedical-embeddings",
         "description": "Find tools for analyzing gene expression data",
@@ -359,7 +359,7 @@
     },
     "test_examples": [
       {
-        "action": "create",
+        "action": "download",
         "repository": "username/biomedical-embeddings",
         "local_name": "biomedical_tools",
         "overwrite": false

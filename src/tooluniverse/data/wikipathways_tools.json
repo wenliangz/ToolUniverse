@@ -23,26 +23,24 @@
     },
     "return_schema": {
       "type": "object",
-      "description": "WikiPathways search response",
+      "description": "WikiPathways API response with pathway search results",
       "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "object",
-          "properties": {
-            "result": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {"type": "string", "description": "WPID"},
-                  "name": {"type": "string"},
-                  "species": {"type": "string"}
-                }
-              }
+        "result": {
+          "type": "array",
+          "description": "Array of matching pathways",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string", "description": "WikiPathways ID (WPID)"},
+              "name": {"type": "string", "description": "Pathway name"},
+              "species": {"type": "string", "description": "Organism name"},
+              "url": {"type": "string", "description": "Pathway URL"},
+              "revision": {"type": "string", "description": "Revision number"},
+              "score": {"type": ["object", "null"], "description": "Search relevance score"},
+              "fields": {"type": "array", "description": "Additional fields"}
             }
           }
-        },
-        "url": {"type": "string"}
+        }
       }
     },
     "test_examples": [
@@ -81,17 +79,20 @@
     },
     "return_schema": {
       "type": "object",
-      "description": "WikiPathways getPathway response",
+      "description": "WikiPathways API response with pathway content",
       "properties": {
-        "status": {"type": "string"},
-        "data": {
+        "pathway": {
           "type": "object",
+          "description": "Pathway content and metadata",
           "properties": {
-            "pathway": {"type": "object"},
-            "metadata": {"type": "object"}
+            "id": {"type": "string", "description": "WikiPathways ID"},
+            "name": {"type": "string", "description": "Pathway name"},
+            "species": {"type": "string", "description": "Organism name"},
+            "revision": {"type": "string", "description": "Revision number"},
+            "url": {"type": "string", "description": "Pathway URL"},
+            "gpml": {"type": ["string", "null"], "description": "GPML XML content if format=gpml"}
           }
-        },
-        "url": {"type": "string"}
+        }
       }
     },
     "test_examples": [

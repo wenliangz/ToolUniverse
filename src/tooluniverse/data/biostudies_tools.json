@@ -215,20 +215,34 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of file objects with path, size, and type information"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "url": {
-          "type": "string"
+      "type": "array",
+      "description": "List of file objects with path, size, and type information",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File path within the study"
+          },
+          "size": {
+            "type": "integer",
+            "description": "File size in bytes"
+          },
+          "type": {
+            "type": "string",
+            "description": "File type (e.g., 'file', 'directory')"
+          },
+          "attributes": {
+            "type": "array",
+            "description": "File attributes/metadata",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {"type": "string"},
+                "value": {"type": "string"}
+              }
+            }
+          }
         }
       }
     },

@@ -208,37 +208,25 @@
       "default_params": {"sort": "cited_by_count:desc"}
     },
     "return_schema": {
-      "type": "object",
-      "description": "Wrapper around OpenAlex /works search response.",
+      "type": ["object", "null"],
+      "description": "OpenAlex /works search response data.",
       "additionalProperties": true,
       "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {
-          "type": ["object", "null"],
-          "additionalProperties": true,
-          "properties": {
-            "meta": {"type": "object", "additionalProperties": true},
-            "results": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": true,
-                "properties": {
-                  "id": {"type": "string"},
-                  "title": {"type": ["string", "null"]},
-                  "doi": {"type": ["string", "null"]},
-                  "publication_year": {"type": ["integer", "null"]}
-                }
-              }
+        "meta": {"type": "object", "additionalProperties": true},
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "id": {"type": "string"},
+              "title": {"type": ["string", "null"]},
+              "doi": {"type": ["string", "null"]},
+              "publication_year": {"type": ["integer", "null"]}
             }
           }
-        },
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+        }
+      }
     },
     "test_examples": [
       {
@@ -271,27 +259,15 @@
       "path_params": ["openalex_id"]
     },
     "return_schema": {
-      "type": "object",
-      "description": "Wrapper around OpenAlex /works/{id} response.",
+      "type": ["object", "null"],
+      "description": "OpenAlex work (paper) data.",
       "additionalProperties": true,
       "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {
-          "type": ["object", "null"],
-          "additionalProperties": true,
-          "properties": {
-            "id": {"type": "string"},
-            "title": {"type": ["string", "null"]},
-            "doi": {"type": ["string", "null"]},
-            "publication_year": {"type": ["integer", "null"]}
-          }
-        },
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+        "id": {"type": "string"},
+        "title": {"type": ["string", "null"]},
+        "doi": {"type": ["string", "null"]},
+        "publication_year": {"type": ["integer", "null"]}
+      }
     },
     "test_examples": [
       {"openalex_id": "W2626778328"}
@@ -320,21 +296,12 @@
       "path_params": ["doi"]
     },
     "return_schema": {
-      "type": "object",
-      "description": "Wrapper around OpenAlex DOI lookup response.",
-      "additionalProperties": true,
-      "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {"type": ["object", "null"], "additionalProperties": true},
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+      "type": ["object", "null"],
+      "description": "OpenAlex work data from DOI lookup.",
+      "additionalProperties": true
     },
     "test_examples": [
-      {"doi": "10.65215/2q58a426"}
+      {"doi": "10.1145/3065386"}
     ]
   },
   {
@@ -374,18 +341,9 @@
       "param_map": {"per_page": "per-page"}
     },
     "return_schema": {
-      "type": "object",
-      "description": "Wrapper around OpenAlex /authors search response.",
-      "additionalProperties": true,
-      "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {"type": ["object", "null"], "additionalProperties": true},
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+      "type": ["object", "null"],
+      "description": "OpenAlex authors search response data.",
+      "additionalProperties": true
     },
     "test_examples": [
       {"search": "Yann LeCun", "per_page": 3}
@@ -414,18 +372,9 @@
       "path_params": ["author_id"]
     },
     "return_schema": {
-      "type": "object",
-      "description": "Wrapper around OpenAlex /authors/{id} response.",
-      "additionalProperties": true,
-      "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {"type": ["object", "null"], "additionalProperties": true},
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+      "type": ["object", "null"],
+      "description": "OpenAlex author data.",
+      "additionalProperties": true
     },
     "test_examples": [
       {"author_id": "A5001226970"}
@@ -468,18 +417,9 @@
       "param_map": {"per_page": "per-page"}
     },
     "return_schema": {
-      "type": "object",
-      "description": "Wrapper around OpenAlex /institutions search response.",
-      "additionalProperties": true,
-      "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {"type": ["object", "null"], "additionalProperties": true},
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+      "type": ["object", "null"],
+      "description": "OpenAlex institutions search response data.",
+      "additionalProperties": true
     },
     "test_examples": [
       {"search": "Harvard University", "per_page": 3}
@@ -508,18 +448,9 @@
       "path_params": ["institution_id"]
     },
     "return_schema": {
-      "type": "object",
-      "description": "Wrapper around OpenAlex /institutions/{id} response.",
-      "additionalProperties": true,
-      "properties": {
-        "status": {"type": "string", "enum": ["success", "error"]},
-        "url": {"type": ["string", "null"]},
-        "data": {"type": ["object", "null"], "additionalProperties": true},
-        "error": {"type": ["string", "null"]},
-        "status_code": {"type": ["integer", "null"]},
-        "detail": {"type": ["string", "null"]}
-      },
-      "required": ["status"]
+      "type": ["object", "null"],
+      "description": "OpenAlex institution data.",
+      "additionalProperties": true
     },
     "test_examples": [
       {"institution_id": "I136199984"}

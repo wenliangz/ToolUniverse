@@ -39,6 +39,9 @@ default_tool_files = {
     "HumanBase": os.path.join(current_dir, "data", "humanbase_tools.json"),
     "OpenAlex": os.path.join(current_dir, "data", "openalex_tools.json"),
     # Literature search tools
+    "literature_search": os.path.join(
+        current_dir, "data", "literature_search_tools.json"
+    ),
     "arxiv": os.path.join(current_dir, "data", "arxiv_tools.json"),
     "crossref": os.path.join(current_dir, "data", "crossref_tools.json"),
     "simbad": os.path.join(current_dir, "data", "simbad_tools.json"),
@@ -85,6 +88,11 @@ default_tool_files = {
     ),
     "adverse_event": os.path.join(current_dir, "data", "adverse_event_tools.json"),
     "dailymed": os.path.join(current_dir, "data", "dailymed_tools.json"),
+    "cdc": os.path.join(current_dir, "data", "cdc_tools.json"),
+    "nhanes": os.path.join(current_dir, "data", "nhanes_tools.json"),
+    "health_disparities": os.path.join(
+        current_dir, "data", "health_disparities_tools.json"
+    ),
     "hpa": os.path.join(current_dir, "data", "hpa_tools.json"),
     "reactome": os.path.join(current_dir, "data", "reactome_tools.json"),
     "pubchem": os.path.join(current_dir, "data", "pubchem_tools.json"),

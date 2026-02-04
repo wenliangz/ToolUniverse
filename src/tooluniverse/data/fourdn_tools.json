@@ -94,12 +94,12 @@
       "properties": {
         "status": {"type": "string"},
         "accession": {"type": "string"},
-        "file_type": {"type": "string"},
-        "file_format": {"type": "string"},
-        "file_size": {"type": "integer"},
-        "description": {"type": "string"},
+        "file_type": {"type": ["string", "null"]},
+        "file_format": {"type": ["string", "null"]},
+        "file_size": {"type": ["integer", "null"]},
+        "description": {"type": ["string", "null"]},
         "download_url": {"type": "string"},
-        "metadata": {"type": "object"},
+        "metadata": {"type": ["object", "null"]},
         "error": {"type": "string"}
       },
       "additionalProperties": true
@@ -140,14 +140,14 @@
       "properties": {
         "status": {"type": "string"},
         "accession": {"type": "string"},
-        "experiment_type": {"type": "string"},
+        "experiment_type": {"type": ["string", "null"]},
         "biosample": {"type": "object"},
         "biosource": {"type": "array"},
         "biosource_summary": {"type": "string"},
-        "description": {"type": "string"},
+        "description": {"type": ["string", "null"]},
         "data_status": {"type": "string"},
         "files": {"type": "array"},
-        "metadata": {"type": "object"},
+        "metadata": {"type": ["object", "null"]},
         "error": {"type": "string"}
       },
       "additionalProperties": true

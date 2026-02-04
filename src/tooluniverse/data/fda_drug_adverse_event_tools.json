@@ -94,14 +94,17 @@
         "medicinalproduct": "Aspirin",
         "patientsex": "Male",
         "patientagegroup": "Neonate",
-        "occurcountry": 1,
+        "occurcountry": "US",
         "serious": "Yes",
         "seriousnessdeath": "Yes",
         "reactionmeddraverse": "nausea"
       }
     ],
     "return_schema": {
-      "type": "object",
+      "anyOf": [
+        {"type": "array", "items": {"type": "object"}},
+        {"type": "object"}
+      ],
       "properties": {
         "error": {
           "type": "string"
@@ -338,12 +341,15 @@
       {
         "patientsex": "Male",
         "patientagegroup": "Neonate",
-        "occurcountry": 1,
+        "occurcountry": "US",
         "serious": "Yes"
       }
     ],
     "return_schema": {
-      "type": "object",
+      "anyOf": [
+        {"type": "array", "items": {"type": "object"}},
+        {"type": "object"}
+      ],
       "properties": {
         "error": {
           "type": "string"
@@ -715,11 +721,14 @@
         "medicinalproduct": "Aspirin",
         "patientsex": "Male",
         "patientagegroup": "Neonate",
-        "occurcountry": 1
+        "occurcountry": "US"
       }
     ],
     "return_schema": {
-      "type": "object",
+      "anyOf": [
+        {"type": "array", "items": {"type": "object"}},
+        {"type": "object"}
+      ],
       "properties": {
         "error": {
           "type": "string"
@@ -917,11 +926,14 @@
         "medicinalproduct": "Aspirin",
         "patientsex": "Male",
         "patientagegroup": "Neonate",
-        "occurcountry": 1
+        "occurcountry": "US"
       }
     ],
     "return_schema": {
-      "type": "object",
+      "anyOf": [
+        {"type": "array", "items": {"type": "object"}},
+        {"type": "object"}
+      ],
       "properties": {
         "error": {
           "type": "string"
@@ -1370,13 +1382,16 @@
         ],
         "patientsex": "Male",
         "patientagegroup": "Neonate",
-        "occurcountry": 1,
+        "occurcountry": "US",
         "serious": "Yes",
         "seriousnessdeath": "Yes"
       }
     ],
     "return_schema": {
-      "type": "object",
+      "anyOf": [
+        {"type": "array", "items": {"type": "object"}},
+        {"type": "object"}
+      ],
       "properties": {
         "error": {
           "type": "string"
@@ -1802,11 +1817,14 @@
         ],
         "patientsex": "Male",
         "patientagegroup": "Neonate",
-        "occurcountry": 1
+        "occurcountry": "US"
       }
     ],
     "return_schema": {
-      "type": "object",
+      "anyOf": [
+        {"type": "array", "items": {"type": "object"}},
+        {"type": "object"}
+      ],
       "properties": {
         "error": {
           "type": "string"
@@ -2017,11 +2035,14 @@
         ],
         "patientsex": "Male",
         "patientagegroup": "Neonate",
-        "occurcountry": 1
+        "occurcountry": "US"
       }
     ],
     "return_schema": {
-      "type": "object",
+      "anyOf": [
+        {"type": "array", "items": {"type": "object"}},
+        {"type": "object"}
+      ],
       "properties": {
         "error": {
           "type": "string"

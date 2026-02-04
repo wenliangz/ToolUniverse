@@ -8,8 +8,7 @@
       "properties": {
         "target_type": {
           "type": "string",
-          "default": "protein",
-          "description": "Type of pharmacological target. Examples: 'protein', 'receptor', 'enzyme', 'ion_channel'. Leave default for general protein targets."
+          "description": "Type of pharmacological target. Options: 'GPCR' (G-protein coupled receptor), 'Enzyme', 'LGIC' (ligand-gated ion channel), 'VGIC' (voltage-gated ion channel), 'NHR' (nuclear hormone receptor), 'Catalytic receptor', 'Transporter', 'Other protein', 'Other ion channel'. Leave empty to get all targets."
         },
         "limit": {
           "type": "integer",
@@ -23,163 +22,110 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "description": "ToolUniverse wrapper around Guide to Pharmacology (GtoPdb) API response.",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Execution status.",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Request URL used."
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "Number of items returned (when data is a list)."
-        },
-        "data": {
-          "type": [
-            "array",
-            "object",
-            "null"
-          ],
-          "description": "Raw API response body (usually a list of targets).",
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "targetId": {
-                "type": "integer"
-              },
-              "name": {
-                "type": "string"
-              },
-              "targetType": {
-                "type": "string"
-              },
-              "species": {
-                "type": "string"
-              },
-              "uniprotId": {
-                "type": "string"
-              },
-              "ensemblGeneId": {
-                "type": "string"
-              },
-              "hgncId": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "family": {
-                "type": "string"
-              },
-              "subfamily": {
-                "type": "string"
-              },
-              "subunit": {
-                "type": "string"
-              },
-              "tissue": {
-                "type": "array"
-              },
-              "cellLine": {
-                "type": "array"
-              },
-              "diseases": {
-                "type": "array"
-              },
-              "drugs": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "additionalProperties": true,
-                  "properties": {
-                    "drugId": {
-                      "type": "integer"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "action": {
-                      "type": "string"
-                    },
-                    "mechanism": {
-                      "type": "string"
-                    }
-                  }
+      "type": [
+        "array",
+        "object",
+        "null"
+      ],
+      "description": "Raw API response body (usually a list of targets).",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "targetId": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "targetType": {
+            "type": "string"
+          },
+          "species": {
+            "type": "string"
+          },
+          "uniprotId": {
+            "type": "string"
+          },
+          "ensemblGeneId": {
+            "type": "string"
+          },
+          "hgncId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "family": {
+            "type": "string"
+          },
+          "subfamily": {
+            "type": "string"
+          },
+          "subunit": {
+            "type": "string"
+          },
+          "tissue": {
+            "type": "array"
+          },
+          "cellLine": {
+            "type": "array"
+          },
+          "diseases": {
+            "type": "array"
+          },
+          "drugs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "drugId": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "action": {
+                  "type": "string"
+                },
+                "mechanism": {
+                  "type": "string"
                 }
-              },
-              "ligands": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "additionalProperties": true,
-                  "properties": {
-                    "ligandId": {
-                      "type": "integer"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "string"
-                    },
-                    "affinity": {
-                      "type": "string"
-                    }
-                  }
+              }
+            }
+          },
+          "ligands": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "ligandId": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "affinity": {
+                  "type": "string"
                 }
               }
             }
           }
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Error summary if status=error."
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "HTTP status code if available."
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Additional error detail (truncated)."
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
-        "target_type": "protein",
+        "target_type": "GPCR",
         "limit": 5
       },
       {
-        "target_type": "receptor",
+        "target_type": "Enzyme",
         "limit": 10
       }
     ]
@@ -205,85 +151,44 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "description": "ToolUniverse wrapper around GtoPdb target response. Returns single target or batch results.",
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Detailed target information.",
       "additionalProperties": true,
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
+        "targetId": {
+          "type": "integer"
         },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "name": {
+          "type": "string"
         },
-        "data": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "description": "Detailed target information.",
-          "additionalProperties": true,
-          "properties": {
-            "targetId": {
-              "type": "integer"
-            },
-            "name": {
-              "type": "string"
-            },
-            "abbreviation": {
-              "type": "string"
-            },
-            "targetType": {
-              "type": "string"
-            },
-            "species": {
-              "type": "array"
-            },
-            "geneSymbol": {
-              "type": "string"
-            },
-            "uniprotId": {
-              "type": "string"
-            },
-            "ensemblGeneId": {
-              "type": "string"
-            },
-            "hgncId": {
-              "type": "string"
-            },
-            "description": {
-              "type": "string"
-            }
-          }
+        "abbreviation": {
+          "type": "string"
         },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "targetType": {
+          "type": "string"
         },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
+        "species": {
+          "type": "array"
         },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "geneSymbol": {
+          "type": "string"
+        },
+        "uniprotId": {
+          "type": "string"
+        },
+        "ensemblGeneId": {
+          "type": "string"
+        },
+        "hgncId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -321,101 +226,55 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "ligandId": {
-                "type": "integer"
-              },
-              "name": {
-                "type": "string"
-              },
-              "abbreviation": {
-                "type": "string"
-              },
-              "type": {
-                "type": "string"
-              },
-              "approved": {
-                "type": "boolean"
-              },
-              "withdrawn": {
-                "type": "boolean"
-              },
-              "iupacName": {
-                "type": "string"
-              },
-              "smiles": {
-                "type": "string"
-              },
-              "inchi": {
-                "type": "string"
-              },
-              "inchiKey": {
-                "type": "string"
-              },
-              "pubchemCid": {
-                "type": "integer"
-              },
-              "molecularWeight": {
-                "type": "number"
-              },
-              "logP": {
-                "type": "number"
-              }
-            }
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ligandId": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "abbreviation": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "approved": {
+            "type": "boolean"
+          },
+          "withdrawn": {
+            "type": "boolean"
+          },
+          "iupacName": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          },
+          "inchi": {
+            "type": "string"
+          },
+          "inchiKey": {
+            "type": "string"
+          },
+          "pubchemCid": {
+            "type": "integer"
+          },
+          "molecularWeight": {
+            "type": "number"
+          },
+          "logP": {
+            "type": "number"
           }
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -449,96 +308,56 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Detailed ligand information.",
       "additionalProperties": true,
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
+        "ligandId": {
+          "type": "integer"
         },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "name": {
+          "type": "string"
         },
-        "data": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "description": "Detailed ligand information.",
-          "additionalProperties": true,
-          "properties": {
-            "ligandId": {
-              "type": "integer"
-            },
-            "name": {
-              "type": "string"
-            },
-            "abbreviation": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            },
-            "approved": {
-              "type": "boolean"
-            },
-            "approvalSource": {
-              "type": "string"
-            },
-            "withdrawn": {
-              "type": "boolean"
-            },
-            "iupacName": {
-              "type": "string"
-            },
-            "smiles": {
-              "type": "string"
-            },
-            "inchiKey": {
-              "type": "string"
-            },
-            "molecularWeight": {
-              "type": "number"
-            },
-            "logP": {
-              "type": "number"
-            },
-            "bioavailability": {
-              "type": "string"
-            },
-            "clinicalUse": {
-              "type": "array"
-            }
-          }
+        "abbreviation": {
+          "type": "string"
         },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "type": {
+          "type": "string"
         },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
+        "approved": {
+          "type": "boolean"
         },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "approvalSource": {
+          "type": "string"
+        },
+        "withdrawn": {
+          "type": "boolean"
+        },
+        "iupacName": {
+          "type": "string"
+        },
+        "smiles": {
+          "type": "string"
+        },
+        "inchiKey": {
+          "type": "string"
+        },
+        "molecularWeight": {
+          "type": "number"
+        },
+        "logP": {
+          "type": "number"
+        },
+        "bioavailability": {
+          "type": "string"
+        },
+        "clinicalUse": {
+          "type": "array"
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -552,7 +371,7 @@
   {
     "type": "GtoPdbRESTTool",
     "name": "GtoPdb_search_interactions",
-    "description": "Search pharmacological interactions between targets and ligands across the Guide to Pharmacology database. Returns interaction data with affinity measurements (pKi, pIC50, pEC50), action types (agonist, antagonist, inhibitor), species, and references. Filter by target type, ligand type, affinity threshold, approved drugs, or species. Essential for finding drug-target pairs and structure-activity relationships.",
+    "description": "Search pharmacological interactions between targets and ligands across the Guide to Pharmacology database. Returns interaction data with affinity measurements (pKi, pIC50, pEC50), action types (agonist, antagonist, inhibitor), species, and references. Filter by target type, ligand type, action type, affinity parameter, or approved drugs. Essential for finding drug-target pairs and structure-activity relationships. Note: Use parameters individually or in simple combinations - complex filter combinations may not be supported by the API.",
     "parameter": {
       "type": "object",
       "properties": {
@@ -574,7 +393,7 @@
         },
         "min_affinity": {
           "type": "number",
-          "description": "Minimum affinity value (e.g., 7.0 for pKi >= 7). Higher values indicate stronger binding."
+          "description": "Minimum affinity value (e.g., 7.0 for pKi >= 7). Higher values indicate stronger binding. Note: This parameter may not be supported by the API - consider filtering results after retrieval instead."
         },
         "approved_only": {
           "type": "boolean",
@@ -593,105 +412,57 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "interactionId": {
-                "type": "integer"
-              },
-              "targetId": {
-                "type": "integer"
-              },
-              "targetName": {
-                "type": "string"
-              },
-              "targetType": {
-                "type": "string"
-              },
-              "ligandId": {
-                "type": "integer"
-              },
-              "ligandName": {
-                "type": "string"
-              },
-              "type": {
-                "type": "string"
-              },
-              "action": {
-                "type": "string"
-              },
-              "species": {
-                "type": "string"
-              },
-              "affinityParameters": {
-                "type": "array"
-              },
-              "primaryTarget": {
-                "type": "boolean"
-              }
-            }
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "interactionId": {
+            "type": "integer"
+          },
+          "targetId": {
+            "type": "integer"
+          },
+          "targetName": {
+            "type": "string"
+          },
+          "targetType": {
+            "type": "string"
+          },
+          "ligandId": {
+            "type": "integer"
+          },
+          "ligandName": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "species": {
+            "type": "string"
+          },
+          "affinityParameters": {
+            "type": "array"
+          },
+          "primaryTarget": {
+            "type": "boolean"
           }
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
-        "target_type": "GPCR",
         "approved_only": true,
         "limit": 20
       },
       {
-        "affinity_parameter": "pKi",
-        "min_affinity": 7.5,
+        "action_type": "Agonist",
         "limit": 50
       }
     ]
@@ -699,7 +470,7 @@
   {
     "type": "GtoPdbRESTTool",
     "name": "GtoPdb_get_target_interactions",
-    "description": "Get all ligand interactions for a specific target by its GtoPdb target ID. Returns detailed interaction data including affinity measurements, action types, endogenous ligands, and rank-order potency. Use this to find all known ligands for a target, compare binding affinities, or identify the most potent agonists/antagonists.",
+    "description": "Get all ligand interactions for a specific target by its GtoPdb target ID. Returns detailed interaction data including affinity measurements, action types, endogenous ligands, and rank-order potency. Use this to find all known ligands for a target, compare binding affinities, or identify the most potent agonists/antagonists. Get target IDs using GtoPdb_get_targets first.",
     "parameter": {
       "type": "object",
       "properties": {
@@ -717,7 +488,7 @@
         },
         "min_affinity": {
           "type": "number",
-          "description": "Minimum affinity value (e.g., 7.0). Leave empty for all affinities."
+          "description": "Minimum affinity value (e.g., 7.0). Leave empty for all affinities. Note: This parameter may not be supported by the API - consider filtering results after retrieval instead."
         }
       },
       "required": [
@@ -729,86 +500,40 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "interactionId": {
-                "type": "integer"
-              },
-              "ligandId": {
-                "type": "integer"
-              },
-              "ligandName": {
-                "type": "string"
-              },
-              "type": {
-                "type": "string"
-              },
-              "action": {
-                "type": "string"
-              },
-              "endogenous": {
-                "type": "boolean"
-              },
-              "selectivity": {
-                "type": "string"
-              },
-              "affinityParameters": {
-                "type": "array"
-              }
-            }
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "interactionId": {
+            "type": "integer"
+          },
+          "ligandId": {
+            "type": "integer"
+          },
+          "ligandName": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "endogenous": {
+            "type": "boolean"
+          },
+          "selectivity": {
+            "type": "string"
+          },
+          "affinityParameters": {
+            "type": "array"
           }
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -844,83 +569,37 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "diseaseId": {
-                "type": "integer"
-              },
-              "name": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "omimId": {
-                "type": "string"
-              },
-              "doidId": {
-                "type": "string"
-              },
-              "orphanetId": {
-                "type": "string"
-              },
-              "synonyms": {
-                "type": "array"
-              }
-            }
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "diseaseId": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "omimId": {
+            "type": "string"
+          },
+          "doidId": {
+            "type": "string"
+          },
+          "orphanetId": {
+            "type": "string"
+          },
+          "synonyms": {
+            "type": "array"
           }
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -954,82 +633,42 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Detailed disease information with targets and ligands.",
       "additionalProperties": true,
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
+        "diseaseId": {
+          "type": "integer"
         },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "name": {
+          "type": "string"
         },
-        "data": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "description": "Detailed disease information with targets and ligands.",
-          "additionalProperties": true,
-          "properties": {
-            "diseaseId": {
-              "type": "integer"
-            },
-            "name": {
-              "type": "string"
-            },
-            "description": {
-              "type": "string"
-            },
-            "omimId": {
-              "type": "string"
-            },
-            "doidId": {
-              "type": "string"
-            },
-            "targets": {
-              "type": "array"
-            },
-            "ligands": {
-              "type": "array"
-            }
-          }
+        "description": {
+          "type": "string"
         },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "omimId": {
+          "type": "string"
         },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
+        "doidId": {
+          "type": "string"
         },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "targets": {
+          "type": "array"
+        },
+        "ligands": {
+          "type": "array"
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
-        "disease_id": 1
+        "disease_id": 652
       },
       {
-        "disease_id": 100
+        "disease_id": 273
       }
     ]
   }

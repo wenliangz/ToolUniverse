@@ -20,37 +20,19 @@
       "return_format": "TEXT"
     },
     "return_schema": {
-      "type": "object",
-      "description": "KEGG pathway search results",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Status of the request"
-        },
-        "data": {
-          "type": "array",
-          "description": "Array of pathway results",
-          "items": {
-            "type": "object",
-            "properties": {
-              "pathway_id": {
-                "type": "string",
-                "description": "KEGG pathway identifier"
-              },
-              "description": {
-                "type": "string",
-                "description": "Pathway description"
-              }
-            }
+      "type": "array",
+      "description": "Array of pathway results",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pathway_id": {
+            "type": "string",
+            "description": "KEGG pathway identifier"
+          },
+          "description": {
+            "type": "string",
+            "description": "Pathway description"
           }
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of pathways found"
-        },
-        "url": {
-          "type": "string",
-          "description": "API URL used"
         }
       }
     },
@@ -178,37 +160,19 @@
       "return_format": "TEXT"
     },
     "return_schema": {
-      "type": "object",
-      "description": "KEGG gene search results",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Status of the request"
-        },
-        "data": {
-          "type": "array",
-          "description": "Array of gene results",
-          "items": {
-            "type": "object",
-            "properties": {
-              "gene_id": {
-                "type": "string",
-                "description": "KEGG gene identifier"
-              },
-              "description": {
-                "type": "string",
-                "description": "Gene description"
-              }
-            }
+      "type": "array",
+      "description": "Array of gene results",
+      "items": {
+        "type": "object",
+        "properties": {
+          "gene_id": {
+            "type": "string",
+            "description": "KEGG gene identifier"
+          },
+          "description": {
+            "type": "string",
+            "description": "Gene description"
           }
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of genes found"
-        },
-        "url": {
-          "type": "string",
-          "description": "API URL used"
         }
       }
     },
@@ -325,41 +289,23 @@
       "return_format": "TEXT"
     },
     "return_schema": {
-      "type": "object",
-      "description": "KEGG organism list",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Status of the request"
-        },
-        "data": {
-          "type": "array",
-          "description": "Array of organism information",
-          "items": {
-            "type": "object",
-            "properties": {
-              "organism_code": {
-                "type": "string",
-                "description": "KEGG organism code (e.g., 'hsa', 'mmu')"
-              },
-              "organism_name": {
-                "type": "string",
-                "description": "Organism scientific name"
-              },
-              "description": {
-                "type": "string",
-                "description": "Organism description"
-              }
-            }
+      "type": "array",
+      "description": "Array of organism information",
+      "items": {
+        "type": "object",
+        "properties": {
+          "organism_code": {
+            "type": "string",
+            "description": "KEGG organism code (e.g., 'hsa', 'mmu')"
+          },
+          "organism_name": {
+            "type": "string",
+            "description": "Organism scientific name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Organism description"
           }
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of organisms"
-        },
-        "url": {
-          "type": "string",
-          "description": "API URL used"
         }
       }
     },

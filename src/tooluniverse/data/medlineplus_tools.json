@@ -86,7 +86,7 @@
               "groups": {
                 "type": "array",
                 "items": {
-                  "type": "string"
+                  "type": ["string", "object"]
                 }
               }
             }
@@ -305,7 +305,7 @@
         "health_conditions": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": ["string", "object"]
           },
           "description": "List of related health conditions"
         },

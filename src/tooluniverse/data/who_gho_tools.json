@@ -84,9 +84,9 @@
     "test_examples": [
       {
         "indicator_code": "WHOSIS_000001",
-        "country_code": 1,
-        "year": 2023,
-        "top": 100,
+        "country_code": "USA",
+        "year": 2020,
+        "top": 10,
         "skip": 0
       }
     ]
@@ -153,9 +153,9 @@
     },
     "test_examples": [
       {
-        "query": "machine learning optimization",
-        "country_code": 1,
-        "year": 2023,
+        "query": "diabetes prevalence",
+        "country_code": "USA",
+        "year": 2020,
         "top": 5
       }
     ]

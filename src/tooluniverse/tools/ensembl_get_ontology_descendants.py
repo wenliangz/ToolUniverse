@@ -15,7 +15,7 @@ def ensembl_get_ontology_descendants(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> list[Any]:
     """
     Get descendant terms for a GO (Gene Ontology) term. Returns child terms down the ontology hierarc...
 
@@ -34,7 +34,7 @@ def ensembl_get_ontology_descendants(
 
     Returns
     -------
-    dict[str, Any]
+    list[Any]
     """
     # Handle mutable defaults to avoid B006 linting error
 

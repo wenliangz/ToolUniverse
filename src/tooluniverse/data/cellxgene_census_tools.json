@@ -2,6 +2,10 @@
   {
     "name": "CELLxGENE_get_census_versions",
     "type": "CELLxGENECensusTool",
+    "required_packages": [
+      "cellxgene_census",
+      "tiledbsoma"
+    ],
     "description": "Get list of available CELLxGENE Census versions with release dates and descriptions. The Census contains single-cell RNA-seq data from 50M+ cells (human, mouse, non-human primates). Latest LTS release: 2025-11-08. Prerequisites: Requires 'cellxgene-census' package (install: pip install tooluniverse[singlecell]). Use for: checking available data versions, selecting stable vs latest builds, understanding data updates.",
     "parameter": {
       "type": "object",
@@ -36,6 +40,10 @@
   {
     "name": "CELLxGENE_get_cell_metadata",
     "type": "CELLxGENECensusTool",
+    "required_packages": [
+      "cellxgene_census",
+      "tiledbsoma"
+    ],
     "description": "Query cell (observation) metadata from CELLxGENE Census. Returns cell type, tissue, disease, donor information, and experimental metadata. Filter by tissue, cell type, disease, or any metadata field. Use for: finding cells matching criteria, exploring available cell types, quality filtering, cohort selection.",
     "parameter": {
       "type": "object",
@@ -94,6 +102,10 @@
   {
     "name": "CELLxGENE_get_gene_metadata",
     "type": "CELLxGENECensusTool",
+    "required_packages": [
+      "cellxgene_census",
+      "tiledbsoma"
+    ],
     "description": "Query gene (variable) metadata from CELLxGENE Census. Returns gene symbols, Ensembl IDs, feature types, and summary statistics. Filter by gene name, feature type, or expression characteristics. Use for: finding genes of interest, validating gene symbols, exploring feature presence across datasets.",
     "parameter": {
       "type": "object",
@@ -152,6 +164,10 @@
   {
     "name": "CELLxGENE_get_expression_data",
     "type": "CELLxGENECensusTool",
+    "required_packages": [
+      "cellxgene_census",
+      "tiledbsoma"
+    ],
     "description": "Query gene expression data from CELLxGENE Census as AnnData object summary. Filter cells and genes simultaneously. Returns dataset dimensions and metadata structure. For actual matrix data, use Python API directly with larger memory. Use for: understanding query size, validating filters, preparing for full data download.",
     "parameter": {
       "type": "object",
@@ -221,6 +237,10 @@
   {
     "name": "CELLxGENE_get_presence_matrix",
     "type": "CELLxGENECensusTool",
+    "required_packages": [
+      "cellxgene_census",
+      "tiledbsoma"
+    ],
     "description": "Get feature presence matrix showing which genes are measured in which datasets. Returns sparse matrix dimensions and density. Useful for understanding data completeness and selecting datasets with genes of interest. Use for: checking gene coverage, dataset selection, quality assessment.",
     "parameter": {
       "type": "object",
@@ -269,6 +289,10 @@
   {
     "name": "CELLxGENE_get_embeddings",
     "type": "CELLxGENECensusTool",
+    "required_packages": [
+      "cellxgene_census",
+      "tiledbsoma"
+    ],
     "description": "Access pre-calculated cell embeddings (scVI, Geneformer) from CELLxGENE Census. Returns available embedding names or specific embedding data. Embeddings enable rapid visualization and analysis without recomputation. Use for: UMAP/t-SNE visualization, cell similarity analysis, transfer learning.",
     "parameter": {
       "type": "object",
@@ -321,6 +345,10 @@
   {
     "name": "CELLxGENE_download_h5ad",
     "type": "CELLxGENECensusTool",
+    "required_packages": [
+      "cellxgene_census",
+      "tiledbsoma"
+    ],
     "description": "Download original H5AD (HDF5-based AnnData) files from CELLxGENE datasets or get their URIs. Access unprocessed data from individual studies with complete metadata and analysis results. Requires dataset_id from CELLxGENE Discover. Note: Files can be large (GBs). Use for: accessing raw data, reproducibility, offline analysis, custom processing pipelines.",
     "parameter": {
       "type": "object",

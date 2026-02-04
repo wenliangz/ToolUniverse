@@ -66,15 +66,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -199,15 +208,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -333,15 +351,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -466,15 +493,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -599,15 +635,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -732,15 +777,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -871,15 +925,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -1010,15 +1073,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -1149,15 +1221,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -1282,15 +1363,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -1422,15 +1512,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -1561,15 +1660,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -1693,15 +1801,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -1832,15 +1949,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -1928,15 +2054,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -2024,15 +2159,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -2120,15 +2264,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -2216,15 +2369,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -2312,15 +2474,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {
@@ -2408,15 +2579,24 @@
           "description": "Latest version number"
         },
         "author": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Author or maintainer"
         },
         "license": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "License type"
         },
         "home_page": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Home page URL"
         },
         "documentation": {

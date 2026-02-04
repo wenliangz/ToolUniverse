@@ -86,11 +86,7 @@
     "test_examples": [
       {
         "disease_name": "Diabetes Mellitus",
-        "targets": [
-          "EGFR",
-          "BRAF",
-          "ALK"
-        ],
+        "targets": "EGFR, BRAF, ALK",
         "context": "The quick brown fox jumps over the lazy dog."
       }
     ],

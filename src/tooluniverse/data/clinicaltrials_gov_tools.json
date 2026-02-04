@@ -48,131 +48,59 @@
         "condition": "diabetes-mellitus",
         "intervention": "aspirin",
         "query_term": "gene:TP53",
-        "pageSize": 1,
-        "pageToken": 1
+        "pageSize": 1
       }
     ],
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string"
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Message when no studies are found"
         },
-        "error_details": {
+        {
           "type": "object",
           "properties": {
-            "type": {
-              "type": "string"
-            },
-            "message": {
-              "type": "string"
-            },
-            "retriable": {
-              "type": "boolean"
-            },
-            "next_steps": {
+            "studies": {
               "type": "array",
               "items": {
-                "type": "string"
-              }
-            },
-            "details": {
-              "type": "object",
-              "properties": {
-                "validation_error": {
-                  "type": "string"
-                },
-                "path": {
-                  "type": "array",
-                  "items": {
+                "type": "object",
+                "properties": {
+                  "NCT ID": {
                     "type": "string"
-                  }
-                },
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
+                  },
+                  "brief_title": {
+                    "type": "string"
+                  },
+                  "brief_summary": {
+                    "type": "string"
+                  },
+                  "overall_status": {
+                    "type": "string"
+                  },
+                  "condition": {
+                    "type": "array",
+                    "items": {
                       "type": "string"
-                    },
-                    "properties": {
-                      "type": "object",
-                      "properties": {
-                        "condition": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "intervention": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "query_term": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "pageSize": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "pageToken": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "required": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
+                    }
+                  },
+                  "phase": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
                     }
                   }
-                },
-                "parameter": {
-                  "type": "string"
-                },
-                "expected": {
-                  "type": "string"
                 }
               }
+            },
+            "nextPageToken": {
+              "type": "string"
+            },
+            "total_count": {
+              "type": "integer"
             }
           }
         }
-      }
+      ]
     }
   },
   {

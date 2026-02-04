@@ -44,25 +44,16 @@
       "required": ["operation", "gencode_id"]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "median": {"type": "number"},
-              "tissueSiteDetailId": {"type": "string"},
-              "gencodeId": {"type": "string"},
-              "geneSymbol": {"type": "string"},
-              "unit": {"type": "string"}
-            }
-          }
-        },
-        "paging_info": {"type": "object"},
-        "num_results": {"type": "integer"},
-        "error": {"type": "string"}
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "median": {"type": "number"},
+          "tissueSiteDetailId": {"type": "string"},
+          "gencodeId": {"type": "string"},
+          "geneSymbol": {"type": "string"},
+          "unit": {"type": "string"}
+        }
       }
     },
     "test_examples": [
@@ -107,26 +98,18 @@
       "required": ["operation"]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "tissueSiteDetailId": {"type": "string"},
-              "tissueSiteDetail": {"type": "string"},
-              "tissueSite": {"type": "string"},
-              "colorHex": {"type": "string"},
-              "eGeneCount": {"type": "integer"},
-              "expressedGeneCount": {"type": "integer"},
-              "rnaSeqSampleSummary": {"type": "object"}
-            }
-          }
-        },
-        "num_tissues": {"type": "integer"},
-        "error": {"type": "string"}
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tissueSiteDetailId": {"type": "string"},
+          "tissueSiteDetail": {"type": "string"},
+          "tissueSite": {"type": "string"},
+          "colorHex": {"type": "string"},
+          "eGeneCount": {"type": ["integer", "null"]},
+          "expressedGeneCount": {"type": ["integer", "null"]},
+          "rnaSeqSampleSummary": {"type": "object"}
+        }
       }
     },
     "test_examples": [
@@ -173,26 +156,18 @@
       "required": ["operation"]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "gencodeId": {"type": "string"},
-              "geneSymbol": {"type": "string"},
-              "tissueSiteDetailId": {"type": "string"},
-              "pValue": {"type": "number"},
-              "qValue": {"type": "number"},
-              "log2AllelicFoldChange": {"type": "number"},
-              "empiricalPValue": {"type": "number"}
-            }
-          }
-        },
-        "num_egenes": {"type": "integer"},
-        "error": {"type": "string"}
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "gencodeId": {"type": "string"},
+          "geneSymbol": {"type": "string"},
+          "tissueSiteDetailId": {"type": "string"},
+          "pValue": {"type": "number"},
+          "qValue": {"type": "number"},
+          "log2AllelicFoldChange": {"type": "number"},
+          "empiricalPValue": {"type": "number"}
+        }
       }
     },
     "test_examples": [
@@ -249,28 +224,20 @@
       "required": ["operation"]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "gencodeId": {"type": "string"},
-              "geneSymbol": {"type": "string"},
-              "variantId": {"type": "string"},
-              "snpId": {"type": "string"},
-              "tissueSiteDetailId": {"type": "string"},
-              "pValue": {"type": "number"},
-              "nes": {"type": "number"},
-              "chromosome": {"type": "string"},
-              "pos": {"type": "integer"}
-            }
-          }
-        },
-        "num_eqtls": {"type": "integer"},
-        "error": {"type": "string"}
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "gencodeId": {"type": "string"},
+          "geneSymbol": {"type": "string"},
+          "variantId": {"type": "string"},
+          "snpId": {"type": "string"},
+          "tissueSiteDetailId": {"type": "string"},
+          "pValue": {"type": "number"},
+          "nes": {"type": "number"},
+          "chromosome": {"type": "string"},
+          "pos": {"type": "integer"}
+        }
       }
     },
     "test_examples": [
@@ -316,7 +283,6 @@
     "return_schema": {
       "type": "object",
       "properties": {
-        "status": {"type": "string"},
         "gencodeId": {"type": "string"},
         "geneSymbol": {"type": "string"},
         "variantId": {"type": "string"},
@@ -327,16 +293,16 @@
         "pValueThreshold": {"type": "number"},
         "data": {"type": "array"},
         "genotypes": {"type": "array"},
-        "maf": {"type": "number"},
-        "error": {"type": "string"}
+        "maf": {"type": "number"}
       }
     },
     "test_examples": [
       {
         "operation": "calculate_eqtl",
-        "gencode_id": "ENSG00000141510.16",
-        "variant_id": "chr17_7676154_G_A_b38",
-        "tissue_site_detail_id": "Whole_Blood"
+        "gencode_id": "ENSG00000227232.5",
+        "variant_id": "chr1_64764_C_T_b38",
+        "tissue_site_detail_id": "Whole_Blood",
+        "dataset_id": "gtex_v8"
       }
     ]
   },
@@ -381,24 +347,16 @@
       "required": ["operation", "tissue_site_detail_id"]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "gencodeId": {"type": "string"},
-              "geneSymbol": {"type": "string"},
-              "median": {"type": "number"},
-              "unit": {"type": "string"},
-              "tissueSiteDetailId": {"type": "string"}
-            }
-          }
-        },
-        "num_genes": {"type": "integer"},
-        "error": {"type": "string"}
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "gencodeId": {"type": "string"},
+          "geneSymbol": {"type": "string"},
+          "median": {"type": "number"},
+          "unit": {"type": "string"},
+          "tissueSiteDetailId": {"type": "string"}
+        }
       }
     },
     "test_examples": [
@@ -430,28 +388,20 @@
       "required": ["operation"]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "datasets": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "datasetId": {"type": "string"},
-              "displayName": {"type": "string"},
-              "description": {"type": "string"},
-              "gencodeVersion": {"type": "string"},
-              "genomeBuild": {"type": "string"},
-              "dbSnpBuild": {"type": "integer"},
-              "subjectCount": {"type": "integer"},
-              "tissueCount": {"type": "integer"},
-              "rnaSeqSampleCount": {"type": "integer"}
-            }
-          }
-        },
-        "num_datasets": {"type": "integer"},
-        "error": {"type": "string"}
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "datasetId": {"type": "string"},
+          "displayName": {"type": "string"},
+          "description": {"type": "string"},
+          "gencodeVersion": {"type": "string"},
+          "genomeBuild": {"type": "string"},
+          "dbSnpBuild": {"type": "integer"},
+          "subjectCount": {"type": "integer"},
+          "tissueCount": {"type": "integer"},
+          "rnaSeqSampleCount": {"type": "integer"}
+        }
       }
     },
     "test_examples": [
@@ -507,25 +457,17 @@
       "required": ["operation", "gencode_id"]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "gencodeId": {"type": "string"},
-              "geneSymbol": {"type": "string"},
-              "tissueSiteDetailId": {"type": "string"},
-              "data": {"type": "array", "items": {"type": "number"}},
-              "unit": {"type": "string"},
-              "subsetGroup": {"type": "string"}
-            }
-          }
-        },
-        "num_results": {"type": "integer"},
-        "error": {"type": "string"}
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "gencodeId": {"type": "string"},
+          "geneSymbol": {"type": "string"},
+          "tissueSiteDetailId": {"type": "string"},
+          "data": {"type": "array", "items": {"type": "number"}},
+          "unit": {"type": "string"},
+          "subsetGroup": {"type": "string"}
+        }
       }
     },
     "test_examples": [
@@ -597,28 +539,20 @@
       "required": ["operation"]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "sampleId": {"type": "string"},
-              "subjectId": {"type": "string"},
-              "tissueSiteDetailId": {"type": "string"},
-              "sex": {"type": "string"},
-              "ageBracket": {"type": "string"},
-              "ischemicTime": {"type": "integer"},
-              "rin": {"type": "number"},
-              "hardyScale": {"type": "string"},
-              "pathologyNotes": {"type": "string"}
-            }
-          }
-        },
-        "num_samples": {"type": "integer"},
-        "error": {"type": "string"}
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sampleId": {"type": "string"},
+          "subjectId": {"type": "string"},
+          "tissueSiteDetailId": {"type": "string"},
+          "sex": {"type": "string"},
+          "ageBracket": {"type": "string"},
+          "ischemicTime": {"type": ["integer", "null"]},
+          "rin": {"type": ["number", "null"]},
+          "hardyScale": {"type": ["string", "null"]},
+          "pathologyNotes": {"type": ["string", "null"]}
+        }
       }
     },
     "test_examples": [
@@ -670,34 +604,26 @@
       "required": ["operation", "gencode_id"]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "gencodeId": {"type": "string"},
+          "variantId": {"type": "string"},
+          "metaP": {"type": "number"},
+          "tissues": {
             "type": "object",
-            "properties": {
-              "gencodeId": {"type": "string"},
-              "variantId": {"type": "string"},
-              "metaP": {"type": "number"},
-              "tissues": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "object",
-                  "properties": {
-                    "mValue": {"type": "number"},
-                    "pValue": {"type": "number"},
-                    "nes": {"type": "number"},
-                    "se": {"type": "number"}
-                  }
-                }
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "mValue": {"type": ["number", "null"]},
+                "pValue": {"type": ["number", "null"]},
+                "nes": {"type": ["number", "null"]},
+                "se": {"type": ["number", "null"]}
               }
             }
           }
-        },
-        "num_results": {"type": "integer"},
-        "error": {"type": "string"}
+        }
       }
     },
     "test_examples": [

@@ -1022,38 +1022,52 @@
         ],
         "from_db": "UniProtKB_AC-ID",
         "to_db": "UniProtKB",
-        "max_wait_time": 120
+        "max_wait_time": 30
       }
     ],
     "return_schema": {
       "type": "object",
+      "description": "ID mapping results or job status information",
       "properties": {
         "status": {
           "type": "string",
-          "description": "When successful: omitted; when timed out: 'running'; when failed: omitted with error."
+          "description": "Job status: 'running' if still processing, or omitted if completed"
         },
         "job_id": {
           "type": "string",
-          "description": "UniProt ID mapping job ID when status='running'."
+          "description": "UniProt ID mapping job ID"
         },
         "status_url": {
           "type": "string",
-          "description": "URL to poll for job status when status='running'."
+          "description": "URL to poll for job status"
         },
         "results_url": {
           "type": "string",
-          "description": "URL to fetch job results when finished."
+          "description": "URL to fetch job results when finished"
         },
         "note": {
           "type": "string",
-          "description": "Human-readable guidance when job is still running."
+          "description": "Human-readable guidance when job is still running"
         },
         "max_wait_time": {
           "type": "integer",
-          "description": "The max wait time used before returning status='running'."
+          "description": "Maximum wait time used"
+        },
+        "mapped_count": {
+          "type": "integer",
+          "description": "Number of successfully mapped IDs (when completed)"
+        },
+        "results": {
+          "type": "array",
+          "description": "Mapping results (when completed)"
+        },
+        "failed": {
+          "type": "array",
+          "description": "IDs that failed to map (when completed)"
         },
         "error": {
-          "type": "string"
+          "type": "string",
+          "description": "Error message if mapping failed"
         }
       }
     }

@@ -28,27 +28,26 @@
       "format": "json"
     },
     "return_schema": {
-      "type": "object",
-      "description": "MGnify study list response",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "object",
-          "properties": {
-            "data": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {"type": "string"},
-                  "type": {"type": "string"},
-                  "attributes": {"type": "object"}
-                }
-              }
-            }
+      "type": "array",
+      "description": "Array of MGnify study objects",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string", "description": "MGnify study accession (e.g., MGYS00006860)"},
+          "type": {"type": "string", "description": "Resource type (studies)"},
+          "attributes": {
+            "type": "object",
+            "description": "Study metadata (bioproject, accession, study-name, etc.)"
+          },
+          "relationships": {
+            "type": "object",
+            "description": "Links to related resources (samples, analyses, biomes, etc.)"
+          },
+          "links": {
+            "type": "object",
+            "description": "API links for this study"
           }
-        },
-        "url": {"type": "string"}
+        }
       }
     },
     "test_examples": [
@@ -86,27 +85,26 @@
       "format": "json"
     },
     "return_schema": {
-      "type": "object",
-      "description": "MGnify analyses list response",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "object",
-          "properties": {
-            "data": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {"type": "string"},
-                  "type": {"type": "string"},
-                  "attributes": {"type": "object"}
-                }
-              }
-            }
+      "type": "array",
+      "description": "Array of MGnify analysis objects",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string", "description": "MGnify analysis accession"},
+          "type": {"type": "string", "description": "Resource type (analyses)"},
+          "attributes": {
+            "type": "object",
+            "description": "Analysis metadata (pipeline version, taxonomy/function results, etc.)"
+          },
+          "relationships": {
+            "type": "object",
+            "description": "Links to related resources (study, sample, downloads, etc.)"
+          },
+          "links": {
+            "type": "object",
+            "description": "API links for this analysis"
           }
-        },
-        "url": {"type": "string"}
+        }
       }
     },
     "test_examples": [

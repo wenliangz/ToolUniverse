@@ -69,11 +69,13 @@ class TestBioModelsDirectClass:
         with patch.object(tool.session, 'request') as mock_request:
             mock_response = MagicMock()
             mock_response.status_code = 200
+            # Match actual API format: models array + matches integer
             mock_response.json.return_value = {
-                "matches": [
+                "models": [
                     {"id": "BIOMD0000000001", "name": "Test Model 1"},
                     {"id": "BIOMD0000000002", "name": "Test Model 2"}
-                ]
+                ],
+                "matches": 2
             }
             mock_response.raise_for_status = MagicMock()
             mock_request.return_value = mock_response
@@ -84,6 +86,9 @@ class TestBioModelsDirectClass:
             assert "data" in result
             assert "count" in result
             assert result["count"] == 2
+            assert isinstance(result["data"], dict)
+            assert "models" in result["data"]
+            assert len(result["data"]["models"]) == 2
     
     def test_get_model_success(self, tool_configs):
         """Test successful model retrieval"""
@@ -212,8 +217,10 @@ class TestBioModelsToolUniverse:
         """Test search via ToolUniverse interface"""
         mock_response = MagicMock()
         mock_response.status_code = 200
+        # Match actual API format: models array + matches integer
         mock_response.json.return_value = {
-            "matches": [{"id": "BIOMD0000000001", "name": "Test"}]
+            "models": [{"id": "BIOMD0000000001", "name": "Test"}],
+            "matches": 1
         }
         mock_response.raise_for_status = MagicMock()
         mock_request.return_value = mock_response
@@ -225,6 +232,8 @@ class TestBioModelsToolUniverse:
         
         assert result["status"] == "success"
         assert "data" in result
+        assert "count" in result
+        assert result["count"] == 1
     
     @patch('requests.Session.request')
     def test_get_model_via_tooluniverse(self, mock_request, tu):

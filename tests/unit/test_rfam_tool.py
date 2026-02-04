@@ -76,5 +76,7 @@ class TestRfamTools:
         assert result.get("status") == "success" or "error" in result
         
         if result.get("status") == "success":
-            assert "alignment" in result
-            assert "format" in result
+            # Check if data is nested or flat
+            data = result.get("data", result)
+            assert "alignment" in data
+            assert "format" in data

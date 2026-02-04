@@ -12,52 +12,25 @@
         },
         "format": {
           "type": "string",
-          "enum": ["json", "xml"],
+          "enum": [
+            "json",
+            "xml"
+          ],
           "default": "json",
           "description": "Response format"
         }
       },
-      "required": ["identifier"]
+      "required": [
+        "identifier"
+      ]
     },
     "fields": {
       "endpoint": "https://www.ebi.ac.uk/intact/ws/interactor/{identifier}",
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Request status"
-        },
-        "data": {
-          "type": "array",
-          "description": "Interactor information including names, organism, cross-references"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL of the API request"
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of results returned"
-        },
-        "hitCount": {
-          "type": "integer",
-          "description": "Total number of hits available"
-        },
-        "interaction_ids": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "List of interaction IDs found"
-        },
-        "note": {
-          "type": "string",
-          "description": "Information about data source and usage"
-        }
-      }
+      "type": ["array", "object"],
+      "description": "Interactor information including names, organism, cross-references (returns array for multiple results or object for single result)"
     },
     "test_examples": [
       {
@@ -81,51 +54,24 @@
         },
         "format": {
           "type": "string",
-          "enum": ["json", "xml"],
+          "enum": [
+            "json",
+            "xml"
+          ],
           "default": "json"
         }
       },
-      "required": ["identifier"]
+      "required": [
+        "identifier"
+      ]
     },
     "fields": {
       "endpoint": "https://www.ebi.ac.uk/intact/ws/interaction/{identifier}",
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Request status"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of interactions involving the interactor"
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of interactions found"
-        },
-        "hitCount": {
-          "type": "integer",
-          "description": "Total number of hits available"
-        },
-        "interaction_ids": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "List of IntAct interaction IDs (e.g., 'EBI-366083-EBI-366083') that can be used with intact_get_interaction_details or intact_get_interaction_network"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL of the API request"
-        },
-        "note": {
-          "type": "string",
-          "description": "Information about data source and usage"
-        }
-      }
+      "type": "array",
+      "description": "List of interactions involving the interactor"
     },
     "test_examples": [
       {
@@ -161,51 +107,24 @@
         },
         "format": {
           "type": "string",
-          "enum": ["json", "xml"],
+          "enum": [
+            "json",
+            "xml"
+          ],
           "default": "json"
         }
       },
-      "required": ["query"]
+      "required": [
+        "query"
+      ]
     },
     "fields": {
       "endpoint": "https://www.ebi.ac.uk/intact/ws/interaction/search",
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Request status"
-        },
-        "data": {
-          "type": "array",
-          "description": "Search results with interactions"
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of results returned"
-        },
-        "hitCount": {
-          "type": "integer",
-          "description": "Total number of hits available"
-        },
-        "interaction_ids": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "List of IntAct interaction IDs (e.g., 'EBI-366083-EBI-366083') that can be used with intact_get_interaction_details or intact_get_interaction_network"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL of the API request"
-        },
-        "note": {
-          "type": "string",
-          "description": "Information about data source and usage"
-        }
-      }
+      "type": "array",
+      "description": "Search results with interactions"
     },
     "test_examples": [
       {
@@ -231,51 +150,24 @@
         },
         "format": {
           "type": "string",
-          "enum": ["json", "xml"],
+          "enum": [
+            "json",
+            "xml"
+          ],
           "default": "json"
         }
       },
-      "required": ["interaction_id"]
+      "required": [
+        "interaction_id"
+      ]
     },
     "fields": {
       "endpoint": "https://www.ebi.ac.uk/intact/ws/interaction/{interaction_id}",
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Request status"
-        },
-        "data": {
-          "type": "array",
-          "description": "Complete interaction details"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL of the API request"
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of results returned"
-        },
-        "hitCount": {
-          "type": "integer",
-          "description": "Total number of hits available"
-        },
-        "interaction_ids": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "List of interaction IDs found"
-        },
-        "note": {
-          "type": "string",
-          "description": "Information about data source and usage"
-        }
-      }
+      "type": "array",
+      "description": "Complete interaction details"
     },
     "test_examples": [
       {
@@ -303,51 +195,24 @@
         },
         "format": {
           "type": "string",
-          "enum": ["json", "xml"],
+          "enum": [
+            "json",
+            "xml"
+          ],
           "default": "json"
         }
       },
-      "required": ["identifier"]
+      "required": [
+        "identifier"
+      ]
     },
     "fields": {
       "endpoint": "https://www.ebi.ac.uk/intact/ws/interaction/network/{identifier}",
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Request status"
-        },
-        "data": {
-          "type": "array",
-          "description": "Interaction network data with nodes and edges"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL of the API request"
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of results returned"
-        },
-        "hitCount": {
-          "type": "integer",
-          "description": "Total number of hits available"
-        },
-        "interaction_ids": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "List of interaction IDs found"
-        },
-        "note": {
-          "type": "string",
-          "description": "Information about data source and usage"
-        }
-      }
+      "type": "array",
+      "description": "Interaction network data with nodes and edges"
     },
     "test_examples": [
       {
@@ -375,51 +240,24 @@
         },
         "format": {
           "type": "string",
-          "enum": ["json", "xml"],
+          "enum": [
+            "json",
+            "xml"
+          ],
           "default": "json"
         }
       },
-      "required": ["taxid"]
+      "required": [
+        "taxid"
+      ]
     },
     "fields": {
       "endpoint": "https://www.ebi.ac.uk/ebisearch/ws/rest/intact",
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Request status (success or error)"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of interactions for the organism"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL of the API request"
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of interactions found"
-        },
-        "hitCount": {
-          "type": "integer",
-          "description": "Total number of interactions available"
-        },
-        "interaction_ids": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "List of IntAct interaction IDs that can be used with intact_get_interaction_details"
-        },
-        "note": {
-          "type": "string",
-          "description": "Information about data source and usage"
-        }
-      }
+      "type": "array",
+      "description": "List of interactions for the organism"
     },
     "test_examples": [
       {
@@ -457,51 +295,24 @@
         },
         "format": {
           "type": "string",
-          "enum": ["json", "xml"],
+          "enum": [
+            "json",
+            "xml"
+          ],
           "default": "json"
         }
       },
-      "required": ["complex_id"]
+      "required": [
+        "complex_id"
+      ]
     },
     "fields": {
       "endpoint": "https://www.ebi.ac.uk/intact/complex-ws/search",
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Request status (success or error)"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of complexes matching the search. Each complex includes complexAC, complexName, organismName, description, predictedComplex, and interactors."
-        },
-        "url": {
-          "type": "string",
-          "description": "URL of the API request"
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of complexes returned"
-        },
-        "totalNumberOfResults": {
-          "type": "integer",
-          "description": "Total number of complexes available"
-        },
-        "complex_ac_list": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "List of complex ACs (e.g., 'CPX-915') that can be used for further queries"
-        },
-        "note": {
-          "type": "string",
-          "description": "Information about data source and usage"
-        }
-      }
+      "type": "array",
+      "description": "List of complexes matching the search. Each complex includes complexAC, complexName, organismName, description, predictedComplex, and interactors."
     },
     "test_examples": [
       {
@@ -527,11 +338,16 @@
         },
         "format": {
           "type": "string",
-          "enum": ["json", "xml"],
+          "enum": [
+            "json",
+            "xml"
+          ],
           "default": "json"
         }
       },
-      "required": ["complex_ac"]
+      "required": [
+        "complex_ac"
+      ]
     },
     "fields": {
       "endpoint": "https://www.ebi.ac.uk/intact/complex-ws/complex/{complex_ac}",
@@ -539,152 +355,127 @@
     },
     "return_schema": {
       "type": "object",
+      "description": "Complete complex details including complexAC, name, synonyms, systematicName, functions, properties, species, ligands, complexAssemblies, participants, diseases, and other metadata",
       "properties": {
-        "status": {
-          "type": "string",
-          "description": "Request status (success or error)"
-        },
-        "data": {
-          "type": "object",
-          "description": "Complete complex details including complexAC, name, synonyms, systematicName, functions, properties, species, ligands, complexAssemblies, participants, diseases, and other metadata",
-          "properties": {
-            "complexAc": {
-              "type": "string",
-              "description": "Complex AC (e.g., 'CPX-915')"
-            },
-            "name": {
-              "type": "string",
-              "description": "Complex name"
-            },
-            "systematicName": {
-              "type": "string",
-              "description": "Systematic name of the complex"
-            },
-            "synonyms": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Alternative names for the complex"
-            },
-            "functions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Functional descriptions of the complex"
-            },
-            "properties": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Properties and characteristics of the complex"
-            },
-            "ac": {
-              "type": "string",
-              "description": "Additional accession identifier"
-            },
-            "species": {
-              "type": "string",
-              "description": "Organism information"
-            },
-            "ligands": {
-              "type": "array",
-              "description": "Associated ligands"
-            },
-            "complexAssemblies": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Complex assembly information"
-            },
-            "participants": {
-              "type": "array",
-              "description": "Complex participants with interactor details, stoichiometry, and features"
-            },
-            "diseases": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Associated diseases"
-            },
-            "crossReferences": {
-              "type": "array",
-              "description": "Cross-references to other databases (GO, PubMed, PDB, etc.)"
-            },
-            "institution": {
-              "type": "string",
-              "description": "Institution that curated the complex data"
-            },
-            "institutionURL": {
-              "type": "string",
-              "description": "URL of the institution"
-            },
-            "agonists": {
-              "type": "array",
-              "description": "Agonists associated with the complex"
-            },
-            "antagonists": {
-              "type": "array",
-              "description": "Antagonists associated with the complex"
-            },
-            "comments": {
-              "type": "array",
-              "description": "Additional comments about the complex"
-            },
-            "predictedComplex": {
-              "type": "boolean",
-              "description": "Whether the complex is predicted or experimentally verified"
-            },
-            "evidenceType": {
-              "type": "object",
-              "description": "Evidence type information including identifier, description, and confidence score",
-              "properties": {
-                "identifier": {
-                  "type": "string",
-                  "description": "Evidence type identifier (e.g., ECO code)"
-                },
-                "description": {
-                  "type": "string",
-                  "description": "Description of the evidence type"
-                },
-                "searchURL": {
-                  "type": "string",
-                  "description": "URL to search for evidence type details"
-                },
-                "confidenceScore": {
-                  "type": "integer",
-                  "description": "Confidence score for the evidence"
-                }
-              }
-            },
-            "releaseDates": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Release dates for the complex data"
-            }
-          }
-        },
-        "url": {
-          "type": "string",
-          "description": "URL of the API request"
-        },
-        "complex_ac": {
+        "complexAc": {
           "type": "string",
           "description": "Complex AC (e.g., 'CPX-915')"
         },
-        "complex_name": {
+        "name": {
           "type": "string",
           "description": "Complex name"
         },
-        "note": {
+        "systematicName": {
           "type": "string",
-          "description": "Information about data source and usage"
+          "description": "Systematic name of the complex"
+        },
+        "synonyms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Alternative names for the complex"
+        },
+        "functions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Functional descriptions of the complex"
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Properties and characteristics of the complex"
+        },
+        "ac": {
+          "type": "string",
+          "description": "Additional accession identifier"
+        },
+        "species": {
+          "type": "string",
+          "description": "Organism information"
+        },
+        "ligands": {
+          "type": "array",
+          "description": "Associated ligands"
+        },
+        "complexAssemblies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Complex assembly information"
+        },
+        "participants": {
+          "type": "array",
+          "description": "Complex participants with interactor details, stoichiometry, and features"
+        },
+        "diseases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Associated diseases"
+        },
+        "crossReferences": {
+          "type": "array",
+          "description": "Cross-references to other databases (GO, PubMed, PDB, etc.)"
+        },
+        "institution": {
+          "type": "string",
+          "description": "Institution that curated the complex data"
+        },
+        "institutionURL": {
+          "type": "string",
+          "description": "URL of the institution"
+        },
+        "agonists": {
+          "type": "array",
+          "description": "Agonists associated with the complex"
+        },
+        "antagonists": {
+          "type": "array",
+          "description": "Antagonists associated with the complex"
+        },
+        "comments": {
+          "type": "array",
+          "description": "Additional comments about the complex"
+        },
+        "predictedComplex": {
+          "type": "boolean",
+          "description": "Whether the complex is predicted or experimentally verified"
+        },
+        "evidenceType": {
+          "type": "object",
+          "description": "Evidence type information including identifier, description, and confidence score",
+          "properties": {
+            "identifier": {
+              "type": "string",
+              "description": "Evidence type identifier (e.g., ECO code)"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the evidence type"
+            },
+            "searchURL": {
+              "type": "string",
+              "description": "URL to search for evidence type details"
+            },
+            "confidenceScore": {
+              "type": "integer",
+              "description": "Confidence score for the evidence"
+            }
+          }
+        },
+        "releaseDates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Release dates for the complex data"
         }
       }
     },

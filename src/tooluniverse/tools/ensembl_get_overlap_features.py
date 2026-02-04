@@ -17,7 +17,7 @@ def ensembl_get_overlap_features(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> list[Any]:
     """
     Get genomic features (genes, transcripts, repeats) overlapping a region. Returns comprehensive an...
 
@@ -40,7 +40,7 @@ def ensembl_get_overlap_features(
 
     Returns
     -------
-    dict[str, Any]
+    list[Any]
     """
     # Handle mutable defaults to avoid B006 linting error
 

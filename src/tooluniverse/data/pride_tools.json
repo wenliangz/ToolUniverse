@@ -25,139 +25,50 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "description": "ToolUniverse wrapper around PRIDE Archive v2 API response.",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Execution status.",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Request URL used."
-        },
-        "data": {
-          "type": [
-            "object",
-            "array",
-            "null"
-          ],
-          "description": "PRIDE API response body - can be paginated object with content array or direct array of projects.",
-          "additionalProperties": true,
-          "properties": {
-            "content": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": true,
-                "properties": {
-                  "accession": {
-                    "type": "string"
-                  },
-                  "title": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  },
-                  "species": {
-                    "type": "array"
-                  },
-                  "tissues": {
-                    "type": "array"
-                  },
-                  "diseases": {
-                    "type": "array"
-                  },
-                  "instruments": {
-                    "type": "array"
-                  },
-                  "submissionDate": {
-                    "type": "string"
-                  },
-                  "publicationDate": {
-                    "type": "string"
-                  },
-                  "numAssays": {
-                    "type": "integer"
-                  },
-                  "numSamples": {
-                    "type": "integer"
-                  },
-                  "numFiles": {
-                    "type": "integer"
-                  },
-                  "fileSize": {
-                    "type": "integer"
-                  },
-                  "labHead": {
-                    "type": "object"
-                  },
-                  "submitters": {
-                    "type": "array"
-                  },
-                  "keywords": {
-                    "type": "array"
-                  },
-                  "projectTags": {
-                    "type": "array"
-                  }
-                }
-              }
-            },
-            "pageInfo": {
-              "type": "object",
-              "additionalProperties": true,
-              "properties": {
-                "page": {
-                  "type": "integer"
-                },
-                "size": {
-                  "type": "integer"
-                },
-                "totalElements": {
-                  "type": "integer"
-                },
-                "totalPages": {
-                  "type": "integer"
-                }
-              }
-            }
+      "type": "array",
+      "description": "Array of PRIDE project search results.",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "accession": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "projectDescription": {
+            "type": "string"
+          },
+          "organisms": {
+            "type": "array"
+          },
+          "organismParts": {
+            "type": "array"
+          },
+          "diseases": {
+            "type": "array"
+          },
+          "instruments": {
+            "type": "array"
+          },
+          "submissionDate": {
+            "type": "string"
+          },
+          "publicationDate": {
+            "type": "string"
+          },
+          "submitters": {
+            "type": "array"
+          },
+          "keywords": {
+            "type": "array"
+          },
+          "projectTags": {
+            "type": "array"
           }
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Error summary if status=error."
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "HTTP status code if available."
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Additional error detail (truncated)."
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -192,114 +103,52 @@
     },
     "return_schema": {
       "type": "object",
-      "description": "ToolUniverse wrapper around PRIDE project details response. Returns single project or batch results.",
+      "description": "Comprehensive PRIDE project metadata.",
       "additionalProperties": true,
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
+        "accession": {
+          "type": "string"
         },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "title": {
+          "type": "string"
         },
-        "data": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "description": "Comprehensive project metadata.",
-          "additionalProperties": true,
-          "properties": {
-            "accession": {
-              "type": "string"
-            },
-            "title": {
-              "type": "string"
-            },
-            "description": {
-              "type": "string"
-            },
-            "projectDescription": {
-              "type": "string"
-            },
-            "sampleProcessingProtocol": {
-              "type": "string"
-            },
-            "dataProcessingProtocol": {
-              "type": "string"
-            },
-            "species": {
-              "type": "array"
-            },
-            "tissues": {
-              "type": "array"
-            },
-            "instruments": {
-              "type": "array"
-            },
-            "modifications": {
-              "type": "array"
-            },
-            "submissionDate": {
-              "type": "string"
-            },
-            "publicationDate": {
-              "type": "string"
-            },
-            "submitters": {
-              "type": "array"
-            },
-            "labHead": {
-              "type": "object"
-            },
-            "keywords": {
-              "type": "array"
-            },
-            "doi": {
-              "type": "string"
-            },
-            "numFiles": {
-              "type": "integer"
-            },
-            "numAssays": {
-              "type": "integer"
-            },
-            "numSamples": {
-              "type": "integer"
-            },
-            "fileSize": {
-              "type": "integer"
-            }
-          }
+        "projectDescription": {
+          "type": "string"
         },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "sampleProcessingProtocol": {
+          "type": "string"
         },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
+        "dataProcessingProtocol": {
+          "type": "string"
         },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "organisms": {
+          "type": "array"
+        },
+        "organismParts": {
+          "type": "array"
+        },
+        "instruments": {
+          "type": "array"
+        },
+        "submissionDate": {
+          "type": "string"
+        },
+        "publicationDate": {
+          "type": "string"
+        },
+        "submitters": {
+          "type": "array"
+        },
+        "labPIs": {
+          "type": "array"
+        },
+        "keywords": {
+          "type": "array"
+        },
+        "doi": {
+          "type": "string"
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -327,95 +176,47 @@
       ]
     },
     "fields": {
-      "endpoint": "https://www.ebi.ac.uk/pride/ws/archive/v2/files/byProject?accession={accession}",
+      "endpoint": "https://www.ebi.ac.uk/pride/ws/archive/v2/projects/{accession}/files",
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "description": "ToolUniverse wrapper around PRIDE files list response. Returns single project files or batch results.",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "array",
-            "object",
-            "null"
-          ],
-          "description": "List of project files with download URLs.",
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "accession": {
-                "type": "string"
-              },
-              "fileName": {
-                "type": "string"
-              },
-              "fileCategory": {
-                "type": "string"
-              },
-              "fileSize": {
-                "type": "integer"
-              },
-              "fileExtension": {
-                "type": "string"
-              },
-              "fileMd5": {
-                "type": "string"
-              },
-              "publicFileLocations": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "value": {
-                      "type": "string"
-                    }
-                  }
+      "type": "array",
+      "description": "List of project files with download URLs and metadata.",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "projectAccessions": {
+            "type": "array"
+          },
+          "accession": {
+            "type": "string"
+          },
+          "fileCategory": {
+            "type": "object"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "fileSize": {
+            "type": "object"
+          },
+          "publicFileLocations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
                 }
               }
             }
           }
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {

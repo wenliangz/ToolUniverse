@@ -65,7 +65,7 @@
     },
     "test_examples": [
       {
-        "year": 2023,
+        "year": "2017-2018",
         "component": "Demographics"
       }
     ]
@@ -122,7 +122,7 @@
     "test_examples": [
       {
         "search_term": "diabetes",
-        "year": 2023,
+        "year": "2017-2018",
         "limit": 1
       }
     ]

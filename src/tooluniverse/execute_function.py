@@ -227,7 +227,6 @@ class ToolNamespace:
         self.engine.eager_load_tools(names)
 
 
-
 class ToolUniverse:
     """
     A comprehensive tool management system for loading, organizing, and executing various scientific and data tools.
@@ -2819,6 +2818,7 @@ class ToolUniverse:
     def _create_dual_format_error(self, error: ToolError) -> dict:
         """Create dual-format error response for backward compatibility."""
         return {
+            "status": "error",  # Consistent status field
             "error": str(error),  # Backward compatible string
             "error_details": error.to_dict(),  # New structured format
         }
@@ -3247,7 +3247,7 @@ class ToolUniverse:
             stacklevel=2,
         )
         selected_tools = []
-        
+
         # If no category filters are specified, use all_tools directly
         # This ensures we include auto-discovered tools that might not be in tool_category_dicts
         if include_categories is None and exclude_categories is None:

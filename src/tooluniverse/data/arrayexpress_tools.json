@@ -2,7 +2,7 @@
   {
     "type": "ArrayExpressRESTTool",
     "name": "arrayexpress_search_experiments",
-    "description": "Search ArrayExpress experiments - the original functional genomics database from EMBL-EBI. Searches microarray and RNA-seq experiments by keywords, species, or array platform. Returns experiment metadata including accession IDs (E-GEOD, E-MTAB), titles, descriptions, and study information.",
+    "description": "Search ArrayExpress experiments - the original functional genomics database from EMBL-EBI. Searches microarray and RNA-seq experiments by keywords, species, or array platform. Returns experiment metadata including accession IDs (E-GEOD, E-MTAB), titles, descriptions, and study information. Note: Some newer ArrayExpress data is now hosted in BioStudies - use BioStudies tools if an accession is not found here.",
     "parameter": {
       "type": "object",
       "properties": {
@@ -39,16 +39,23 @@
     },
     "return_schema": {
       "type": "object",
+      "description": "Search results with experiments",
       "properties": {
-        "status": {
-          "type": "string"
+        "experiments": {
+          "type": "array",
+          "description": "List of matching experiments"
         },
-        "data": {
-          "type": "object",
-          "description": "Search results with experiments"
+        "totalHits": {
+          "type": "integer",
+          "description": "Total number of matching experiments"
         },
-        "count": {
-          "type": "integer"
+        "page": {
+          "type": "integer",
+          "description": "Current page number"
+        },
+        "pageSize": {
+          "type": "integer",
+          "description": "Number of results per page"
         }
       }
     },
@@ -85,13 +92,15 @@
     },
     "return_schema": {
       "type": "object",
+      "description": "Complete experiment information",
       "properties": {
-        "status": {
-          "type": "string"
+        "accno": {
+          "type": "string",
+          "description": "Experiment accession number"
         },
-        "data": {
+        "section": {
           "type": "object",
-          "description": "Complete experiment information"
+          "description": "Experiment metadata and sections"
         }
       }
     },
@@ -121,20 +130,20 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of files (may be empty if no files found)"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "url": {
-          "type": "string"
+      "type": "array",
+      "description": "List of files (may be empty if no files found)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          }
         }
       }
     },
@@ -164,21 +173,11 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of samples with their attributes"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "url": {
-          "type": "string"
-        }
+      "type": "array",
+      "description": "List of samples with their attributes",
+      "items": {
+        "type": "object",
+        "description": "Sample with key-value pairs of attributes"
       }
     },
     "test_examples": [

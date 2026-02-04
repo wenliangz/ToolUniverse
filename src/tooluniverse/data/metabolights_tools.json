@@ -27,18 +27,10 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "object",
-          "description": "List of studies with metadata"
-        },
-        "count": {
-          "type": "integer"
-        }
+      "type": "array",
+      "description": "List of study identifiers",
+      "items": {
+        "type": "string"
       }
     },
     "test_examples": [
@@ -77,18 +69,10 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "object",
-          "description": "Search results with matching studies"
-        },
-        "count": {
-          "type": "integer"
-        }
+      "type": "array",
+      "description": "List of matching study identifiers",
+      "items": {
+        "type": "string"
       }
     },
     "test_examples": [
@@ -157,18 +141,10 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of assays"
-        },
-        "count": {
-          "type": "integer"
-        }
+      "type": "array",
+      "description": "List of assays with metadata",
+      "items": {
+        "type": "object"
       }
     },
     "test_examples": [
@@ -196,18 +172,10 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of samples"
-        },
-        "count": {
-          "type": "integer"
-        }
+      "type": "array",
+      "description": "List of samples with characteristics",
+      "items": {
+        "type": "object"
       }
     },
     "test_examples": [
@@ -236,16 +204,19 @@
     },
     "return_schema": {
       "type": "object",
+      "description": "File listings organized by category",
       "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
+        "study": {
           "type": "array",
-          "description": "List of files"
+          "description": "Study files"
         },
-        "count": {
-          "type": "integer"
+        "latest": {
+          "type": "array",
+          "description": "Latest files"
+        },
+        "private": {
+          "type": "array",
+          "description": "Private files"
         }
       }
     },
@@ -276,18 +247,10 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of protocols associated with the study"
-        },
-        "count": {
-          "type": "integer"
-        }
+      "type": "array",
+      "description": "List of protocols with detailed methodology",
+      "items": {
+        "type": "object"
       }
     },
     "test_examples": [
@@ -317,18 +280,10 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of experimental factors defined for the study"
-        },
-        "count": {
-          "type": "integer"
-        }
+      "type": "array",
+      "description": "List of experimental factors (variables)",
+      "items": {
+        "type": "object"
       }
     },
     "test_examples": [
@@ -340,13 +295,28 @@
   {
     "type": "MetaboLightsRESTTool",
     "name": "metabolights_get_study_data_files",
-    "description": "Get data file listings for a MetaboLights study. Returns metadata about analytical data files (raw or processed spectra, peak lists, etc.) available for the study. This endpoint focuses specifically on data files and may differ from the generic files endpoint. Use this to discover which data files are available for download and analysis.",
+    "description": "Search for data files in a MetaboLights study. Returns a list of files matching the search criteria. Use search_pattern to filter by file type (e.g., '*.mzML', '*.raw', '*.d'). At least one of file_match or folder_match must be true.",
     "parameter": {
       "type": "object",
       "properties": {
         "study_id": {
           "type": "string",
-          "description": "MetaboLights study ID (e.g., 'MTBLS1'). Use metabolights_list_studies or metabolights_search_studies to discover study IDs."
+          "description": "MetaboLights study ID (e.g., 'MTBLS1')"
+        },
+        "search_pattern": {
+          "type": "string",
+          "description": "Search pattern for files (e.g., '*.mzML', '*.zip', '*.d'). Default is 'FILES/*' to match all files",
+          "default": "FILES/*"
+        },
+        "file_match": {
+          "type": "boolean",
+          "description": "Include file matches in results. At least one of file_match or folder_match must be true",
+          "default": true
+        },
+        "folder_match": {
+          "type": "boolean",
+          "description": "Include folder matches in results. At least one of file_match or folder_match must be true",
+          "default": false
         }
       },
       "required": [
@@ -358,23 +328,16 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "array",
-          "description": "List of data files associated with the study"
-        },
-        "count": {
-          "type": "integer"
-        }
+      "type": "array",
+      "description": "List of matching files",
+      "items": {
+        "type": "object"
       }
     },
     "test_examples": [
       {
-        "study_id": "MTBLS1"
+        "study_id": "MTBLS1",
+        "file_match": true
       }
     ]
   }

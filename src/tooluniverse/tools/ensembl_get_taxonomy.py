@@ -14,7 +14,7 @@ def ensembl_get_taxonomy(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> list[Any]:
     """
     Get taxonomic classification for a species. Returns complete lineage from kingdom to species leve...
 
@@ -31,7 +31,7 @@ def ensembl_get_taxonomy(
 
     Returns
     -------
-    dict[str, Any]
+    list[Any]
     """
     # Handle mutable defaults to avoid B006 linting error
 

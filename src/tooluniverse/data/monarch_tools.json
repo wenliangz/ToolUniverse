@@ -49,121 +49,17 @@
     "tool_url": "/association",
     "test_examples": [
       {
-        "HPO_ID_list": "1",
+        "HPO_ID_list": ["HP:0001250"],
         "limit": 5,
         "offset": 1
       }
     ],
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string"
-        },
-        "error_details": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string"
-            },
-            "message": {
-              "type": "string"
-            },
-            "retriable": {
-              "type": "boolean"
-            },
-            "next_steps": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "details": {
-              "type": "object",
-              "properties": {
-                "validation_error": {
-                  "type": "string"
-                },
-                "path": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string"
-                    },
-                    "properties": {
-                      "type": "object",
-                      "properties": {
-                        "HPO_ID_list": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            },
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "string"
-                                },
-                                "description": {
-                                  "type": "string"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "limit": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "offset": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "required": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "parameter": {
-                  "type": "string"
-                },
-                "expected": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of disease names associated with the provided HPO phenotype IDs"
     }
   },
   {

@@ -20,7 +20,7 @@ def euhealthinfo_search_diabetes_epidemiology_registry(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> list[Any]:
+) -> Any:
     """
     This tool is designed to search and retrieve datasets related to epidemiological and registry-bas...
 
@@ -49,7 +49,7 @@ def euhealthinfo_search_diabetes_epidemiology_registry(
 
     Returns
     -------
-    list[Any]
+    Any
     """
     # Handle mutable defaults to avoid B006 linting error
 

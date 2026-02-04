@@ -24,14 +24,9 @@
             }
         ],
         "return_schema": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                }
+            "type": "array",
+            "items": {
+                "type": "object"
             }
         }
     },
@@ -88,7 +83,10 @@
             }
         ],
         "return_schema": {
-            "type": "object"
+            "type": "array",
+            "items": {
+                "type": "object"
+            }
         }
     },
     {
@@ -174,7 +172,10 @@
             }
         ],
         "return_schema": {
-            "type": "object"
+            "type": "array",
+            "items": {
+                "type": "object"
+            }
         }
     },
     {

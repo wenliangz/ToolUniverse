@@ -32,37 +32,38 @@
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Dataset ID"
-        },
-        "name": {
-          "type": "string",
-          "description": "Dataset name"
-        },
-        "description": {
-          "type": "string",
-          "description": "Dataset description"
-        },
-        "category": {
-          "type": "string"
-        },
-        "viewCount": {
-          "type": "integer"
-        },
-        "downloadCount": {
-          "type": "integer"
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Dataset ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Dataset name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Dataset description"
+          },
+          "category": {
+            "type": "string"
+          },
+          "viewCount": {
+            "type": "integer"
+          },
+          "downloadCount": {
+            "type": "integer"
+          }
         }
       }
     },
     "test_examples": [
       {
-        "search_query": "machine learning optimization",
-        "category": "mortality",
-        "limit": 1,
-        "offset": 0
+        "search_query": "mortality",
+        "limit": 1
       }
     ]
   },
@@ -110,23 +111,21 @@
         "data": {
           "type": "array",
           "items": {
-            "type": "object",
-            "description": "Data rows from the dataset"
-          }
+            "type": "array",
+            "description": "Data row as array of values"
+          },
+          "description": "Data rows from the dataset (Socrata format: array of arrays)"
         },
         "meta": {
           "type": "object",
-          "description": "Metadata about the dataset"
+          "description": "Metadata about the dataset including column definitions"
         }
       }
     },
     "test_examples": [
       {
-        "dataset_id": "mcd3",
-        "limit": 1,
-        "offset": 0,
-        "where_clause": "year > 2020",
-        "order_by": "date DESC"
+        "dataset_id": "jkcx-ndu8",
+        "limit": 2
       }
     ]
   }

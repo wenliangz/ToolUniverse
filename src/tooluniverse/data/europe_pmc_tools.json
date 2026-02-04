@@ -46,7 +46,7 @@
             "description": "Journal name where the article was published"
           },
           "year": {
-            "type": ["integer", "string"],
+            "type": ["integer", "string", "null"],
             "description": "Publication year"
           },
           "doi": {

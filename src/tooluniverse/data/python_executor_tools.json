@@ -77,15 +77,15 @@
           "description": "Memory usage in MB (if available)"
         },
         "error": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Error message if execution failed"
         },
         "error_type": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Type of error if execution failed"
         },
         "traceback": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Full traceback if execution failed"
         },
         "requires_confirmation": {
@@ -129,33 +129,17 @@
     },
     "test_examples": [
       {
-        "input": {
-          "code": "result = sum([1, 2, 3, 4, 5])"
-        },
-        "expected_output_type": "object",
-        "description": "Basic arithmetic calculation"
+        "code": "result = sum([1, 2, 3, 4, 5])"
       },
       {
-        "input": {
-          "code": "result = x ** 2 + y ** 2",
-          "arguments": {"x": 3, "y": 4}
-        },
-        "expected_output_type": "object",
-        "description": "Calculation with variables"
+        "code": "result = x ** 2 + y ** 2",
+        "arguments": {"x": 3, "y": 4}
       },
       {
-        "input": {
-          "code": "import math\nresult = math.sqrt(16)"
-        },
-        "expected_output_type": "object",
-        "description": "Using allowed math module"
+        "code": "import math\nresult = math.sqrt(16)"
       },
       {
-        "input": {
-          "code": "result = [i**2 for i in range(10)]"
-        },
-        "expected_output_type": "object",
-        "description": "List comprehension"
+        "code": "result = [i**2 for i in range(10)]"
       }
     ],
     "metadata": {
@@ -250,15 +234,15 @@
           "description": "Memory usage in MB (if available)"
         },
         "error": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Error message if execution failed"
         },
         "error_type": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Type of error if execution failed"
         },
         "traceback": {
-          "type": "string",
+          "type": ["string", "null"],
           "description": "Full traceback if execution failed"
         },
         "requires_confirmation": {
@@ -302,27 +286,15 @@
     },
     "test_examples": [
       {
-        "input": {
-          "script_path": "./examples/hello_world.py"
-        },
-        "expected_output_type": "object",
-        "description": "Run a simple hello world script"
+        "script_path": "./examples/code_executor/hello_world.py"
       },
       {
-        "input": {
-          "script_path": "./examples/data_processor.py",
-          "script_args": ["--input", "data.csv", "--output", "result.csv"]
-        },
-        "expected_output_type": "object",
-        "description": "Run script with command-line arguments"
+        "script_path": "./examples/code_executor/data_processor.py",
+        "script_args": ["--input", "data.csv", "--output", "result.csv"]
       },
       {
-        "input": {
-          "script_path": "./examples/configurable_script.py",
-          "env_vars": {"DEBUG": "true", "LOG_LEVEL": "info"}
-        },
-        "expected_output_type": "object",
-        "description": "Run script with environment variables"
+        "script_path": "./examples/code_executor/configurable_script.py",
+        "env_vars": {"DEBUG": "true", "LOG_LEVEL": "info"}
       }
     ],
     "metadata": {

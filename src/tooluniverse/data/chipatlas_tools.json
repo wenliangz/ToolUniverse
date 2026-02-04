@@ -54,15 +54,7 @@
     },
     "return_schema": {
       "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "message": {"type": "string"},
-        "url": {"type": "string", "description": "ChIP-Atlas enrichment analysis URL"},
-        "parameters": {"type": "object"},
-        "instruction": {"type": "string"},
-        "note": {"type": "string"},
-        "error": {"type": "string"}
-      },
+      "description": "Response object with enrichment analysis URL and parameters",
       "additionalProperties": true
     },
     "test_examples": [
@@ -111,27 +103,7 @@
     },
     "return_schema": {
       "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "num_experiments": {"type": "integer"},
-        "experiments": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "experiment_id": {"type": "string"},
-              "genome": {"type": "string"},
-              "track_type_class": {"type": "string"},
-              "track_type": {"type": "string"},
-              "cell_type_class": {"type": "string"},
-              "cell_type": {"type": "string"},
-              "title": {"type": "string"}
-            }
-          }
-        },
-        "message": {"type": "string"},
-        "error": {"type": "string"}
-      },
+      "description": "Response with experiment metadata list",
       "additionalProperties": true
     },
     "test_examples": [
@@ -182,15 +154,7 @@
     },
     "return_schema": {
       "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "experiment_id": {"type": "string"},
-        "genome": {"type": "string"},
-        "format": {"type": "string"},
-        "url": {"type": "string", "description": "Download URL"},
-        "message": {"type": "string"},
-        "error": {"type": "string"}
-      },
+      "description": "Response with download URL for peak data",
       "additionalProperties": true
     },
     "test_examples": [
@@ -233,26 +197,7 @@
     },
     "return_schema": {
       "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "search_key": {"type": "string"},
-        "search_value": {"type": "string"},
-        "genome": {"type": "string"},
-        "num_results": {"type": "integer"},
-        "results": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "genome": {"type": "string"},
-              "name": {"type": "string"},
-              "num_experiments": {"type": "string"},
-              "experiment_ids": {"type": "array"}
-            }
-          }
-        },
-        "error": {"type": "string"}
-      },
+      "description": "Response with search results for datasets",
       "additionalProperties": true
     },
     "test_examples": [

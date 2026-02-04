@@ -16,57 +16,45 @@
           "description": "Species name required for gene symbols (default 'homo_sapiens'). Examples: 'homo_sapiens', 'mus_musculus', 'rattus_norvegicus'"
         }
       },
-      "required": ["gene_id"]
+      "required": [
+        "gene_id"
+      ]
     },
     "return_schema": {
       "type": "object",
-      "description": "Ensembl gene lookup data",
+      "description": "Gene information object",
       "properties": {
-        "status": {
+        "id": {
           "type": "string",
-          "description": "Status of the request ('success' or 'error')"
+          "description": "Ensembl gene ID"
         },
-        "data": {
-          "type": "object",
-          "description": "Gene information object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "Ensembl gene ID"
-            },
-            "display_name": {
-              "type": "string",
-              "description": "Gene symbol"
-            },
-            "description": {
-              "type": "string",
-              "description": "Gene description"
-            },
-            "biotype": {
-              "type": "string",
-              "description": "Gene biotype"
-            },
-            "start": {
-              "type": "integer",
-              "description": "Gene start position"
-            },
-            "end": {
-              "type": "integer",
-              "description": "Gene end position"
-            },
-            "strand": {
-              "type": "integer",
-              "description": "Gene strand (1 or -1)"
-            },
-            "seq_region_name": {
-              "type": "string",
-              "description": "Chromosome name"
-            }
-          }
-        },
-        "url": {
+        "display_name": {
           "type": "string",
-          "description": "API URL used"
+          "description": "Gene symbol"
+        },
+        "description": {
+          "type": "string",
+          "description": "Gene description"
+        },
+        "biotype": {
+          "type": "string",
+          "description": "Gene biotype"
+        },
+        "start": {
+          "type": "integer",
+          "description": "Gene start position"
+        },
+        "end": {
+          "type": "integer",
+          "description": "Gene end position"
+        },
+        "strand": {
+          "type": "integer",
+          "description": "Gene strand (1 or -1)"
+        },
+        "seq_region_name": {
+          "type": "string",
+          "description": "Chromosome name"
         }
       }
     },
@@ -91,7 +79,12 @@
         },
         "type": {
           "type": "string",
-          "enum": ["genomic", "cds", "cdna", "peptide"],
+          "enum": [
+            "genomic",
+            "cds",
+            "cdna",
+            "peptide"
+          ],
           "default": "genomic",
           "description": "Sequence type: 'genomic' (genomic DNA), 'cds' (coding sequence), 'cdna' (cDNA), 'peptide' (protein sequence)"
         },
@@ -105,44 +98,32 @@
           "description": "Return multiple sequences if available (e.g., all transcripts)"
         }
       },
-      "required": ["id"]
+      "required": [
+        "id"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "description": "Ensembl sequence data",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Status of the request"
-        },
-        "data": {
-          "type": "array",
-          "description": "Array of sequence objects",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "description": "Sequence ID"
-              },
-              "seq": {
-                "type": "string",
-                "description": "DNA/protein sequence"
-              },
-              "desc": {
-                "type": "string",
-                "description": "Sequence description"
-              },
-              "molecule": {
-                "type": "string",
-                "description": "Molecule type (dna, rna, protein)"
-              }
-            }
+      "type": ["array", "object"],
+      "description": "Array of sequence objects or single sequence object",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Sequence ID"
+          },
+          "seq": {
+            "type": "string",
+            "description": "DNA/protein sequence"
+          },
+          "desc": {
+            "type": "string",
+            "description": "Sequence description"
+          },
+          "molecule": {
+            "type": "string",
+            "description": "Molecule type (dna, rna, protein)"
           }
-        },
-        "url": {
-          "type": "string",
-          "description": "API URL used"
         }
       }
     },
@@ -176,52 +157,40 @@
           "description": "Feature type to retrieve (default 'variation')"
         }
       },
-      "required": ["region"]
+      "required": [
+        "region"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "description": "Ensembl variant data",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Status of the request"
-        },
-        "data": {
-          "type": "array",
-          "description": "Array of variant objects",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "description": "Variant ID (e.g., rs699)"
-              },
-              "start": {
-                "type": "integer",
-                "description": "Variant start position"
-              },
-              "end": {
-                "type": "integer",
-                "description": "Variant end position"
-              },
-              "strand": {
-                "type": "integer",
-                "description": "Variant strand"
-              },
-              "allele_string": {
-                "type": "string",
-                "description": "Allele string (e.g., 'A/T')"
-              },
-              "consequence_type": {
-                "type": "string",
-                "description": "Variant consequence (e.g., 'missense_variant', 'synonymous_variant')"
-              }
-            }
+      "type": "array",
+      "description": "Array of variant objects",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Variant ID (e.g., rs699)"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Variant start position"
+          },
+          "end": {
+            "type": "integer",
+            "description": "Variant end position"
+          },
+          "strand": {
+            "type": "integer",
+            "description": "Variant strand"
+          },
+          "allele_string": {
+            "type": "string",
+            "description": "Allele string (e.g., 'A/T')"
+          },
+          "consequence_type": {
+            "type": "string",
+            "description": "Variant consequence (e.g., 'missense_variant', 'synonymous_variant')"
           }
-        },
-        "url": {
-          "type": "string",
-          "description": "API URL used"
         }
       }
     },
@@ -255,53 +224,41 @@
           "description": "Include phenotype associations (0=no, 1=yes)"
         }
       },
-      "required": ["id"]
+      "required": [
+        "id"
+      ]
     },
     "return_schema": {
       "type": "object",
-      "description": "Ensembl variation data",
+      "description": "Variation information object",
       "properties": {
-        "status": {
+        "name": {
           "type": "string",
-          "description": "Status of the request"
+          "description": "Variation ID"
         },
-        "data": {
-          "type": "object",
-          "description": "Variation information object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "Variation ID"
-            },
-            "minor_allele": {
-              "type": "string",
-              "description": "Minor allele"
-            },
-            "var_class": {
-              "type": "string",
-              "description": "Variant class"
-            },
-            "mappings": {
-              "type": "array",
-              "description": "Genomic mappings"
-            },
-            "MAF": {
-              "type": "string",
-              "description": "Minor allele frequency"
-            },
-            "most_severe_consequence": {
-              "type": "string",
-              "description": "Most severe consequence"
-            },
-            "phenotypes": {
-              "type": "array",
-              "description": "Phenotype associations (if phenotypes=1)"
-            }
-          }
+        "minor_allele": {
+          "type": ["string", "null"],
+          "description": "Minor allele"
         },
-        "url": {
+        "var_class": {
           "type": "string",
-          "description": "API URL used"
+          "description": "Variant class"
+        },
+        "mappings": {
+          "type": "array",
+          "description": "Genomic mappings"
+        },
+        "MAF": {
+          "type": ["string", "null"],
+          "description": "Minor allele frequency"
+        },
+        "most_severe_consequence": {
+          "type": "string",
+          "description": "Most severe consequence"
+        },
+        "phenotypes": {
+          "type": "array",
+          "description": "Phenotype associations (if phenotypes=1)"
         }
       }
     },
@@ -336,50 +293,38 @@
           "description": "Include phenotype associations (must be 1 for this tool)"
         }
       },
-      "required": ["id"]
+      "required": [
+        "id"
+      ]
     },
     "return_schema": {
       "type": "object",
-      "description": "Ensembl variation phenotypes data",
+      "description": "Variation information with phenotypes",
       "properties": {
-        "status": {
+        "name": {
           "type": "string",
-          "description": "Status of the request"
+          "description": "Variation ID"
         },
-        "data": {
-          "type": "object",
-          "description": "Variation information with phenotypes",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "Variation ID"
-            },
-            "phenotypes": {
-              "type": "array",
-              "description": "Array of phenotype associations",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "trait": {
-                    "type": "string",
-                    "description": "Phenotype trait"
-                  },
-                  "study": {
-                    "type": "string",
-                    "description": "Study name"
-                  },
-                  "association_type": {
-                    "type": "string",
-                    "description": "Type of association"
-                  }
-                }
+        "phenotypes": {
+          "type": "array",
+          "description": "Array of phenotype associations",
+          "items": {
+            "type": "object",
+            "properties": {
+              "trait": {
+                "type": "string",
+                "description": "Phenotype trait"
+              },
+              "study": {
+                "type": "string",
+                "description": "Study name"
+              },
+              "association_type": {
+                "type": "string",
+                "description": "Type of association"
               }
             }
           }
-        },
-        "url": {
-          "type": "string",
-          "description": "API URL used"
         }
       }
     },
@@ -412,52 +357,40 @@
           "description": "Object type filter (optional, e.g., 'gene', 'transcript', 'translation')"
         }
       },
-      "required": ["id"]
+      "required": [
+        "id"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "description": "Ensembl cross-references data",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Status of the request"
+      "type": "array",
+      "description": "Array of cross-reference objects",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dbname": {
+            "type": "string",
+            "description": "Database name (e.g., 'UniProt', 'RefSeq', 'HGNC')"
+          },
+          "db_display_name": {
+            "type": "string",
+            "description": "Display name of database"
+          },
+          "primary_id": {
+            "type": "string",
+            "description": "Primary ID in external database"
+          },
+          "display_id": {
+            "type": "string",
+            "description": "Display ID"
+          },
+        "description": {
+          "type": ["string", "null"],
+          "description": "Description"
         },
-        "data": {
-          "type": "array",
-          "description": "Array of cross-reference objects",
-          "items": {
-            "type": "object",
-            "properties": {
-              "dbname": {
-                "type": "string",
-                "description": "Database name (e.g., 'UniProt', 'RefSeq', 'HGNC')"
-              },
-              "db_display_name": {
-                "type": "string",
-                "description": "Display name of database"
-              },
-              "primary_id": {
-                "type": "string",
-                "description": "Primary ID in external database"
-              },
-              "display_id": {
-                "type": "string",
-                "description": "Display ID"
-              },
-              "description": {
-                "type": "string",
-                "description": "Description"
-              },
-              "info_type": {
-                "type": "string",
-                "description": "Information type"
-              }
-            }
+          "info_type": {
+            "type": "string",
+            "description": "Information type"
           }
-        },
-        "url": {
-          "type": "string",
-          "description": "API URL used"
         }
       }
     },
@@ -489,40 +422,28 @@
           "description": "Filter by external database name (optional)"
         }
       },
-      "required": ["name"]
+      "required": [
+        "name"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "description": "Ensembl cross-references by name",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Status of the request"
-        },
-        "data": {
-          "type": "array",
-          "description": "Array of cross-reference objects",
-          "items": {
-            "type": "object",
-            "properties": {
-              "dbname": {
-                "type": "string",
-                "description": "Database name"
-              },
-              "primary_id": {
-                "type": "string",
-                "description": "Primary ID in external database"
-              },
-              "display_id": {
-                "type": "string",
-                "description": "Display ID"
-              }
-            }
+      "type": "array",
+      "description": "Array of cross-reference objects",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dbname": {
+            "type": "string",
+            "description": "Database name"
+          },
+          "primary_id": {
+            "type": "string",
+            "description": "Primary ID in external database"
+          },
+          "display_id": {
+            "type": "string",
+            "description": "Display ID"
           }
-        },
-        "url": {
-          "type": "string",
-          "description": "API URL used"
         }
       }
     },
@@ -555,56 +476,45 @@
           "description": "Feature type (must be 'regulatory' for this tool)"
         }
       },
-      "required": ["region", "feature"]
+      "required": [
+        "region",
+        "feature"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "description": "Ensembl regulatory features data",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Status of the request"
-        },
-        "data": {
-          "type": "array",
-          "description": "Array of regulatory feature objects",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "description": "Regulatory feature ID"
-              },
-              "feature_type": {
-                "type": "string",
-                "description": "Feature type (e.g., 'Promoter', 'Enhancer', 'TF_binding_site')"
-              },
-              "start": {
-                "type": "integer",
-                "description": "Feature start position"
-              },
-              "end": {
-                "type": "integer",
-                "description": "Feature end position"
-              },
-              "strand": {
-                "type": "integer",
-                "description": "Feature strand"
-              },
-              "seq_region_name": {
-                "type": "string",
-                "description": "Chromosome name"
-              },
-              "description": {
-                "type": "string",
-                "description": "Feature description"
-              }
-            }
+      "type": "array",
+      "description": "Array of regulatory feature objects",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Regulatory feature ID"
+          },
+          "feature_type": {
+            "type": "string",
+            "description": "Feature type (e.g., 'Promoter', 'Enhancer', 'TF_binding_site')"
+          },
+          "start": {
+            "type": "integer",
+            "description": "Feature start position"
+          },
+          "end": {
+            "type": "integer",
+            "description": "Feature end position"
+          },
+          "strand": {
+            "type": "integer",
+            "description": "Feature strand"
+          },
+          "seq_region_name": {
+            "type": "string",
+            "description": "Chromosome name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Feature description"
           }
-        },
-        "url": {
-          "type": "string",
-          "description": "API URL used"
         }
       }
     },
@@ -644,46 +554,38 @@
         },
         "sequence": {
           "type": "string",
-          "enum": ["cdna", "protein", "none"],
+          "enum": [
+            "cdna",
+            "protein",
+            "none"
+          ],
           "default": "none",
           "description": "Include sequences in tree (cdna, protein, or none)"
         }
       },
-      "required": ["id"]
+      "required": [
+        "id"
+      ]
     },
     "return_schema": {
       "type": "object",
-      "description": "Ensembl gene tree data",
+      "description": "Gene tree object",
       "properties": {
-        "status": {
+        "id": {
           "type": "string",
-          "description": "Status of the request"
+          "description": "Gene tree ID"
         },
-        "data": {
+        "type": {
+          "type": "string",
+          "description": "Tree type"
+        },
+        "rooted": {
+          "type": ["boolean", "integer"],
+          "description": "Whether tree is rooted (boolean or integer 0/1)"
+        },
+        "tree": {
           "type": "object",
-          "description": "Gene tree object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "Gene tree ID"
-            },
-            "type": {
-              "type": "string",
-              "description": "Tree type"
-            },
-            "rooted": {
-              "type": "boolean",
-              "description": "Whether tree is rooted"
-            },
-            "tree": {
-              "type": "object",
-              "description": "Tree structure with nodes and leaves"
-            }
-          }
-        },
-        "url": {
-          "type": "string",
-          "description": "API URL used"
+          "description": "Tree structure with nodes and leaves"
         }
       }
     },
@@ -719,13 +621,21 @@
         },
         "type": {
           "type": "string",
-          "enum": ["orthologues", "paralogues", "all"],
+          "enum": [
+            "orthologues",
+            "paralogues",
+            "all"
+          ],
           "default": "all",
           "description": "Homology type: 'orthologues' (different species), 'paralogues' (same species), 'all' (both)"
         },
         "sequence": {
           "type": "string",
-          "enum": ["cdna", "protein", "none"],
+          "enum": [
+            "cdna",
+            "protein",
+            "none"
+          ],
           "default": "none",
           "description": "Include sequences in response"
         },
@@ -735,30 +645,36 @@
           "description": "Return aligned sequences"
         }
       },
-      "required": ["species", "symbol"]
+      "required": [
+        "species",
+        "symbol"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "homologies": {
-                "type": "array",
-                "items": {
+      "type": ["array", "object"],
+      "items": {
+        "type": "object",
+        "properties": {
+          "homologies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Homology type"
+                },
+                "target": {
                   "type": "object",
                   "properties": {
-                    "type": {"type": "string", "description": "Homology type"},
-                    "target": {
-                      "type": "object",
-                      "properties": {
-                        "id": {"type": "string"},
-                        "species": {"type": "string"},
-                        "protein_id": {"type": "string"}
-                      }
+                    "id": {
+                      "type": "string"
+                    },
+                    "species": {
+                      "type": "string"
+                    },
+                    "protein_id": {
+                      "type": "string"
                     }
                   }
                 }
@@ -800,7 +716,11 @@
         },
         "method": {
           "type": "string",
-          "enum": ["EPO", "EPO_EXTENDED", "PECAN"],
+          "enum": [
+            "EPO",
+            "EPO_EXTENDED",
+            "PECAN"
+          ],
           "default": "EPO",
           "description": "Alignment method: EPO (high quality multiple), EPO_EXTENDED (extended coverage), PECAN (low coverage)"
         },
@@ -814,20 +734,21 @@
           "description": "Comma-separated list to filter which species to display in results (optional, e.g., 'mouse,rat')"
         }
       },
-      "required": ["species", "region"]
+      "required": [
+        "species",
+        "region"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "alignments": {"type": "array"},
-              "tree": {"type": "string"}
-            }
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "alignments": {
+            "type": "array"
+          },
+          "tree": {
+            "type": "string"
           }
         }
       }
@@ -854,21 +775,23 @@
           "description": "NCBI Taxonomy ID (e.g., '9606' for human, '10090' for mouse) or species name (e.g., 'homo_sapiens')"
         }
       },
-      "required": ["id"]
+      "required": [
+        "id"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "string"},
-              "scientific_name": {"type": "string"},
-              "rank": {"type": "string"}
-            }
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "scientific_name": {
+            "type": "string"
+          },
+          "rank": {
+            "type": "string"
           }
         }
       }
@@ -889,7 +812,14 @@
       "properties": {
         "division": {
           "type": "string",
-          "enum": ["EnsemblVertebrates", "EnsemblPlants", "EnsemblFungi", "EnsemblBacteria", "EnsemblProtists", "EnsemblMetazoa"],
+          "enum": [
+            "EnsemblVertebrates",
+            "EnsemblPlants",
+            "EnsemblFungi",
+            "EnsemblBacteria",
+            "EnsemblProtists",
+            "EnsemblMetazoa"
+          ],
           "description": "Filter by Ensembl division (optional)"
         }
       }
@@ -897,19 +827,19 @@
     "return_schema": {
       "type": "object",
       "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "object",
-          "properties": {
-            "species": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {"type": "string"},
-                  "common_name": {"type": "string"},
-                  "assembly": {"type": "string"}
-                }
+        "species": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "common_name": {
+                "type": "string"
+              },
+              "assembly": {
+                "type": "string"
               }
             }
           }
@@ -935,23 +865,29 @@
           "description": "Ensembl stable ID (gene, transcript, or protein, e.g., 'ENSG00000139618')"
         }
       },
-      "required": ["id"]
+      "required": [
+        "id"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "string"},
-              "version": {"type": "integer"},
-              "release": {"type": "integer"},
-              "assembly": {"type": "string"},
-              "latest": {"type": "boolean"}
-            }
+      "type": ["array", "object"],
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "release": {
+            "type": "integer"
+          },
+          "assembly": {
+            "type": "string"
+          },
+          "latest": {
+            "type": "boolean"
           }
         }
       }
@@ -975,21 +911,23 @@
           "description": "GO term ID (e.g., 'GO:0005737' for cytoplasm)"
         }
       },
-      "required": ["id"]
+      "required": [
+        "id"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "accession": {"type": "string"},
-              "name": {"type": "string"},
-              "namespace": {"type": "string"}
-            }
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "accession": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
           }
         }
       }
@@ -1018,21 +956,23 @@
           "description": "Return only immediate children"
         }
       },
-      "required": ["id"]
+      "required": [
+        "id"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "accession": {"type": "string"},
-              "name": {"type": "string"},
-              "namespace": {"type": "string"}
-            }
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "accession": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
           }
         }
       }
@@ -1061,21 +1001,27 @@
           "description": "Filter relationships (optional, e.g., 'is_a', 'part_of', 'regulates')"
         }
       },
-      "required": ["id"]
+      "required": [
+        "id"
+      ]
     },
     "return_schema": {
       "type": "object",
       "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "object",
-          "properties": {
-            "accession": {"type": "string"},
-            "name": {"type": "string"},
-            "definition": {"type": "string"},
-            "namespace": {"type": "string"},
-            "synonyms": {"type": "array"}
-          }
+        "accession": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "synonyms": {
+          "type": "array"
         }
       }
     },
@@ -1103,7 +1049,16 @@
         },
         "feature": {
           "type": "string",
-          "enum": ["gene", "transcript", "cds", "exon", "repeat", "simple_feature", "misc_feature", "constrained_element"],
+          "enum": [
+            "gene",
+            "transcript",
+            "cds",
+            "exon",
+            "repeat",
+            "simple_feature",
+            "misc_feature",
+            "constrained_element"
+          ],
           "default": "gene",
           "description": "Feature type to retrieve"
         },
@@ -1112,23 +1067,30 @@
           "description": "Filter by biotype (optional, e.g., 'protein_coding', 'lincRNA', 'miRNA')"
         }
       },
-      "required": ["species", "region"]
+      "required": [
+        "species",
+        "region"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {"type": "string"},
-              "external_name": {"type": "string"},
-              "biotype": {"type": "string"},
-              "start": {"type": "integer"},
-              "end": {"type": "integer"}
-            }
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "external_name": {
+            "type": "string"
+          },
+          "biotype": {
+            "type": "string"
+          },
+          "start": {
+            "type": "integer"
+          },
+          "end": {
+            "type": "integer"
           }
         }
       }
@@ -1214,31 +1176,45 @@
         },
         "SIFT": {
           "type": "string",
-          "enum": ["p", "s", "b"],
+          "enum": [
+            "p",
+            "s",
+            "b"
+          ],
           "description": "SIFT prediction: p=prediction, s=score, b=both"
         },
         "PolyPhen": {
           "type": "string",
-          "enum": ["p", "s", "b"],
+          "enum": [
+            "p",
+            "s",
+            "b"
+          ],
           "description": "PolyPhen prediction: p=prediction, s=score, b=both"
         }
       },
-      "required": ["species", "region", "allele"]
+      "required": [
+        "species",
+        "region",
+        "allele"
+      ]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {"type": "string"},
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "allele_string": {"type": "string"},
-              "consequence_terms": {"type": "array"},
-              "most_severe_consequence": {"type": "string"},
-              "transcript_consequences": {"type": "array"}
-            }
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "allele_string": {
+            "type": "string"
+          },
+          "consequence_terms": {
+            "type": "array"
+          },
+          "most_severe_consequence": {
+            "type": "string"
+          },
+          "transcript_consequences": {
+            "type": "array"
           }
         }
       }

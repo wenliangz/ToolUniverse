@@ -28,7 +28,7 @@ def ensembl_vep_region(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> list[Any]:
     """
     Variant Effect Predictor (VEP) for genomic variants. Predicts functional consequences of variants...
 
@@ -73,7 +73,7 @@ def ensembl_vep_region(
 
     Returns
     -------
-    dict[str, Any]
+    list[Any]
     """
     # Handle mutable defaults to avoid B006 linting error
 

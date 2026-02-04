@@ -41,33 +41,8 @@
             }
         ],
         "return_schema": {
-            "type": "object",
-            "properties": {
-                "study_id": {
-                    "type": "string",
-                    "description": "Study identifier"
-                },
-                "study_title": {
-                    "type": "string",
-                    "description": "Title of the study"
-                },
-                "subject_species": {
-                    "type": "string",
-                    "description": "Species studied"
-                },
-                "institute": {
-                    "type": "string",
-                    "description": "Research institute"
-                },
-                "analysis_type": {
-                    "type": "string",
-                    "description": "Type of analysis (NMR, LC-MS, etc.)"
-                },
-                "num_metabolites": {
-                    "type": "integer",
-                    "description": "Number of metabolites in study"
-                }
-            }
+            "type": ["object", "array", "string"],
+            "description": "Study information object, empty array if not found, or text response"
         }
     },
     {
@@ -313,35 +288,8 @@
             }
         ],
         "return_schema": {
-            "type": "object",
-            "properties": {
-                "matches": {
-                    "type": "array",
-                    "description": "List of matching metabolites",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string"
-                            },
-                            "formula": {
-                                "type": "string"
-                            },
-                            "exactmass": {
-                                "type": "number"
-                            },
-                            "delta": {
-                                "type": "number",
-                                "description": "Mass difference from query"
-                            }
-                        }
-                    }
-                },
-                "data": {
-                    "type": "string",
-                    "description": "Raw response if not JSON"
-                }
-            }
+            "type": ["object", "string"],
+            "description": "Metabolite matches object or error message string"
         }
     },
     {
@@ -379,31 +327,8 @@
             }
         ],
         "return_schema": {
-            "type": "object",
-            "properties": {
-                "matches": {
-                    "type": "array",
-                    "description": "List of metabolites matching the exact mass",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string"
-                            },
-                            "formula": {
-                                "type": "string"
-                            },
-                            "exactmass": {
-                                "type": "number"
-                            }
-                        }
-                    }
-                },
-                "data": {
-                    "type": "string",
-                    "description": "Raw response if not JSON"
-                }
-            }
+            "type": ["object", "array"],
+            "description": "Metabolite matches object or empty array if no matches found"
         }
     }
 ]

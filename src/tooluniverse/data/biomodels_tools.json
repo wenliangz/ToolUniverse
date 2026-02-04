@@ -23,55 +23,23 @@
     "return_schema": {
       "type": "object",
       "additionalProperties": true,
+      "description": "BioModels API search response",
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "data": {
-          "type": "object",
-          "additionalProperties": true,
-          "description": "BioModels API search response",
-          "properties": {
-            "models": {
-              "type": "array",
-              "description": "Array of biological model objects",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {"type": "string", "description": "Model identifier (e.g., BIOMD0000000469)"},
-                  "name": {"type": "string", "description": "Model name/title"},
-                  "format": {"type": "string", "description": "Model format (usually SBML)"},
-                  "publicationId": {"type": "string"},
-                  "submissionId": {"type": "string"}
-                }
-              }
-            },
-            "matches": {"type": "integer", "description": "Total number of matching models"}
+        "models": {
+          "type": "array",
+          "description": "Array of biological model objects",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string", "description": "Model identifier (e.g., BIOMD0000000469)"},
+              "name": {"type": "string", "description": "Model name/title"},
+              "format": {"type": "string", "description": "Model format (usually SBML)"},
+              "publicationId": {"type": "string"},
+              "submissionId": {"type": "string"}
+            }
           }
         },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "Number of models in the matches field"
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
+        "matches": {"type": "integer", "description": "Total number of matching models"}
       }
     },
     "test_examples": [
@@ -119,74 +87,32 @@
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
+        "id": {
+          "type": "string"
         },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "name": {
+          "type": "string"
         },
-        "data": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": true,
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "description": {
-              "type": "string"
-            },
-            "format": {
-              "type": "string"
-            },
-            "publication": {
-              "type": "object"
-            },
-            "submitter": {
-              "type": "object"
-            },
-            "created": {
-              "type": "string"
-            },
-            "modified": {
-              "type": "string"
-            }
-          }
+        "description": {
+          "type": "string"
         },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "format": {
+          "type": ["object", "string"],
+          "description": "Model format - can be a string or object with name, identifier, and version"
         },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
+        "publication": {
+          "type": "object"
         },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "submitter": {
+          "type": "object"
+        },
+        "created": {
+          "type": "string"
+        },
+        "modified": {
+          "type": "string"
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -223,50 +149,7 @@
     "return_schema": {
       "type": "object",
       "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "object",
-            "array",
-            "null"
-          ],
-          "description": "File listing with metadata."
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      },
-      "required": [
-        "status"
-      ]
+      "description": "File listing with metadata containing 'main' and 'additional' file arrays"
     },
     "test_examples": [
       {
@@ -305,59 +188,19 @@
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
         "download_url": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string",
+          "description": "URL to download the model file"
         },
         "filename": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string",
+          "description": "Content-Disposition filename header"
         },
         "content_type": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": "string",
+          "description": "MIME type of the download"
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -401,56 +244,7 @@
     "return_schema": {
       "type": "object",
       "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "array",
-            "object",
-            "null"
-          ],
-          "description": "Parameter search results with model IDs and parameter details."
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      },
-      "required": [
-        "status"
-      ]
+      "description": "Parameter search results with model IDs and parameter details"
     },
     "test_examples": [
       {

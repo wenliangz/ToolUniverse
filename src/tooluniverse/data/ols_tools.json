@@ -311,7 +311,7 @@
       {
         "operation": "search_ontologies",
         "search": "cancer",
-        "page": 1,
+        "page": 0,
         "size": 20
       }
     ],

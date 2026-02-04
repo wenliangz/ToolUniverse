@@ -1,8 +1,11 @@
 [
   {
     "name": "visualize_molecule_2d",
-    "description": "Visualize 2D molecular structures using RDKit. Supports SMILES, InChI, molecule names, and various output formats including PNG, SVG, and interactive HTML.",
+    "description": "Visualize 2D molecular structures using RDKit. Supports SMILES, InChI, molecule names, and various output formats including PNG, SVG, and interactive HTML. Prerequisites: Requires 'rdkit' package (install: pip install tooluniverse[visualization]).",
     "type": "Molecule2DTool",
+    "required_packages": [
+      "rdkit"
+    ],
     "parameter": {
       "type": "object",
       "properties": {

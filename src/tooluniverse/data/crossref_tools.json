@@ -21,59 +21,52 @@
         }
       },
       "required": [
-        "query",
-        "limit",
-        "filter"
+        "query"
       ]
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "data": {
-          "type": "array",
-          "description": "Array of Crossref work objects (articles/publications)",
-          "items": {
-            "type": "object",
-            "properties": {
-              "DOI": {"type": "string"},
-              "title": {"type": "array", "items": {"type": "string"}},
-              "author": {"type": "array"},
-              "container-title": {"type": "array", "description": "Journal name"},
-              "published": {"type": "object"},
-              "publisher": {"type": "string"},
-              "type": {"type": "string", "description": "Publication type (e.g., journal-article)"},
-              "is-referenced-by-count": {"type": "integer", "description": "Citation count"},
-              "abstract": {"type": "string"},
-              "reference": {"type": "array", "description": "List of references"}
+      "type": "array",
+      "description": "Array of Crossref work objects (articles/publications)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "DOI": {
+            "type": "string"
+          },
+          "title": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
+          },
+          "author": {
+            "type": "array"
+          },
+          "container-title": {
+            "type": "array",
+            "description": "Journal name"
+          },
+          "published": {
+            "type": "object"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "Publication type (e.g., journal-article)"
+          },
+          "is-referenced-by-count": {
+            "type": "integer",
+            "description": "Citation count"
+          },
+          "abstract": {
+            "type": "string"
+          },
+          "reference": {
+            "type": "array",
+            "description": "List of references"
           }
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "Number of works returned"
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
         }
       }
     },
@@ -114,89 +107,49 @@
       "method": "GET"
     },
     "return_schema": {
-      "type": "object",
+      "type": [
+        "object",
+        "null"
+      ],
       "additionalProperties": true,
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
+        "DOI": {
+          "type": "string"
         },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "title": {
+          "type": "array"
         },
-        "data": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": true,
-          "properties": {
-            "DOI": {
-              "type": "string"
-            },
-            "title": {
-              "type": "array"
-            },
-            "abstract": {
-              "type": "string"
-            },
-            "author": {
-              "type": "array"
-            },
-            "container-title": {
-              "type": "array"
-            },
-            "published": {
-              "type": "object"
-            },
-            "publisher": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string"
-            },
-            "is-referenced-by-count": {
-              "type": "integer"
-            },
-            "reference": {
-              "type": "array"
-            },
-            "license": {
-              "type": "array"
-            },
-            "funder": {
-              "type": "array"
-            }
-          }
+        "abstract": {
+          "type": "string"
         },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "author": {
+          "type": "array"
         },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
+        "container-title": {
+          "type": "array"
         },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "published": {
+          "type": "object"
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "is-referenced-by-count": {
+          "type": "integer"
+        },
+        "reference": {
+          "type": "array"
+        },
+        "license": {
+          "type": "array"
+        },
+        "funder": {
+          "type": "array"
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -228,68 +181,28 @@
       "method": "GET"
     },
     "return_schema": {
-      "type": "object",
+      "type": [
+        "object",
+        "null"
+      ],
       "additionalProperties": true,
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
+        "title": {
+          "type": "string"
         },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "publisher": {
+          "type": "string"
         },
-        "data": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": true,
-          "properties": {
-            "title": {
-              "type": "string"
-            },
-            "publisher": {
-              "type": "string"
-            },
-            "ISSN": {
-              "type": "array"
-            },
-            "coverage": {
-              "type": "object"
-            },
-            "flags": {
-              "type": "object"
-            }
-          }
+        "ISSN": {
+          "type": "array"
         },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "coverage": {
+          "type": "object"
         },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "flags": {
+          "type": "object"
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -325,78 +238,32 @@
       "method": "GET"
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "description": "List of funders.",
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "location": {
-                "type": "string"
-              },
-              "alt-names": {
-                "type": "array"
-              },
-              "tokens": {
-                "type": "array"
-              }
-            }
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "List of funders.",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "alt-names": {
+            "type": "array"
+          },
+          "tokens": {
+            "type": "array"
           }
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -429,71 +296,31 @@
       "method": "GET"
     },
     "return_schema": {
-      "type": "object",
+      "type": [
+        "object",
+        "null"
+      ],
       "additionalProperties": true,
       "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
+        "id": {
+          "type": "string"
         },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "name": {
+          "type": "string"
         },
-        "data": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": true,
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "location": {
-              "type": "string"
-            },
-            "alt-names": {
-              "type": "array"
-            },
-            "uri": {
-              "type": "string"
-            },
-            "hierarchy": {
-              "type": "object"
-            }
-          }
+        "location": {
+          "type": "string"
         },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "alt-names": {
+          "type": "array"
         },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
+        "uri": {
+          "type": "string"
         },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
+        "hierarchy": {
+          "type": "object"
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {
@@ -517,69 +344,23 @@
       "method": "GET"
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "description": "List of publication types.",
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "label": {
-                "type": "string"
-              }
-            }
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "List of publication types.",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
           }
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
         }
-      },
-      "required": [
-        "status"
-      ]
+      }
     },
     "test_examples": [
       {}

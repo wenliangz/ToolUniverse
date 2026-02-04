@@ -201,11 +201,12 @@ class GTExV2Tool(BaseTool):
         response = requests.get(url, params=params, timeout=30)
 
         if response.status_code == 200:
-            data = response.json()
+            api_data = response.json()
+            datasets = api_data if isinstance(api_data, list) else [api_data]
             return {
                 "status": "success",
-                "datasets": data if isinstance(data, list) else [data],
-                "num_datasets": len(data) if isinstance(data, list) else 1,
+                "data": datasets,
+                "num_datasets": len(datasets),
             }
         else:
             return {
@@ -365,8 +366,8 @@ class GTExV2Tool(BaseTool):
         response = requests.get(url, params=params, timeout=30)
 
         if response.status_code == 200:
-            data = response.json()
-            return {"status": "success", **data}
+            api_data = response.json()
+            return {"status": "success", "data": api_data}
         elif response.status_code == 400:
             return {
                 "status": "error",

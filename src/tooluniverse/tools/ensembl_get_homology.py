@@ -20,7 +20,7 @@ def ensembl_get_homology(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> Any:
     """
     Get homology (orthologues and paralogues) for a gene by symbol across species. Returns evolutiona...
 
@@ -49,7 +49,7 @@ def ensembl_get_homology(
 
     Returns
     -------
-    dict[str, Any]
+    Any
     """
     # Handle mutable defaults to avoid B006 linting error
 

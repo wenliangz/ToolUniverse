@@ -55,55 +55,20 @@
     "return_schema": {
       "type": "object",
       "properties": {
-        "success": {
-          "type": "boolean"
+        "data": {
+          "type": "array",
+          "description": "Array of interaction records parsed from TSV"
         },
-        "interactions": {
+        "header": {
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "protein1": {
-                "type": "string"
-              },
-              "protein2": {
-                "type": "string"
-              },
-              "protein1_name": {
-                "type": "string"
-              },
-              "protein2_name": {
-                "type": "string"
-              },
-              "combined_score": {
-                "type": "number"
-              },
-              "confidence_score": {
-                "type": "number"
-              },
-              "interaction_sources": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "interaction_type": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "mapping_data": {
-          "type": "array"
-        },
-        "functional_enrichment": {
-          "type": "array"
-        },
-        "summary": {
-          "type": "object"
+            "type": "string"
+          },
+          "description": "Column headers from the TSV response"
         },
         "error": {
-          "type": "string"
+          "type": "string",
+          "description": "Error message if request failed"
         }
       }
     },
@@ -116,7 +81,7 @@
     },
     "test_examples": [
       {
-        "protein_ids": [],
+        "protein_ids": ["TP53", "MDM2"],
         "species": 9606,
         "confidence_score": 0.4,
         "limit": 50,
@@ -127,7 +92,7 @@
   {
     "type": "BioGRIDRESTTool",
     "name": "BioGRID_get_interactions",
-    "description": "Query protein and genetic interactions from the BioGRID database. BioGRID is a comprehensive database of physical and genetic interactions with detailed experimental evidence.",
+    "description": "Query protein and genetic interactions from the BioGRID database. BioGRID is a comprehensive database of physical and genetic interactions with detailed experimental evidence. Requires free BioGRID API key (register at https://webservice.thebiogrid.org/). Set BIOGRID_API_KEY environment variable in .env file.",
     "parameter": {
       "type": "object",
       "properties": {
@@ -141,7 +106,7 @@
         },
         "organism": {
           "type": "string",
-          "description": "Organism name (e.g., 'Homo sapiens', 'Mus musculus')",
+          "description": "Organism name (e.g., 'Homo sapiens', 'Mus musculus') or NCBI taxonomy ID (e.g., '9606' for human)",
           "default": "Homo sapiens"
         },
         "interaction_type": {
@@ -182,25 +147,12 @@
         "gene_names"
       ]
     },
+    "required_api_keys": [
+      "BIOGRID_API_KEY"
+    ],
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "interactions": {
-          "type": "array"
-        },
-        "summary": {
-          "type": "object"
-        },
-        "statistics": {
-          "type": "object"
-        },
-        "error": {
-          "type": "string"
-        }
-      }
+      "type": ["object", "array"],
+      "description": "BioGRID API response - can be an object with interaction data or an array of interactions"
     },
     "fields": {
       "endpoint": "/interactions/",
@@ -208,7 +160,7 @@
     },
     "test_examples": [
       {
-        "gene_names": "TP53",
+        "gene_names": ["TP53"],
         "organism": "9606",
         "interaction_type": "physical",
         "evidence_types": [],

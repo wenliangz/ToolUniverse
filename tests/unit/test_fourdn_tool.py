@@ -39,7 +39,12 @@ class TestFourDNTools:
         })
         
         assert "status" in result
-        assert "num_results" in result or "error" in result
+        # Response now has nested data structure
+        if result["status"] == "success":
+            assert "data" in result
+            assert "num_results" in result["data"] or "num_results" in result
+        else:
+            assert "error" in result
     
     def test_search_data_with_filters(self, tu):
         """Test search with filters."""
@@ -53,8 +58,9 @@ class TestFourDNTools:
         assert "status" in result
         
         if result["status"] == "success":
-            assert "results" in result
-            assert isinstance(result["results"], list)
+            assert "data" in result
+            assert "results" in result["data"]
+            assert isinstance(result["data"]["results"], list)
     
     def test_get_file_metadata_requires_accession(self, tu):
         """Test get_file_metadata requires file_accession."""
@@ -79,10 +85,12 @@ class TestFourDNTools:
         assert "status" in result
         
         if result["status"] == "success":
+            # Check if data is nested or flat
+            data = result.get("data", result)
             # Expected fields from return_schema
             expected_fields = ["accession", "file_type", "download_url"]
             for field in expected_fields:
-                assert field in result, f"Missing field: {field}"
+                assert field in data, f"Missing field: {field}"
     
     def test_get_experiment_metadata_requires_accession(self, tu):
         """Test get_experiment_metadata requires experiment_accession."""
@@ -120,9 +128,11 @@ class TestFourDNTools:
         assert "status" in result
         
         if result["status"] == "success":
-            assert "download_url" in result
-            assert "drs_url" in result
-            assert "instruction" in result or "note" in result
+            # Check if data is nested or flat
+            data = result.get("data", result)
+            assert "download_url" in data
+            assert "drs_url" in data
+            assert "instruction" in data or "note" in data
 
 
 class TestFourDNReturnSchemas:
@@ -146,9 +156,11 @@ class TestFourDNReturnSchemas:
         assert "status" in result
         
         if result["status"] == "success":
+            # Check if data is nested or flat
+            data = result.get("data", result)
             # Must have num_results and results
-            assert "num_results" in result
-            assert "results" in result
+            assert "num_results" in data
+            assert "results" in data
     
     def test_error_response_schema(self, tu):
         """Test that error responses follow schema."""

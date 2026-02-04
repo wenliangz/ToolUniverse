@@ -17,7 +17,7 @@ def GTEx_get_tissue_sites(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> list[Any]:
     """
     Get all available GTEx tissue sites with metadata. Returns tissue IDs, names, sample counts, eGen...
 
@@ -40,7 +40,7 @@ def GTEx_get_tissue_sites(
 
     Returns
     -------
-    dict[str, Any]
+    list[Any]
     """
     # Handle mutable defaults to avoid B006 linting error
 

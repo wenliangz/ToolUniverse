@@ -2,7 +2,7 @@
   {
     "type": "PubMedRESTTool",
     "name": "PubMed_search_articles",
-    "description": "Search PubMed biomedical literature database using NCBI E-utilities (esearch + esummary). Returns articles with title, journal, authors, publication year, DOI, MeSH keywords, and PubMed URL. Use this to discover medical/life sciences literature, find articles by topic, or search for publications by author or journal. Find PMIDs (PubMed IDs) to use with other PubMed tools for detailed information, abstracts, citations, or related articles.",
+    "description": "Search PubMed biomedical literature database using NCBI E-utilities (esearch + esummary). Returns articles with title, journal, authors, publication year, DOI, MeSH keywords, and PubMed URL. Use this to discover medical/life sciences literature, find articles by topic, or search for publications by author or journal. Find PMIDs (PubMed IDs) to use with other PubMed tools for detailed information, abstracts, citations, or related articles. Rate limiting is automatically handled (3 req/sec without API key, 10 req/sec with key).",
     "parameter": {
       "type": "object",
       "properties": {
@@ -25,44 +25,11 @@
       ]
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "data": {
-          "type": "array",
-          "description": "Array of PubMed IDs (PMIDs) as strings",
-          "items": {
-            "type": "string",
-            "description": "PubMed ID (PMID)"
-          }
-        },
-        "count": {
-          "type": ["integer", "null"],
-          "description": "Number of PMIDs returned"
-        },
-        "total_count": {
-          "type": ["integer", "null"],
-          "description": "Total number of matching articles in PubMed (may be larger than count)"
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
+      "type": "array",
+      "description": "Array of PubMed IDs (PMIDs) as strings",
+      "items": {
+        "type": "string",
+        "description": "PubMed ID (PMID)"
       }
     },
     "test_examples": [
@@ -109,52 +76,8 @@
       "retmode": "xml"
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "object",
-            "string",
-            "null"
-          ],
-          "description": "Full PubMed article metadata (XML format parsed to dict/text)."
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      },
-      "required": [
-        "status"
-      ]
+      "type": ["object", "string"],
+      "description": "Full PubMed article metadata in XML format (as string) or parsed structure"
     },
     "test_examples": [
       {
@@ -200,58 +123,8 @@
       "cmd": "neighbor_score"
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "array",
-            "object",
-            "null"
-          ],
-          "description": "List of related PMIDs with similarity scores."
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      },
-      "required": [
-        "status"
-      ]
+      "type": ["array", "object", "string"],
+      "description": "List of related PMIDs, linkset data structure, or error message"
     },
     "test_examples": [
       {
@@ -298,58 +171,8 @@
       "linkname": "pubmed_pubmed_citedin"
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "array",
-            "object",
-            "null"
-          ],
-          "description": "List of PMIDs that cite the input article."
-        },
-        "count": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      },
-      "required": [
-        "status"
-      ]
+      "type": ["array", "object", "string"],
+      "description": "List of PMIDs that cite the input article, linkset data structure, or error message"
     },
     "test_examples": [
       {
@@ -384,55 +207,11 @@
       "endpoint": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi",
       "method": "GET",
       "dbfrom": "pubmed",
-      "cmd": "llinkslib"
+      "cmd": "llinks"
     },
     "return_schema": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": [
-            "success",
-            "error"
-          ]
-        },
-        "url": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "data": {
-          "type": [
-            "object",
-            "string",
-            "null"
-          ],
-          "description": "LinkOut URLs and provider information."
-        },
-        "error": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "status_code": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "detail": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      },
-      "required": [
-        "status"
-      ]
+      "type": ["array", "object", "string"],
+      "description": "LinkOut URLs and provider information (array of link objects or structured data)"
     },
     "test_examples": [
       {

@@ -39,12 +39,15 @@ class BiGGModelsTool(BaseTool):
             if param not in arguments or arguments[param] is None:
                 return {
                     "status": "error",
-                    "error": f"Missing required parameter: {param}",
+                    "data": {"error": f"Missing required parameter: {param}"},
                 }
 
         operation = arguments.get("operation")
         if not operation:
-            return {"status": "error", "error": "Missing required parameter: operation"}
+            return {
+                "status": "error",
+                "data": {"error": "Missing required parameter: operation"},
+            }
 
         operation_handlers = {
             "list_models": self._list_models,
@@ -63,8 +66,10 @@ class BiGGModelsTool(BaseTool):
         if not handler:
             return {
                 "status": "error",
-                "error": f"Unknown operation: {operation}",
-                "available_operations": list(operation_handlers.keys()),
+                "data": {
+                    "error": f"Unknown operation: {operation}",
+                    "available_operations": list(operation_handlers.keys()),
+                },
             }
 
         try:
@@ -72,8 +77,10 @@ class BiGGModelsTool(BaseTool):
         except Exception as e:
             return {
                 "status": "error",
-                "error": f"Operation failed: {str(e)}",
-                "operation": operation,
+                "data": {
+                    "error": f"Operation failed: {str(e)}",
+                    "operation": operation,
+                },
             }
 
     def _list_models(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -82,17 +89,22 @@ class BiGGModelsTool(BaseTool):
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            data = response.json()
-            return {
+            api_data = response.json()
+            result = {
                 "status": "success",
-                "models": data.get("results", []),
-                "count": data.get("results_count", len(data.get("results", []))),
+                "models": api_data.get("results", []),
+                "count": api_data.get(
+                    "results_count", len(api_data.get("results", []))
+                ),
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"API request failed with status {response.status_code}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"API request failed with status {response.status_code}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_model(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -100,20 +112,27 @@ class BiGGModelsTool(BaseTool):
         model_id = arguments.get("model_id")
 
         if not model_id:
-            return {"status": "error", "error": "model_id is required"}
+            return {"status": "error", "data": {"error": "model_id is required"}}
 
         url = f"{BIGG_BASE_URL}/models/{model_id}"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            return {"status": "success", "model": response.json(), "model_id": model_id}
+            result = {
+                "status": "success",
+                "model": response.json(),
+                "model_id": model_id,
+            }
+            return {"status": "success", "data": result}
         elif response.status_code == 404:
-            return {"status": "error", "error": f"Model {model_id} not found"}
+            return {"status": "error", "data": {"error": f"Model {model_id} not found"}}
         else:
             return {
                 "status": "error",
-                "error": f"API request failed with status {response.status_code}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"API request failed with status {response.status_code}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_model_reactions(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -121,24 +140,28 @@ class BiGGModelsTool(BaseTool):
         model_id = arguments.get("model_id")
 
         if not model_id:
-            return {"status": "error", "error": "model_id is required"}
+            return {"status": "error", "data": {"error": "model_id is required"}}
 
         url = f"{BIGG_BASE_URL}/models/{model_id}/reactions"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            reactions = response.json()
-            return {
+            api_data = response.json()
+            reactions = api_data.get("results", api_data)
+            result = {
                 "status": "success",
                 "reactions": reactions if isinstance(reactions, list) else [reactions],
                 "count": len(reactions) if isinstance(reactions, list) else 1,
                 "model_id": model_id,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get reactions for model {model_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get reactions for model {model_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_model_metabolites(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -146,14 +169,15 @@ class BiGGModelsTool(BaseTool):
         model_id = arguments.get("model_id")
 
         if not model_id:
-            return {"status": "error", "error": "model_id is required"}
+            return {"status": "error", "data": {"error": "model_id is required"}}
 
         url = f"{BIGG_BASE_URL}/models/{model_id}/metabolites"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            metabolites = response.json()
-            return {
+            api_data = response.json()
+            metabolites = api_data.get("results", api_data)
+            result = {
                 "status": "success",
                 "metabolites": metabolites
                 if isinstance(metabolites, list)
@@ -161,11 +185,14 @@ class BiGGModelsTool(BaseTool):
                 "count": len(metabolites) if isinstance(metabolites, list) else 1,
                 "model_id": model_id,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get metabolites for model {model_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get metabolites for model {model_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_model_genes(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -173,24 +200,28 @@ class BiGGModelsTool(BaseTool):
         model_id = arguments.get("model_id")
 
         if not model_id:
-            return {"status": "error", "error": "model_id is required"}
+            return {"status": "error", "data": {"error": "model_id is required"}}
 
         url = f"{BIGG_BASE_URL}/models/{model_id}/genes"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            genes = response.json()
-            return {
+            api_data = response.json()
+            genes = api_data.get("results", api_data)
+            result = {
                 "status": "success",
                 "genes": genes if isinstance(genes, list) else [genes],
                 "count": len(genes) if isinstance(genes, list) else 1,
                 "model_id": model_id,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get genes for model {model_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get genes for model {model_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_reaction(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -199,23 +230,26 @@ class BiGGModelsTool(BaseTool):
         reaction_id = arguments.get("reaction_id")
 
         if not reaction_id:
-            return {"status": "error", "error": "reaction_id is required"}
+            return {"status": "error", "data": {"error": "reaction_id is required"}}
 
-        url = f"{BIGG_BASE_URL}/{model_id}/reactions/{reaction_id}"
+        url = f"{BIGG_BASE_URL}/models/{model_id}/reactions/{reaction_id}"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            return {
+            result = {
                 "status": "success",
                 "reaction": response.json(),
                 "reaction_id": reaction_id,
                 "model_id": model_id,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get reaction {reaction_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get reaction {reaction_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_metabolite(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -224,23 +258,26 @@ class BiGGModelsTool(BaseTool):
         metabolite_id = arguments.get("metabolite_id")
 
         if not metabolite_id:
-            return {"status": "error", "error": "metabolite_id is required"}
+            return {"status": "error", "data": {"error": "metabolite_id is required"}}
 
-        url = f"{BIGG_BASE_URL}/{model_id}/metabolites/{metabolite_id}"
+        url = f"{BIGG_BASE_URL}/models/{model_id}/metabolites/{metabolite_id}"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            return {
+            result = {
                 "status": "success",
                 "metabolite": response.json(),
                 "metabolite_id": metabolite_id,
                 "model_id": model_id,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get metabolite {metabolite_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get metabolite {metabolite_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_gene(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -249,25 +286,28 @@ class BiGGModelsTool(BaseTool):
         gene_id = arguments.get("gene_id")
 
         if not model_id:
-            return {"status": "error", "error": "model_id is required"}
+            return {"status": "error", "data": {"error": "model_id is required"}}
         if not gene_id:
-            return {"status": "error", "error": "gene_id is required"}
+            return {"status": "error", "data": {"error": "gene_id is required"}}
 
         url = f"{BIGG_BASE_URL}/models/{model_id}/genes/{gene_id}"
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            return {
+            result = {
                 "status": "success",
                 "gene": response.json(),
                 "gene_id": gene_id,
                 "model_id": model_id,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get gene {gene_id}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get gene {gene_id}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _search(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -276,7 +316,7 @@ class BiGGModelsTool(BaseTool):
         search_type = arguments.get("search_type", "reactions")
 
         if not query:
-            return {"status": "error", "error": "query is required"}
+            return {"status": "error", "data": {"error": "query is required"}}
 
         params = {"query": query, "search_type": search_type}
 
@@ -284,19 +324,22 @@ class BiGGModelsTool(BaseTool):
         response = requests.get(url, params=params, timeout=30)
 
         if response.status_code == 200:
-            data = response.json()
-            return {
+            api_data = response.json()
+            result = {
                 "status": "success",
-                "results": data.get("results", []),
-                "count": data.get("results_count", 0),
+                "results": api_data.get("results", []),
+                "count": api_data.get("results_count", 0),
                 "query": query,
                 "search_type": search_type,
             }
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Search failed with status {response.status_code}",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Search failed with status {response.status_code}",
+                    "detail": response.text[:500],
+                },
             }
 
     def _get_database_version(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -305,10 +348,13 @@ class BiGGModelsTool(BaseTool):
         response = requests.get(url, timeout=30)
 
         if response.status_code == 200:
-            return {"status": "success", **response.json()}
+            result = {"status": "success", **response.json()}
+            return {"status": "success", "data": result}
         else:
             return {
                 "status": "error",
-                "error": f"Failed to get database version",
-                "detail": response.text[:500],
+                "data": {
+                    "error": f"Failed to get database version",
+                    "detail": response.text[:500],
+                },
             }

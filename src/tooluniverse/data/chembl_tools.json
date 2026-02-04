@@ -30,74 +30,47 @@
     "test_examples": [
       {
         "query": "CC(=O)Oc1ccccc1C(=O)O",
-        "similarity_threshold": 1,
+        "similarity_threshold": 70,
         "max_results": 5
       }
     ],
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string",
-          "description": "Error message if search failed"
-        },
-        "error_details": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string"
-            },
-            "message": {
-              "type": "string"
-            },
-            "retriable": {
-              "type": "boolean"
-            },
-            "next_steps": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "details": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "chembl_id": {
+            "type": "string",
+            "description": "ChEMBL molecule ID"
+          },
+          "pref_name": {
+            "type": ["string", "null"],
+            "description": "Preferred name"
+          },
+          "smiles": {
+            "type": "string",
+            "description": "SMILES string"
+          },
+          "similar_molecules": {
+            "type": "array",
+            "items": {
               "type": "object",
-              "properties": {}
-            }
-          },
-          "description": "Detailed error information"
-        },
-        "molecules": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "molecule_chembl_id": {
-                "type": "string",
-                "description": "ChEMBL molecule ID"
-              },
-              "similarity": {
-                "type": "number",
-                "description": "Similarity score (0-100)"
-              },
-              "pref_name": {
-                "type": "string",
-                "description": "Preferred name"
-              },
-              "canonical_smiles": {
-                "type": "string",
-                "description": "Canonical SMILES string"
+              "properties": {
+                "chembl_id": {
+                  "type": "string"
+                },
+                "pref_name": {
+                  "type": ["string", "null"]
+                },
+                "smiles": {
+                  "type": "string"
+                },
+                "similarity": {
+                  "type": "string"
+                }
               }
             }
-          },
-          "description": "List of similar molecules found (on success)"
-        },
-        "query_smiles": {
-          "type": "string",
-          "description": "SMILES string used for the search"
-        },
-        "threshold": {
-          "type": "number",
-          "description": "Similarity threshold used"
+          }
         }
       }
     }
@@ -1358,7 +1331,7 @@
   {
     "type": "ChEMBLRESTTool",
     "name": "ChEMBL_get_molecule_image",
-    "description": "Get molecular structure image (SVG format) for a molecule by ChEMBL ID.",
+    "description": "Get molecular structure image (SVG or PNG format) for a molecule by ChEMBL ID. Returns the image URL and metadata.",
     "fields": {
       "endpoint": "/image/{chembl_id}"
     },
@@ -1384,19 +1357,8 @@
       ]
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "string",
-          "description": "Image URL or SVG content"
-        },
-        "url": {
-          "type": "string"
-        }
-      }
+      "type": "string",
+      "description": "Description of image data availability and access information"
     },
     "test_examples": [
       {

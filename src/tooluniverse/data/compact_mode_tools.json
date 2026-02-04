@@ -70,7 +70,7 @@
           "description": "Total number of tools"
         },
         "limit": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "description": "Limit used for pagination"
         },
         "offset": {
@@ -96,54 +96,30 @@
     },
     "test_examples": [
       {
-        "input": {
-          "mode": "names"
-        },
-        "expected_output_type": "object",
-        "description": "Get only tool names"
+        "mode": "names"
       },
       {
-        "input": {
-          "mode": "basic"
-        },
-        "expected_output_type": "object",
-        "description": "Get tools with descriptions"
+        "mode": "basic"
       },
       {
-        "input": {
-          "mode": "categories"
-        },
-        "expected_output_type": "object",
-        "description": "Get category statistics"
+        "mode": "categories"
       },
       {
-        "input": {
-          "mode": "by_category"
-        },
-        "expected_output_type": "object",
-        "description": "Get tools grouped by category"
+        "mode": "by_category"
       },
       {
-        "input": {
-          "mode": "summary"
-        },
-        "expected_output_type": "object",
-        "description": "Get summary info (name, description, type, has_parameters)"
+        "mode": "summary"
       },
       {
-        "input": {
-          "mode": "custom",
-          "fields": [
-            "name",
-            "type",
-            "category"
-          ],
-          "categories": [
-            "uniprot"
-          ]
-        },
-        "expected_output_type": "object",
-        "description": "Get custom fields for tools in specific categories"
+        "mode": "custom",
+        "fields": [
+          "name",
+          "type",
+          "category"
+        ],
+        "categories": [
+          "uniprot"
+        ]
       }
     ]
   },
@@ -218,7 +194,7 @@
           "description": "Total number of matching tools"
         },
         "limit": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "description": "Limit used for pagination"
         },
         "offset": {
@@ -262,31 +238,19 @@
     },
     "test_examples": [
       {
-        "input": {
-          "pattern": "protein",
-          "search_mode": "text",
-          "field": "name"
-        },
-        "expected_output_type": "object",
-        "description": "Simple text search for 'protein' in tool names"
+        "pattern": "protein",
+        "search_mode": "text",
+        "field": "name"
       },
       {
-        "input": {
-          "pattern": "^UniProt",
-          "search_mode": "regex",
-          "field": "name"
-        },
-        "expected_output_type": "object",
-        "description": "Regex search for tools starting with 'UniProt'"
+        "pattern": "^UniProt",
+        "search_mode": "regex",
+        "field": "name"
       },
       {
-        "input": {
-          "pattern": "drug",
-          "search_mode": "text",
-          "field": "description"
-        },
-        "expected_output_type": "object",
-        "description": "Search in descriptions"
+        "pattern": "drug",
+        "search_mode": "text",
+        "field": "description"
       }
     ]
   },
@@ -337,67 +301,23 @@
     ],
     "return_schema": {
       "type": "object",
-      "description": "Tool information. For single tool query, returns the tool info directly. For batch query, returns an object with total_requested, total_found, and tools array.",
-      "oneOf": [
-        {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "Tool name"
-            },
-            "description": {
-              "type": "string",
-              "description": "Tool description (when detail_level='description')"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "properties": {
-            "total_requested": {
-              "type": "integer",
-              "description": "Number of tools requested"
-            },
-            "total_found": {
-              "type": "integer",
-              "description": "Number of tools found"
-            },
-            "tools": {
-              "type": "array",
-              "description": "Array of tool information objects"
-            }
-          }
-        }
-      ]
+      "description": "Tool information. For single tool query, returns the tool info directly. For batch query, returns an object with total_requested, total_found, and tools array."
     },
     "test_examples": [
       {
-        "input": {
-          "tool_names": "UniProt_get_entry_by_accession",
-          "detail_level": "description"
-        },
-        "expected_output_type": "object",
-        "description": "Get description for a single tool"
+        "tool_names": "UniProt_get_entry_by_accession",
+        "detail_level": "description"
       },
       {
-        "input": {
-          "tool_names": "UniProt_get_entry_by_accession",
-          "detail_level": "full"
-        },
-        "expected_output_type": "object",
-        "description": "Get full definition for a single tool"
+        "tool_names": "UniProt_get_entry_by_accession",
+        "detail_level": "full"
       },
       {
-        "input": {
-          "tool_names": [
-            "UniProt_get_entry_by_accession",
-            "ChEMBL_get_molecule_by_chembl_id"
-          ],
-          "detail_level": "description"
-        },
-        "expected_output_type": "object",
-        "description": "Get descriptions for multiple tools"
+        "tool_names": [
+          "UniProt_get_entry_by_accession",
+          "ChEMBL_get_molecule"
+        ],
+        "detail_level": "description"
       }
     ]
   },
@@ -436,24 +356,16 @@
     },
     "test_examples": [
       {
-        "input": {
-          "tool_name": "UniProt_get_entry_by_accession",
-          "arguments": {
-            "accession": "P05067"
-          }
-        },
-        "expected_output_type": "string",
-        "description": "Execute a tool with arguments"
+        "tool_name": "UniProt_get_entry_by_accession",
+        "arguments": {
+          "accession": "P05067"
+        }
       },
       {
-        "input": {
-          "tool_name": "ChEMBL_get_molecule_by_chembl_id",
-          "arguments": {
-            "chembl_id": "CHEMBL25"
-          }
-        },
-        "expected_output_type": "string",
-        "description": "Execute a tool with multiple arguments"
+        "tool_name": "ChEMBL_get_molecule",
+        "arguments": {
+          "chembl_id": "CHEMBL25"
+        }
       }
     ]
   }

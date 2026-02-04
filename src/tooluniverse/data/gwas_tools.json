@@ -2,13 +2,17 @@
   {
     "type": "GWASAssociationSearch",
     "name": "gwas_search_associations",
-    "description": "Search for GWAS associations by various criteria including EFO trait, rs ID, accession ID, with sorting and pagination support.",
+    "description": "Search for GWAS associations by various criteria including disease trait, rs ID, accession ID, with sorting and pagination support.",
     "parameter": {
       "type": "object",
       "properties": {
-        "efo_trait": {
+        "disease_trait": {
           "type": "string",
-          "description": "EFO trait identifier or name"
+          "description": "Disease or trait name for text-based search (e.g., 'diabetes', 'coronary artery disease', 'breast cancer')"
+        },
+        "efo_uri": {
+          "type": "string",
+          "description": "Full EFO ontology URI (e.g., 'http://www.ebi.ac.uk/efo/EFO_0001645')"
         },
         "rs_id": {
           "type": "string",
@@ -90,8 +94,8 @@
                 "description": "Study accession ID"
               },
               "pubmed_id": {
-                "type": "string",
-                "description": "PubMed reference"
+                "type": ["string", "integer"],
+                "description": "PubMed reference (can be string or integer)"
               },
               "first_author": {
                 "type": "string",
@@ -183,30 +187,25 @@
     },
     "test_examples": [
       {
-        "efo_trait": "EFO_0004321",
-        "rs_id": "rs123456",
-        "accession_id": "GCST000001",
-        "sort": "p_value",
-        "direction": "asc",
-        "size": 10,
-        "page": 1
+        "disease_trait": "coronary artery disease",
+        "size": 5
       }
     ]
   },
   {
     "type": "GWASStudySearch",
     "name": "gwas_search_studies",
-    "description": "Search for GWAS studies by various criteria including EFO trait, disease trait, cohort, GxE interactions, and summary statistics availability.",
+    "description": "Search for GWAS studies by various criteria including disease trait, cohort, GxE interactions, and summary statistics availability.",
     "parameter": {
       "type": "object",
       "properties": {
-        "efo_trait": {
-          "type": "string",
-          "description": "EFO trait identifier or name"
-        },
         "disease_trait": {
           "type": "string",
-          "description": "Disease trait name"
+          "description": "Disease or trait name for text-based search (e.g., 'diabetes', 'breast cancer')"
+        },
+        "efo_uri": {
+          "type": "string",
+          "description": "Full EFO ontology URI (e.g., 'http://www.ebi.ac.uk/efo/EFO_0001645')"
         },
         "cohort": {
           "type": "string",
@@ -334,8 +333,8 @@
                 "description": "URL to full summary statistics"
               },
               "pubmed_id": {
-                "type": "string",
-                "description": "PubMed reference"
+                "type": ["string", "integer"],
+                "description": "PubMed reference (can be string or integer)"
               },
               "terms_of_license": {
                 "type": "string",
@@ -385,13 +384,8 @@
     },
     "test_examples": [
       {
-        "efo_trait": "EFO_0000400",
-        "disease_trait": "breast cancer",
-        "cohort": "UKB",
-        "gxe": true,
-        "full_pvalue_set": false,
-        "size": 10,
-        "page": 1
+        "disease_trait": "diabetes",
+        "size": 5
       }
     ]
   },
@@ -604,8 +598,8 @@
           "description": "Study accession ID"
         },
         "pubmed_id": {
-          "type": "string",
-          "description": "PubMed reference"
+          "type": ["string", "integer"],
+          "description": "PubMed reference (can be string or integer)"
         },
         "first_author": {
           "type": "string",
@@ -783,8 +777,8 @@
           "description": "URL to full summary statistics"
         },
         "pubmed_id": {
-          "type": "string",
-          "description": "PubMed reference"
+          "type": ["string", "integer"],
+          "description": "PubMed reference (can be string or integer)"
         },
         "terms_of_license": {
           "type": "string",
@@ -912,9 +906,13 @@
     "parameter": {
       "type": "object",
       "properties": {
-        "efo_trait": {
+        "disease_trait": {
           "type": "string",
-          "description": "EFO trait identifier or name"
+          "description": "Disease or trait name for text-based search (e.g., 'diabetes', 'breast cancer')"
+        },
+        "efo_uri": {
+          "type": "string",
+          "description": "Full EFO ontology URI (e.g., 'http://www.ebi.ac.uk/efo/EFO_0001645')"
         },
         "size": {
           "type": "integer",
@@ -925,8 +923,9 @@
           "description": "Page number for pagination"
         }
       },
-      "required": [
-        "efo_trait"
+      "oneOf": [
+        {"required": ["disease_trait"]},
+        {"required": ["efo_uri"]}
       ]
     },
     "label": [
@@ -945,6 +944,25 @@
           "items": {
             "type": "object",
             "properties": {
+              "association_id": {
+                "type": "integer"
+              },
+              "risk_frequency": {
+                "type": "string"
+              },
+              "pvalue_description": {
+                "type": "string"
+              },
+              "range": {
+                "type": "string"
+              },
+              "locations": {
+                "type": "array",
+                "items": {
+                  "type": ["object", "string"]
+                },
+                "description": "Array of location objects or location strings"
+              },
               "rs_id": {
                 "type": "string",
                 "description": "dbSNP rs identifier"
@@ -960,28 +978,6 @@
               "last_update_date": {
                 "type": "string",
                 "description": "Last update timestamp"
-              },
-              "locations": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "chromosome_name": {
-                      "type": "string"
-                    },
-                    "chromosome_position": {
-                      "type": "integer"
-                    },
-                    "region": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                }
               },
               "alleles": {
                 "type": "string",
@@ -1043,9 +1039,8 @@
     },
     "test_examples": [
       {
-        "efo_trait": "asthma",
-        "size": 20,
-        "page": 1
+        "disease_trait": "breast cancer",
+        "size": 20
       }
     ]
   },
@@ -1056,9 +1051,13 @@
     "parameter": {
       "type": "object",
       "properties": {
-        "efo_trait": {
+        "disease_trait": {
           "type": "string",
-          "description": "EFO trait identifier or name"
+          "description": "Disease or trait name for text-based search (e.g., 'diabetes', 'hypertension')"
+        },
+        "efo_uri": {
+          "type": "string",
+          "description": "Full EFO ontology URI (e.g., 'http://www.ebi.ac.uk/efo/EFO_0001645')"
         },
         "size": {
           "type": "integer",
@@ -1069,8 +1068,9 @@
           "description": "Page number for pagination"
         }
       },
-      "required": [
-        "efo_trait"
+      "oneOf": [
+        {"required": ["disease_trait"]},
+        {"required": ["efo_uri"]}
       ]
     },
     "label": [
@@ -1126,8 +1126,8 @@
                 "description": "Study accession ID"
               },
               "pubmed_id": {
-                "type": "string",
-                "description": "PubMed reference"
+                "type": ["string", "integer"],
+                "description": "PubMed reference (can be string or integer)"
               },
               "first_author": {
                 "type": "string",
@@ -1219,9 +1219,8 @@
     },
     "test_examples": [
       {
-        "efo_trait": "EFO_0000400",
-        "size": 10,
-        "page": 1
+        "disease_trait": "type 2 diabetes",
+        "size": 10
       }
     ]
   },
@@ -1310,8 +1309,8 @@
                 "description": "Study accession ID"
               },
               "pubmed_id": {
-                "type": "string",
-                "description": "PubMed reference"
+                "type": ["string", "integer"],
+                "description": "PubMed reference (can be string or integer)"
               },
               "first_author": {
                 "type": "string",
@@ -1418,13 +1417,13 @@
     "parameter": {
       "type": "object",
       "properties": {
-        "efo_trait": {
-          "type": "string",
-          "description": "EFO trait identifier or name"
-        },
         "disease_trait": {
           "type": "string",
-          "description": "Disease trait name"
+          "description": "Disease or trait name for text-based search (e.g., 'diabetes', 'alzheimer disease')"
+        },
+        "efo_uri": {
+          "type": "string",
+          "description": "Full EFO ontology URI (e.g., 'http://www.ebi.ac.uk/efo/EFO_0001645')"
         },
         "cohort": {
           "type": "string",
@@ -1447,7 +1446,10 @@
           "description": "Page number for pagination"
         }
       },
-      "required": []
+      "oneOf": [
+        {"required": ["disease_trait"]},
+        {"required": ["efo_uri"]}
+      ]
     },
     "label": [
       "GWAS",
@@ -1552,8 +1554,8 @@
                 "description": "URL to full summary statistics"
               },
               "pubmed_id": {
-                "type": "string",
-                "description": "PubMed reference"
+                "type": ["string", "integer"],
+                "description": "PubMed reference (can be string or integer)"
               },
               "terms_of_license": {
                 "type": "string",
@@ -1603,13 +1605,8 @@
     },
     "test_examples": [
       {
-        "efo_trait": "EFO_0003767",
-        "disease_trait": "breast cancer",
-        "cohort": "UKB",
-        "gxe": true,
-        "full_pvalue_set": false,
-        "size": 10,
-        "page": 1
+        "disease_trait": "hypertension",
+        "size": 5
       }
     ]
   },
@@ -1834,8 +1831,8 @@
                 "description": "Study accession ID"
               },
               "pubmed_id": {
-                "type": "string",
-                "description": "PubMed reference"
+                "type": ["string", "integer"],
+                "description": "PubMed reference (can be string or integer)"
               },
               "first_author": {
                 "type": "string",

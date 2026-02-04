@@ -19,7 +19,7 @@ def GTEx_get_top_expressed_genes(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> list[Any]:
     """
     Get top expressed genes in a specific tissue sorted by median expression. Returns gene list with ...
 
@@ -46,7 +46,7 @@ def GTEx_get_top_expressed_genes(
 
     Returns
     -------
-    dict[str, Any]
+    list[Any]
     """
     # Handle mutable defaults to avoid B006 linting error
 

@@ -23,23 +23,8 @@
       "return_format": "TEXT"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "string",
-          "description": "FASTA sequence"
-        },
-        "count": {
-          "type": "integer",
-          "description": "Number of sequences"
-        },
-        "content_type": {
-          "type": "string"
-        }
-      }
+      "type": "string",
+      "description": "FASTA sequence"
     },
     "test_examples": [
       {
@@ -69,19 +54,8 @@
       "return_format": "TEXT"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "string",
-          "description": "EMBL format sequence record"
-        },
-        "content_type": {
-          "type": "string"
-        }
-      }
+      "type": "string",
+      "description": "EMBL format sequence record"
     },
     "test_examples": [
       {
@@ -108,19 +82,8 @@
       "return_format": "TEXT"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "data": {
-          "type": "string",
-          "description": "XML format metadata record"
-        },
-        "content_type": {
-          "type": "string"
-        }
-      }
+      "type": "string",
+      "description": "XML format metadata record"
     },
     "test_examples": [
       {
