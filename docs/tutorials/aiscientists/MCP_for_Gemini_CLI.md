@@ -171,7 +171,7 @@ For maximum context window efficiency, use compact mode which exposes only 4-5 c
 ```
 
 **Compact Mode Benefits**:
-- **99% reduction**: Only 4-5 tools exposed instead of 750+
+- **99% reduction**: Only 4-5 tools exposed instead of 1000+
 - **Full functionality**: All tools still accessible via `execute_tool`
 - **Minimal context usage**: Ideal for AI agents with limited context windows
 - **Progressive disclosure**: Use `list_tools`, `grep_tools`, and `get_tool_info` to discover tools on demand

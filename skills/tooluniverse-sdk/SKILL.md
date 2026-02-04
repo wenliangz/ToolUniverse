@@ -1,11 +1,11 @@
 ---
 name: tooluniverse-sdk
-description: Build AI scientist systems using ToolUniverse Python SDK for scientific research. Use when users need to access 750+ scientific tools through Python code, create scientific workflows, perform drug discovery, protein analysis, genomics analysis, literature research, or any computational biology task. Triggers include requests to use scientific tools programmatically, build research pipelines, analyze biological data, search literature, predict drug properties, or create AI-powered scientific workflows.
+description: Build AI scientist systems using ToolUniverse Python SDK for scientific research. Use when users need to access 1000++ scientific tools through Python code, create scientific workflows, perform drug discovery, protein analysis, genomics analysis, literature research, or any computational biology task. Triggers include requests to use scientific tools programmatically, build research pipelines, analyze biological data, search literature, predict drug properties, or create AI-powered scientific workflows.
 ---
 
 # ToolUniverse Python SDK
 
-ToolUniverse provides programmatic access to 750+ scientific tools through a unified interface. It implements the AI-Tool Interaction Protocol for building AI scientist systems that integrate ML models, databases, APIs, and scientific packages.
+ToolUniverse provides programmatic access to 1000++ scientific tools through a unified interface. It implements the AI-Tool Interaction Protocol for building AI scientist systems that integrate ML models, databases, APIs, and scientific packages.
 
 ## Installation
 
@@ -43,7 +43,7 @@ from tooluniverse import ToolUniverse
 
 # 1. Initialize and load tools
 tu = ToolUniverse()
-tu.load_tools()  # Loads 750+ tools (~5-10 seconds first time)
+tu.load_tools()  # Loads 1000++ tools (~5-10 seconds first time)
 
 # 2. Find tools (three methods)
 # Method A: Keyword (fast, no API key)

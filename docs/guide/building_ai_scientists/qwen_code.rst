@@ -27,14 +27,14 @@ Qwen Code is a coding agent CLI that can query and edit large codebases and auto
    └──────┬───────┘
           │
    ┌──────▼───────┐
-   │ 600+ Scientific Tools │
+   │ 1000+ Scientific Tools │
    └───────────────────────┘
 
 **Benefits of Qwen Code Integration**:
 
 - **Command-Line Efficiency**: Scriptable, terminal-first scientific workflows
 - **Advanced Reasoning**: Qwen Coder models optimized for code and tooling
-- **Comprehensive Tools**: Access 600+ scientific tools via ToolUniverse
+- **Comprehensive Tools**: Access 1000+ scientific tools via ToolUniverse
 - **Automated Execution**: Natural language to tool execution
 - **Batch Processing**: Efficient multi-task research
 

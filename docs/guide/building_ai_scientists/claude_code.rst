@@ -6,7 +6,7 @@ Claude Code
 Overview
 --------
 
-Claude Code integration enables powerful IDE- or terminal-based scientific research through the Model Context Protocol (MCP). This approach provides a developer-friendly interface for research while leveraging Claude's advanced reasoning and ToolUniverse's 600+ scientific tools.
+Claude Code integration enables powerful IDE- or terminal-based scientific research through the Model Context Protocol (MCP). This approach provides a developer-friendly interface for research while leveraging Claude's advanced reasoning and ToolUniverse's 1000+ scientific tools.
 
 .. code-block:: text
 
@@ -22,7 +22,7 @@ Claude Code integration enables powerful IDE- or terminal-based scientific resea
    └─────────┬───────┘
              │
    ┌─────────▼───────┐
-   │ 600+ Scientific │ ← Scientific Tools Ecosystem
+   │ 1000+ Scientific │ ← Scientific Tools Ecosystem
    │     Tools       │
    └─────────────────┘
 
@@ -30,7 +30,7 @@ Claude Code integration enables powerful IDE- or terminal-based scientific resea
 
 - **Developer Workflow**: Use Claude inside VS Code/JetBrains or terminal
 - **Advanced Reasoning**: Claude's strong multi-step reasoning
-- **Comprehensive Tools**: Access to 600+ ToolUniverse tools
+- **Comprehensive Tools**: Access to 1000+ ToolUniverse tools
 - **Automated Execution**: Natural-language to tools, directly in your editor
 - **Batch & Iteration**: Run multi-step research loops effectively
 

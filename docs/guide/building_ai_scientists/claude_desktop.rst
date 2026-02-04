@@ -22,7 +22,7 @@ Claude Desktop Integration enables seamless connection between Claude Desktop Ap
    └─────────┬───────┘
              │
    ┌─────────▼───────┐
-   │ 600+ Scientific │ ← Scientific Tools Ecosystem
+   │ 1000+ Scientific │ ← Scientific Tools Ecosystem
    │     Tools       │
    └─────────────────┘
 
@@ -30,7 +30,7 @@ Claude Desktop Integration enables seamless connection between Claude Desktop Ap
 
 - **Intuitive Interface**: Natural conversation-based interaction with scientific tools
 - **Advanced Reasoning**: Claude's sophisticated reasoning for complex scientific problems
-- **Comprehensive Tools**: Access to 600+ scientific tools across multiple domains
+- **Comprehensive Tools**: Access to 1000+ scientific tools across multiple domains
 - **Real-time Execution**: Direct tool execution within Claude conversations
 - **Context Awareness**: Claude maintains context across multiple tool interactions
 

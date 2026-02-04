@@ -256,24 +256,47 @@ Retrieved: [date]
 
 ---
 
-## Data Quality Tiers
+## Data Quality Tiers (Aligned with Evidence Grading)
 
-Assessment criteria for expression experiments:
+### Experiment Quality Assessment
+| Tier | Symbol | Criteria | Evidence Equivalent |
+|------|--------|----------|---------------------|
+| High Quality | ●●● | ≥3 bio replicates, complete metadata, processed data | ★★★ |
+| Medium Quality | ●●○ | 2-3 replicates OR some metadata gaps, accessible | ★★☆ |
+| Low Quality | ●○○ | No replicates, sparse metadata, data access issues | ★☆☆ |
+| Use with Caution | ○○○ | Single sample, no replication, outdated platform | ☆☆☆ |
 
-| Tier | Symbol | Criteria |
-|------|--------|----------|
-| High Quality | ●●● | ≥3 bio replicates, complete metadata, processed data available |
-| Medium Quality | ●●○ | 2-3 replicates OR some metadata gaps, data accessible |
-| Low Quality | ●○○ | No replicates, sparse metadata, or data access issues |
-| Use with Caution | ○○○ | Single sample, no replication, outdated platform |
+### Data Reliability by Source
+| Data Source | Reliability | Notes |
+|-------------|-------------|-------|
+| GTEx | ★★★ | Large-scale, well-curated, standardized |
+| HPA | ★★★ | Validated, multiple antibodies |
+| ArrayExpress (curated) | ★★☆-★★★ | Depends on individual study |
+| GEO/ArrayExpress (direct) | ★☆☆-★★☆ | Submitter-provided, verify |
+| Single-cell (CELLxGENE) | ★★☆ | High resolution but technical variation |
+| Microarray (legacy) | ★★☆ | Platform-specific, may need normalization |
+
+### Using Expression Evidence in Research
+When citing expression data in research reports, include reliability:
+```markdown
+**Tissue Expression**: 
+EGFR shows highest expression in skin (156 TPM) [★★★: GTEx], consistent with 
+HPA immunohistochemistry [★★★: HPA, strong staining]. A smaller study 
+found elevated expression in tumors [★★☆: E-MTAB-1234, N=30 samples].
+```
 
 Include assessment rationale:
 ```markdown
-**Quality**: ●●● High
+**Quality**: ●●● High (★★★)
 - ✓ 4 biological replicates per condition
 - ✓ Complete sample annotations
 - ✓ Processed and raw data available
-- ✓ Recent RNA-seq platform
+- ✓ Recent RNA-seq platform (Illumina NovaSeq)
+
+**Reliability for Use**: 
+- Differential expression calls: ★★★ (well-powered)
+- Absolute expression values: ★★☆ (compare within study)
+- Cross-study comparison: ★☆☆ (requires batch correction)
 ```
 
 ---

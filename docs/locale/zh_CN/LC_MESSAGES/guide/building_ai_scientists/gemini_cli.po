@@ -69,7 +69,7 @@ msgstr "**高级推理**：Gemini 针对复杂科学问题的高级推理能力"
 #: ../../guide/building_ai_scientists/gemini_cli.rst:33
 #: cc677d2c7c454e7ba311d9b5e5b14eef
 msgid ""
-"**Comprehensive Tools**: Access to 600+ scientific tools across multiple "
+"**Comprehensive Tools**: Access to 1000+ scientific tools across multiple "
 "domains"
 msgstr "**综合工具**：可访问涵盖多个领域的600多种科学工具"
 

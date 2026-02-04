@@ -13,6 +13,14 @@
 
 **Democratizing AI scientists using ToolUniverse**
 
+📦 **Install Package** &nbsp;|&nbsp; 🛠️ **Install Skills** (Claude Code, Cursor, Codex CLI)
+```bash
+uv pip install tooluniverse
+```
+```bash
+npx skills add mims-harvard/ToolUniverse
+```
+
 We are currently looking for partners. If you’re interested, please reach out to [Shanghua Gao](shanghuagao@gmail.com).
 
 ToolUniverse is an ecosystem for creating AI scientist systems from any open or closed large language model (LLM). Powered by AI-Tool Interaction Protocol, it standardizes how LLMs identify and call tools, integrating more than **700 machine learning models, datasets, APIs, and scientific packages** for data analysis, knowledge retrieval, and experimental design.
@@ -82,7 +90,7 @@ pip install tooluniverse
 from tooluniverse import ToolUniverse
 
 tu = ToolUniverse()
-tu.load_tools()  # Load 600+ scientific tools
+tu.load_tools()  # Load 1000+ scientific tools
 
 # Your AI scientist can reason, experiment, and collaborate in discovery using the AI-tool interaction protocol.
 

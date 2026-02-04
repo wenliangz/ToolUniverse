@@ -22,7 +22,7 @@ GPT Codex CLI integration enables powerful command-line-based scientific researc
    └─────────┬───────┘
              │
    ┌─────────▼───────┐
-   │ 600+ Scientific │ ← Scientific Tools Ecosystem
+   │ 1000+ Scientific │ ← Scientific Tools Ecosystem
    │     Tools       │
    └─────────────────┘
 
@@ -30,7 +30,7 @@ GPT Codex CLI integration enables powerful command-line-based scientific researc
 
 - **Command-Line Efficiency**: Fast, scriptable scientific research workflows
 - **Advanced Reasoning**: Codex's sophisticated reasoning for complex scientific problems
-- **Comprehensive Tools**: Access to 600+ scientific tools across multiple domains
+- **Comprehensive Tools**: Access to 1000+ scientific tools across multiple domains
 - **Automated Execution**: Direct tool execution through natural language commands
 - **Batch Processing**: Handle multiple research tasks efficiently
 

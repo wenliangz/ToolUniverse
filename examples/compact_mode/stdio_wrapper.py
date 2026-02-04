@@ -6,7 +6,7 @@ This wrapper runs the SMCP server in compact mode via STDIO transport,
 filtering stdout logs to stderr, keeping only JSON messages on stdout
 for the MCP client (e.g., Claude Desktop).
 
-Compact mode only exposes 4 core tools instead of 750+ tools,
+Compact mode only exposes 4 core tools instead of 1000+ tools,
 significantly reducing context window usage while maintaining full
 functionality through search and execute capabilities.
 """

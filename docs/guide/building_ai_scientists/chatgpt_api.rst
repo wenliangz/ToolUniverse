@@ -22,7 +22,7 @@ ChatGPT API integration enables powerful programmatic scientific research throug
    └─────────┬───────┘
              │
    ┌─────────▼───────┐
-   │ 600+ Scientific │ ← Scientific Tools Ecosystem
+   │ 1000+ Scientific │ ← Scientific Tools Ecosystem
    │     Tools       │
    └─────────────────┘
 

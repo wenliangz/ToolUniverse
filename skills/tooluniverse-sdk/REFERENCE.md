@@ -25,7 +25,7 @@ pip install tooluniverse[client]
 
 ### Performance Metrics
 
-- First `load_tools()`: 5-10 seconds (700+ tools)
+- First `load_tools()`: 5-10 seconds (1000++ tools)
 - Subsequent loads: 2-3 seconds (cached)
 - Specific categories: <2 seconds
 - Memory: 200-300 MB base, +1-2 GB with embeddings

@@ -1,7 +1,7 @@
 Quick Start
 =================
 
-**Build your first AI scientist in 5 minutes with ToolUniverse's 600+ scientific tools**
+**Build your first AI scientist in 5 minutes with ToolUniverse's 1000+ scientific tools**
 
 This Tutorial gets you from zero to your first successful query in 5 minutes. For detailed tutorials, see :doc:`getting_started`.
 
@@ -19,7 +19,7 @@ This Tutorial gets you from zero to your first successful query in 5 minutes. Fo
    from tooluniverse import ToolUniverse
 
    tu = ToolUniverse()
-   tu.load_tools()  # Load all 600+ tools
+   tu.load_tools()  # Load all 1000+ tools
 
    # 3. Query scientific databases
    result = tu.run({
@@ -27,7 +27,7 @@ This Tutorial gets you from zero to your first successful query in 5 minutes. Fo
        "arguments": {"efoId": "EFO_0000537"}  # hypertension
    })
 
-**Success!** You now have access to 600+ scientific tools.
+**Success!** You now have access to 1000+ scientific tools.
 
 Building AI Scientists
 -----------------------------------------------------------

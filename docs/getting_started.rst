@@ -26,7 +26,7 @@ Let's start with a simple example and build up complexity:
 Step 1: Initialize ToolUniverse
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Create a ToolUniverse instance and load scientific tools. This step sets up the foundation for accessing 600+ tools across various scientific domains.
+Create a ToolUniverse instance and load scientific tools. This step sets up the foundation for accessing 1000+ tools across various scientific domains.
 
 .. code-block:: python
 
@@ -112,7 +112,7 @@ All tools follow this consistent structure:
 
 .. code-block:: python
 
-   # Standardized tool execution across all 600+ tools
+   # Standardized tool execution across all 1000+ tools
    query = {
        "name": "action_description",  # Tool identifier
        "arguments": {                 # Tool parameters
@@ -262,7 +262,7 @@ Tools
 * **Tool Caller** → :doc:`guide/tool_caller` - Primary execution engine with dynamic loading, validation, and MCP server integration
 * **Case Study** → :doc:`tutorials/tooluniverse_case_study` - End-to-end hypercholesterolemia drug discovery workflow with Gemini 2.5 Pro
 * **Agentic Tools** → :doc:`tutorials/agentic_tools_tutorial` - Build and use AI-powered tools with LLMs for tasks requiring reasoning and creativity
-* **Tool Composition** → :doc:`guide/tool_composition` - Chain ToolUniverse's 600+ tools into powerful scientific workflows using Tool Composer
+* **Tool Composition** → :doc:`guide/tool_composition` - Chain ToolUniverse's 1000+ tools into powerful scientific workflows using Tool Composer
 * **Scientific Workflows** → :doc:`guide/scientific_workflows` - Real-world research scenarios: drug discovery, safety analysis, literature review
 * **Expert Feedback** → :doc:`tutorials/expert_feedback` - Human-in-the-loop consultation platform for AI systems with web interface
 * **Embedding Tools** → :doc:`tools/embedding_tools` - Setup and configuration for embedding storage

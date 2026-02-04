@@ -83,8 +83,8 @@ msgstr "步骤 1：初始化 ToolUniverse"
 #: ../../getting_started.rst:29 30bf9c6fa6f14648aabab07975922980
 msgid ""
 "Create a ToolUniverse instance and load scientific tools. This step sets up "
-"the foundation for accessing 600+ tools across various scientific domains."
-msgstr "创建 ToolUniverse 实例并加载科学工具。此步骤为访问各种科学领域中的 600+ 工具奠定了基础。"
+"the foundation for accessing 1000+ tools across various scientific domains."
+msgstr "创建 ToolUniverse 实例并加载科学工具。此步骤为访问各种科学领域中的 1000+ 工具奠定了基础。"
 
 #: ../../getting_started.rst:45 ae2a9e5a04614ae4a7845e7ced2e600e
 msgid ""
@@ -384,9 +384,9 @@ msgstr ""
 #: ../../getting_started.rst:265 c66f05e9aac947d6b5f98bfe92fd63c6
 msgid ""
 "**Tool Composition** → :doc:`guide/tool_composition` - Chain ToolUniverse's "
-"600+ tools into powerful scientific workflows using Tool Composer"
+"1000+ tools into powerful scientific workflows using Tool Composer"
 msgstr ""
-"**工具组合** → :doc:`guide/tool_composition` - 使用工具组合器将 ToolUniverse 的 600+ "
+"**工具组合** → :doc:`guide/tool_composition` - 使用工具组合器将 ToolUniverse 的 1000+ "
 "工具链接成强大的科学工作流程"
 
 #: ../../getting_started.rst:266 7a1f53a24cbb4684a8e6591757693636

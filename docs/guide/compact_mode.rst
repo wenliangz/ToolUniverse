@@ -3,15 +3,15 @@
 Compact Mode Guide
 ==================
 
-Compact mode exposes only 4-5 core tools instead of 750+ tools, reducing context window usage by ~99% while maintaining full functionality.
+Compact mode exposes only 4-5 core tools instead of 1000+ tools, reducing context window usage by ~99% while maintaining full functionality.
 
 What is Compact Mode?
 ---------------------
 
-When enabled, compact mode exposes only 4-5 essential tools instead of all 750+ tools. All tools are still accessible via ``execute_tool``.
+When enabled, compact mode exposes only 4-5 essential tools instead of all 1000+ tools. All tools are still accessible via ``execute_tool``.
 
 **Benefits:**
-- 99% reduction in exposed tools (4-5 vs 750+)
+- 99% reduction in exposed tools (4-5 vs 1000+)
 - Full functionality maintained
 - Ideal for AI agents with limited context windows
 
@@ -90,7 +90,7 @@ Add to ``~/.gemini/settings.json`` or project ``.gemini/settings.json``:
 
 - **500 tool limit**: Gemini CLI has a 500 tool limit per MCP server
 - **Minimal context usage**: Compact mode exposes only 4-5 tools, well within limits
-- **Full functionality**: All 750+ tools still accessible via ``execute_tool``
+- **Full functionality**: All 1000+ tools still accessible via ``execute_tool``
 - **Progressive disclosure**: Discover tools on demand using ``list_tools``, ``grep_tools``, and ``get_tool_info``
 
 .. note::

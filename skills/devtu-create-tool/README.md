@@ -185,7 +185,7 @@ This design minimizes context window usage while providing comprehensive guidanc
 
 This skill is designed to work with:
 
-- ToolUniverse SDK (750+ scientific tools)
+- ToolUniverse SDK (1000++ scientific tools)
 - Scientific databases (PubMed, DrugBank, UniProt, etc.)
 - MCP (Model Context Protocol) server
 - Python 3.8+

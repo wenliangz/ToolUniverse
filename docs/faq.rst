@@ -6,7 +6,7 @@ Quick answers to the most common questions about ToolUniverse.
 What is ToolUniverse?
 ---------------------
 
-ToolUniverse is a collection of 600+ scientific tools for AI agents, providing unified access to drug safety data, genomics, literature, clinical trials, and more.
+ToolUniverse is a collection of 1000+ scientific tools for AI agents, providing unified access to drug safety data, genomics, literature, clinical trials, and more.
 
 .. code-block:: python
 

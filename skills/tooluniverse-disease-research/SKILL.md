@@ -1,11 +1,43 @@
 ---
 name: tooluniverse-disease-research
-description: Generate comprehensive disease research reports using 100+ ToolUniverse tools. Creates a detailed markdown report file and progressively updates it with findings from 10 research dimensions. All information includes source references. Use when users ask about diseases, syndromes, or need systematic disease analysis.
+description: Generate comprehensive disease research reports using 100+ ToolUniverse tools. Creates a detailed markdown report file and progressively updates it with findings from 10 research dimensions. All information includes source references and evidence grading. Use when users ask about diseases, syndromes, or need systematic disease analysis.
 ---
 
 # ToolUniverse Disease Research
 
-Generate a comprehensive, detailed disease research report with full source citations. The report is created as a markdown file and progressively updated during research.
+Generate a comprehensive, detailed disease research report with full source citations and evidence grading. The report is created as a markdown file and progressively updated during research.
+
+**KEY PRINCIPLES**:
+1. **Report-first approach** - Create report file FIRST, then populate progressively
+2. **Evidence grading** - Grade all claims by evidence strength (T1-T4)
+3. **Citation requirements** - Every fact must have inline source attribution
+4. **Mandatory completeness** - All sections must exist, even if "limited data"
+5. **Disease disambiguation** - Resolve EFO/ICD/UMLS IDs before research
+
+## Evidence Grading System (MANDATORY)
+
+**CRITICAL**: Grade every claim by evidence strength for disease research.
+
+### Evidence Tiers for Disease Research
+
+| Tier | Symbol | Criteria | Examples |
+|------|--------|----------|----------|
+| **T1** | ★★★ | Causal evidence, clinical trials, FDA approval | Mendelian gene mutations, Phase 3 trials |
+| **T2** | ★★☆ | Functional validation, large cohort studies | GWAS + functional follow-up, N>1000 cohorts |
+| **T3** | ★☆☆ | Association only, small studies, computational | GWAS without replication, case reports |
+| **T4** | ☆☆☆ | Review mention, database annotation, prediction | Review articles, text-mined associations |
+
+### Apply in Report
+
+```markdown
+### 3.1 Causal Genes (Mendelian)
+Mutations in *PARK2* cause autosomal recessive juvenile Parkinson's [★★★: OMIM:602544, 
+>500 families]. *LRRK2* G2019S is the most common genetic cause [★★★: PMID:15541309].
+
+### 3.2 GWAS Associations
+rs356219 at *SNCA* is associated with PD risk (OR=1.3) [★★☆: PMID:19915575, GWAS + replication].
+rs6430538 shows association in European populations [★☆☆: PMID:xxxxx, single GWAS].
+```
 
 ## When to Use
 
@@ -426,18 +458,35 @@ tu.tools.MedlinePlus_connect_lookup_by_code(cs=icd_oid, c=icd_code)
 ```
 
 ### Section 3: Genetics (use ALL of these)
+
+**Evidence tier guide**: Mendelian genes = ★★★, replicated GWAS = ★★☆, single GWAS = ★☆☆
+
 ```python
+# Disease-gene associations (★★☆ to ★★★)
 tu.tools.OpenTargets_get_associated_targets_by_disease_efoId(efoId=efo_id)
 tu.tools.OpenTargets_target_disease_evidence(efoId=efo_id, ensemblId=gene_id)  # for top genes
+
+# Clinical variants (★★★)
 tu.tools.clinvar_search_variants(condition=disease_name, max_results=50)
 tu.tools.clinvar_get_variant_details(variant_id=vid)  # for top variants
 tu.tools.clinvar_get_clinical_significance(variant_id=vid)
+
+# GWAS associations (★★☆ if replicated, ★☆☆ if single study)
 tu.tools.gwas_search_associations(disease_trait=disease_name, size=50)
 tu.tools.gwas_get_variants_for_trait(disease_trait=disease_name, size=50)
 tu.tools.gwas_get_associations_for_trait(disease_trait=disease_name, size=50)
 tu.tools.gwas_get_studies_for_trait(disease_trait=disease_name, size=30)
 tu.tools.GWAS_search_associations_by_gene(gene_name=gene)  # for top genes
+
+# Variant details (★★★ for population data)
 tu.tools.gnomad_get_variant_frequency(variant=variant)  # for key variants
+tu.tools.gnomad_get_gene_constraints(gene_symbol=gene)  # constraint scores
+tu.tools.dbsnp_get_variant_by_rsid(rsid=rs_id)  # dbSNP details
+
+# NEW: Deep GWAS analysis
+tu.tools.gwas_get_snp_by_id(snp_id=rs_id)  # individual SNP details
+tu.tools.gwas_get_snps_for_gene(gene_symbol=gene)  # GWAS SNPs at gene locus
+tu.tools.gwas_search_snps(query=disease_name)  # SNP-level search
 ```
 
 ### Section 4: Treatment (use ALL of these)
@@ -518,28 +567,43 @@ tu.tools.AdverseEventPredictionQuestionGenerator(disease_name=disease, drug_name
 
 ---
 
-## Citation Format
+## Citation Format with Evidence Grading
 
-Every piece of data MUST include its source. Use this format:
+Every piece of data MUST include its source AND evidence tier. Use this format:
 
 ### In Tables
 ```markdown
-| Gene | Score | Source |
-|------|-------|--------|
-| APOE | 0.92 | OpenTargets_get_associated_targets_by_disease_efoId |
-| APP | 0.88 | OpenTargets_get_associated_targets_by_disease_efoId |
+| Gene | Score | Evidence | Source |
+|------|-------|----------|--------|
+| APOE | 0.92 | ★★★ (causal) | OpenTargets_get_associated_targets_by_disease_efoId |
+| APP | 0.88 | ★★★ (Mendelian) | OpenTargets_get_associated_targets_by_disease_efoId |
+| CLU | 0.45 | ★★☆ (GWAS) | GWAS Catalog |
 ```
 
 ### In Lists
 ```markdown
-- Memory loss [Source: OpenTargets_get_associated_phenotypes_by_disease_efoId]
-- Cognitive decline [Source: MedlinePlus_get_genetics_condition_by_name]
+- Memory loss [★★★: OpenTargets_get_associated_phenotypes_by_disease_efoId, core feature]
+- Cognitive decline [★★★: MedlinePlus_get_genetics_condition_by_name, diagnostic criterion]
+- Sleep disturbance [★☆☆: association studies, not diagnostic]
 ```
 
-### In Prose
+### In Prose with Evidence Grades
 ```markdown
-The disease affects approximately 6.5 million Americans (Source: PubMed_search_articles, 
-query: "Alzheimer disease epidemiology").
+The disease affects approximately 6.5 million Americans [★★★: CDC epidemiology data].
+APOE ε4 increases risk 3-15 fold [★★★: PMID:8346443, replicated in 100+ cohorts].
+A recent single-center study suggests microbiome involvement [★☆☆: PMID:xxxxx, N=50].
+```
+
+### Per-Section Evidence Summary
+Include at section end:
+```markdown
+---
+**Evidence Quality for Section 3 (Genetics)**:
+- Causal/Mendelian (T1): 5 genes
+- Replicated GWAS (T2): 23 loci
+- Single GWAS (T3): 45 associations
+- Mention/Predicted (T4): 12
+---
 ```
 
 ### References Section

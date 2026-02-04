@@ -22,7 +22,7 @@ Gemini CLI Integration enables powerful command-line-based scientific research t
    └─────────┬───────┘
              │
    ┌─────────▼───────┐
-   │ 600+ Scientific │ ← Scientific Tools Ecosystem
+   │ 1000+ Scientific │ ← Scientific Tools Ecosystem
    │     Tools       │
    └─────────────────┘
 
@@ -30,7 +30,7 @@ Gemini CLI Integration enables powerful command-line-based scientific research t
 
 - **Command-Line Efficiency**: Fast, scriptable scientific research workflows
 - **Advanced Reasoning**: Gemini's sophisticated reasoning for complex scientific problems
-- **Comprehensive Tools**: Access to 600+ scientific tools across multiple domains
+- **Comprehensive Tools**: Access to 1000+ scientific tools across multiple domains
 - **Automated Execution**: Direct tool execution through natural language commands
 - **Batch Processing**: Handle multiple research tasks efficiently
 
@@ -159,7 +159,7 @@ Add the ToolUniverse MCP server configuration to your `settings.json`:
 
 **Important: Gemini CLI 500 Tool Limit**
 
-Gemini CLI has a **500 tool limit** per MCP server. ToolUniverse provides 750+ tools by default, which exceeds this limit. **You must use one of the following solutions** to work within this limit:
+Gemini CLI has a **500 tool limit** per MCP server. ToolUniverse provides 1000+ tools by default, which exceeds this limit. **You must use one of the following solutions** to work within this limit:
 
 **Solution 1: Space Configuration (Recommended for Gemini CLI)**
 
@@ -228,8 +228,8 @@ For maximum context window efficiency, use compact mode which exposes only 4-5 c
 
 **Compact Mode Benefits:**
 
-- **99% reduction**: Only 4-5 tools exposed instead of 750+
-- **Full functionality**: All 750+ tools still accessible via ``execute_tool``
+- **99% reduction**: Only 4-5 tools exposed instead of 1000+
+- **Full functionality**: All 1000+ tools still accessible via ``execute_tool``
 - **Minimal context usage**: Ideal for AI agents with limited context windows
 - **Progressive disclosure**: Use ``list_tools``, ``grep_tools``, and ``get_tool_info`` to discover tools on demand
 - **Well within limit**: 4-5 tools is far below the 500 tool limit

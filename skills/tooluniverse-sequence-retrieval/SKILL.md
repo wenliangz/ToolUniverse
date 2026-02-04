@@ -285,22 +285,38 @@ Database: NCBI Nucleotide
 
 ---
 
-## Curation Level Tiers
+## Curation Level Tiers (Aligned with Evidence Grading)
 
-| Tier | Symbol | Accession Prefix | Description |
-|------|--------|------------------|-------------|
-| RefSeq Reference | ●●●● | NC_, NM_, NP_ | NCBI-curated, gold standard |
-| RefSeq Predicted | ●●●○ | XM_, XP_, XR_ | Computationally predicted |
-| GenBank Validated | ●●○○ | Various | Submitted, some curation |
-| GenBank Direct | ●○○○ | Various | Direct submission |
-| Third Party | ○○○○ | TPA_ | Third-party annotation |
+### Sequence Curation Levels
+| Tier | Symbol | Accession Prefix | Description | Evidence Equivalent |
+|------|--------|------------------|-------------|---------------------|
+| RefSeq Reference | ●●●● | NC_, NM_, NP_ | NCBI-curated, gold standard | ★★★ |
+| RefSeq Predicted | ●●●○ | XM_, XP_, XR_ | Computationally predicted | ★★☆ |
+| GenBank Validated | ●●○○ | Various | Submitted, some curation | ★★☆ |
+| GenBank Direct | ●○○○ | Various | Direct submission | ★☆☆ |
+| Third Party | ○○○○ | TPA_ | Third-party annotation | ★☆☆ |
+
+### Data Reliability Mapping
+| Data Type | Reliability | Notes |
+|-----------|-------------|-------|
+| RefSeq curated sequence | ★★★ | Gold standard for reference |
+| RefSeq annotations | ★★★ | Validated gene models |
+| GenBank sequence | ★★☆ | Submitted, generally reliable |
+| GenBank annotations | ★☆☆ | Submitter-provided, verify |
+| Predicted genes (XM_) | ★★☆ | Computational, may lack validation |
+| Genome assembly | ★★★-★☆☆ | Depends on assembly quality |
 
 Include in report:
 ```markdown
-**Curation Level**: ●●●● RefSeq Reference
+**Curation Level**: ●●●● RefSeq Reference (★★★)
 - Curated by NCBI RefSeq project
 - Regular updates and validation
 - Recommended for reference use
+
+**Data Reliability Note**: 
+- Sequence: ★★★ (experimentally derived)
+- Gene annotations: ★★★ (curated models)
+- Variant annotations: ★★☆ (computational)
 ```
 
 ---

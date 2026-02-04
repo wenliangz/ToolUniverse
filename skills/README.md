@@ -4,6 +4,28 @@ This directory contains specialized skills for retrieving scientific data using 
 
 ## Available Skills
 
+### 0. ToolUniverse General Strategies (Start Here!)
+**Path**: `tooluniverse/`  
+**Focus**: Master strategies for using ToolUniverse's 1000++ tools effectively  
+**Triggers**: research, scientific data, how to use tooluniverse, best practices, tool discovery
+
+**Use when**:
+- Learning how to use ToolUniverse effectively
+- Need general guidance on scientific research workflows
+- Task doesn't fit a specialized skill
+- Want to understand multi-hop tool chains
+- Need to combine multiple research approaches
+
+**Key Features**:
+- **8 Core Strategies**: Tool discovery, multi-hop chains, multi-database queries, disambiguation, fallback handling, comprehensive reports, specialized skills, parallel execution
+- Exhaustive tool discovery patterns
+- Multi-hop tool chain examples (5-10 tools per question)
+- Database fallback chains for resilience
+- Evidence grading and citation requirements
+- Quick reference checklists
+
+---
+
 ### 1. Sequence Retrieval
 **Path**: `tooluniverse-sequence-retrieval/`  
 **Focus**: DNA, RNA, and protein sequences  
@@ -219,6 +241,13 @@ All tools return standardized responses:
 | **Diseases** | 20+ | Open Targets, ClinicalTrials, GWAS | EFO IDs |
 
 ## When to Use Which Skill
+
+### Start with tooluniverse (general strategies) if:
+- New to ToolUniverse and need guidance
+- Task spans multiple domains
+- Need to understand best practices
+- Want to maximize research coverage
+- Not sure which specialized skill to use
 
 ### Start with tooluniverse-sequence-retrieval if:
 - Need genomic sequences

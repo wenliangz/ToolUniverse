@@ -5,7 +5,7 @@ Compact mode is a special configuration for SMCP server that only exposes 4-5 co
 ## What is Compact Mode?
 
 When enabled, compact mode:
-- **Only exposes 4-5 core tools** instead of 750+ tools
+- **Only exposes 4-5 core tools** instead of 1000++ tools
 - **Reduces context window usage by ~99%**
 - **Maintains full functionality** - all tools are still accessible via `execute_tool`
 - **Enables progressive disclosure** - start with minimal info, get details when needed
