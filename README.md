@@ -10,7 +10,7 @@
 [![🌐Web](https://img.shields.io/badge/Website-aiscientist.tools-blue)](https://aiscientist.tools)
 [![Slack](https://img.shields.io/badge/Slack-Join_Community-orange)](https://join.slack.com/t/tooluniversehq/shared_invite/zt-3dic3eoio-5xxoJch7TLNibNQn5_AREQ)
 
-<!-- mcp-name: io.github.mims-harvard/tooluniverse -->
+[//]: # (mcp-name: io.github.mims-harvard/tooluniverse)
 
 
 
