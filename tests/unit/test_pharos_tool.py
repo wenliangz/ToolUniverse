@@ -169,7 +169,7 @@ class TestPharosToolIntegration:
         result = tu.tools.Pharos_get_target(gene="EGFR")
         
         assert result["status"] == "success"
-        assert result["data"]["gene"] == "EGFR"
+        assert result["data"]["sym"] == "EGFR"  # API returns 'sym' not 'gene'
 
     def test_search_via_tu(self, tu):
         """Test calling search through ToolUniverse."""
@@ -183,7 +183,8 @@ class TestPharosToolIntegration:
         result = tu.tools.Pharos_get_tdl_summary()
         
         assert result["status"] == "success"
-        assert "tdl_summary" in result["data"]
+        assert "tdl_levels" in result["data"]
+        assert "description" in result["data"]
 
 
 if __name__ == "__main__":
