@@ -1,0 +1,104 @@
+name: Publish to MCP Registry
+
+on:
+  # Trigger after PyPI workflow creates a release
+  release:
+    types: [published]
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 1.0.17.5). Leave empty to use pyproject.toml version.'
+        required: false
+        type: string
+
+jobs:
+  publish-mcp:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for GitHub OIDC authentication
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: get_version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          elif [ -n "${{ github.event.release.tag_name }}" ]; then
+            # Remove 'v' prefix if present
+            VERSION="${{ github.event.release.tag_name }}"
+            VERSION="${VERSION#v}"
+          else
+            # Extract from pyproject.toml
+            VERSION=$(grep -oP '(?<=version = ")[^"]+' pyproject.toml)
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Publishing version: $VERSION"
+
+      - name: Update server.json version
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          # Update version in server.json using jq
+          jq --arg v "$VERSION" '.version = $v | .packages[0].version = $v' server.json > server.json.tmp
+          mv server.json.tmp server.json
+          echo "Updated server.json to version $VERSION"
+          echo "--- server.json content ---"
+          cat server.json
+
+      - name: Wait for PyPI to be available
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          echo "Waiting for tooluniverse==$VERSION to be available on PyPI..."
+          
+          # Install pip if needed
+          python3 -m pip install --upgrade pip > /dev/null 2>&1
+          
+          for i in {1..30}; do
+            # Check PyPI API directly
+            PYPI_VERSION=$(curl -s "https://pypi.org/pypi/tooluniverse/json" | jq -r '.info.version')
+            echo "Attempt $i/30: PyPI latest version is $PYPI_VERSION, waiting for $VERSION"
+            
+            if [ "$PYPI_VERSION" = "$VERSION" ]; then
+              echo "Version $VERSION is available on PyPI!"
+              break
+            fi
+            
+            if [ $i -eq 30 ]; then
+              echo "Warning: Timeout waiting for PyPI. Proceeding anyway..."
+            fi
+            
+            sleep 30
+          done
+
+      - name: Install MCP Publisher CLI
+        run: |
+          echo "Downloading mcp-publisher..."
+          curl -sL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          chmod +x mcp-publisher
+          ./mcp-publisher --help
+
+      - name: Login to MCP Registry (GitHub OIDC)
+        run: |
+          echo "Authenticating with MCP Registry using GitHub OIDC..."
+          ./mcp-publisher login github-oidc
+
+      - name: Validate server.json (dry run)
+        run: |
+          echo "Running dry-run validation..."
+          ./mcp-publisher publish --dry-run
+
+      - name: Publish to MCP Registry
+        run: |
+          echo "Publishing to MCP Registry..."
+          ./mcp-publisher publish
+
+      - name: Verify publication
+        run: |
+          echo "Verifying publication..."
+          sleep 10  # Wait for registry to update
+          echo "Checking MCP Registry for io.github.mims-harvard/tooluniverse..."
+          curl -s "https://registry.modelcontextprotocol.io/v0/servers?search=mims-harvard" | jq '.servers[] | {name: .name, version: .version, description: .description}'
