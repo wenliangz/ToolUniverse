@@ -1,0 +1,33 @@
+#!/bin/bash
+# Skills sync pre-commit hook
+# Syncs product skills from skills_dev/ back to skills/ before committing
+# This ensures edits made through Cursor (.cursor/skills -> skills_dev/) are
+# committed to the canonical skills/ folder.
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+SKILLS_DEV="$REPO_ROOT/skills_dev"
+SKILLS="$REPO_ROOT/skills"
+
+# Patterns for product skills (tracked in skills/, gitignored in skills_dev/)
+PRODUCT_PATTERNS=("tooluniverse*" "setup-*")
+
+SYNCED=0
+
+for pattern in "${PRODUCT_PATTERNS[@]}"; do
+    for src_dir in "$SKILLS_DEV"/$pattern; do
+        [ -d "$src_dir" ] || continue
+        name="$(basename "$src_dir")"
+        dest_dir="$SKILLS/$name"
+
+        # Sync using rsync (delete files in dest that don't exist in src)
+        rsync -a --delete "$src_dir/" "$dest_dir/"
+        git add "$dest_dir"
+        SYNCED=$((SYNCED + 1))
+    done
+done
+
+if [ "$SYNCED" -gt 0 ]; then
+    echo "🔄 Synced $SYNCED product skill(s) from skills_dev/ → skills/"
+fi

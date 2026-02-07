@@ -386,7 +386,7 @@ No pathogen interactions identified in literature or databases.
 | Variant interpretation | `tooluniverse-variant-interpretation` |
 | **Discovery & Design** | |
 | Small molecule binder discovery | `tooluniverse-binder-discovery` |
-| Drug repurposing | `drug-repurposing` |
+| Drug repurposing | `tooluniverse-drug-repurposing` |
 | Protein therapeutic design | `tooluniverse-protein-therapeutic-design` |
 | **Outbreak Response** | |
 | Infectious disease analysis | `tooluniverse-infectious-disease` |
