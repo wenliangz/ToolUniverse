@@ -30,13 +30,30 @@ jobs:
       - name: Get version
         id: get_version
         run: |
-          # inputs.version works for both workflow_call and workflow_dispatch
+          # Always read the current version from pyproject.toml as source of truth
+          PYPROJECT_VERSION=$(python3 -c "
+          import re
+          with open('pyproject.toml') as f:
+              m = re.search(r'version\s*=\s*\"([^\"]+)\"', f.read())
+              print(m.group(1) if m else '')
+          ")
+          echo "pyproject.toml version: $PYPROJECT_VERSION"
+          
+          # Use explicit input if provided, otherwise use pyproject.toml
           if [ -n "${{ inputs.version }}" ]; then
             VERSION="${{ inputs.version }}"
+            echo "Using input version: $VERSION"
           else
-            # Fallback: extract from pyproject.toml
-            VERSION=$(grep -oP '(?<=version = ")[^"]+' pyproject.toml)
+            VERSION="$PYPROJECT_VERSION"
+            echo "Using pyproject.toml version: $VERSION"
           fi
+          
+          # Guard: fail if version is empty
+          if [ -z "$VERSION" ]; then
+            echo "::error::Could not determine version. Aborting."
+            exit 1
+          fi
+          
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Publishing version: $VERSION"
 
@@ -87,19 +104,52 @@ jobs:
           echo "Authenticating with MCP Registry using GitHub OIDC..."
           ./mcp-publisher login github-oidc
 
+      - name: Check if version already published
+        id: check_existing
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          echo "Checking if version $VERSION already exists in MCP Registry..."
+          
+          # Query the MCP Registry for existing version
+          REGISTRY_RESPONSE=$(curl -sf "https://registry.modelcontextprotocol.io/v0/servers/io.github.mims-harvard/tooluniverse" 2>/dev/null || echo "{}")
+          PUBLISHED_VERSION=$(echo "$REGISTRY_RESPONSE" | jq -r '.version // empty' 2>/dev/null || echo "")
+          
+          echo "Published version: $PUBLISHED_VERSION"
+          echo "Target version: $VERSION"
+          
+          if [ "$PUBLISHED_VERSION" = "$VERSION" ]; then
+            echo "Version $VERSION is already published to MCP Registry. Skipping."
+            echo "already_published=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version $VERSION not yet published. Proceeding."
+            echo "already_published=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Validate server.json (dry run)
+        if: steps.check_existing.outputs.already_published != 'true'
         run: |
           echo "Running dry-run validation..."
           ./mcp-publisher publish --dry-run
 
       - name: Publish to MCP Registry
+        if: steps.check_existing.outputs.already_published != 'true'
         run: |
           echo "Publishing to MCP Registry..."
           ./mcp-publisher publish
 
       - name: Verify publication
+        if: steps.check_existing.outputs.already_published != 'true'
         run: |
           echo "Verifying publication..."
           sleep 10  # Wait for registry to update
           echo "Checking MCP Registry for io.github.mims-harvard/tooluniverse..."
           curl -s "https://registry.modelcontextprotocol.io/v0/servers?search=mims-harvard" | jq '.servers[] | {name: .name, version: .version, description: .description}'
+
+      - name: Summary
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          if [ "${{ steps.check_existing.outputs.already_published }}" = "true" ]; then
+            echo "::notice::Version $VERSION was already published to MCP Registry. No action needed."
+          else
+            echo "::notice::Version $VERSION successfully published to MCP Registry."
+          fi
