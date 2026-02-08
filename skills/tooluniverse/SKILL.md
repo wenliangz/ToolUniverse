@@ -192,9 +192,11 @@ When querying multiple databases:
 3. **Handle conflicts** - Document when sources disagree
 4. **Prefer curated** - Weight RefSeq over GenBank, UniProt over predictions
 
+---
+
 ## Strategy 3.1: Abstract Search vs Full-Text Search (Literature)
 
-**CRITICAL**: Many biomedical “needle” terms (rsIDs reagent catalog numbers, supplementary-table IDs) never appear in titles/abstracts. If you only search abstracts, you will miss papers even when they are open access.
+**CRITICAL**: Many biomedical “needle” terms (rsIDs like `rs58542926`, reagent catalog numbers, supplementary-table IDs) never appear in titles/abstracts. If you only search abstracts, you will miss papers even when they are open access.
 
 ### Quick rule
 
@@ -216,9 +218,6 @@ When querying multiple databases:
 1. Try `PMC_search_papers` and `EuropePMC_search_articles` (with `require_has_ft` + `fulltext_terms`).
 2. If you have a PMCID/PMID, use `EuropePMC_get_fulltext_snippets` to **confirm the term is in the paper**.
 3. If you only have a PDF URL, use `CORE_get_fulltext_snippets` as a last resort, and treat HTTP `200` as “request succeeded”, not “PDF succeeded” (validate `content_type`).
-
----
-
 
 ---
 

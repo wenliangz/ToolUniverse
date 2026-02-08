@@ -48,6 +48,7 @@ uv pip install tooluniverse
 </tr>
 </table>
 
+> **Guided Setup:** Install skills first with `npx skills add mims-harvard/ToolUniverse`, then ask your AI coding agent **"setup tooluniverse"**. The `setup-tooluniverse` skill will walk you through MCP configuration, API keys, and validation step by step.
 
 We are currently looking for partners. If you’re interested, please reach out to [Shanghua Gao](shanghuagao@gmail.com).
 
