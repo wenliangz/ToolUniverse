@@ -19,10 +19,10 @@
 ```
 Read https://aiscientist.tools/setup.md and set up ToolUniverse for me.
 ```
-The agent will walk you through MCP configuration, API keys, and validation.
+The agent will walk you through MCP configuration, API keys, skill installation, and validation.
 
 <details>
-<summary>Manual MCP setup</summary>
+<summary>or set up manually</summary>
 
 Add to your MCP config file:
 ```json
@@ -37,18 +37,16 @@ Add to your MCP config file:
 }
 ```
 
-**Install agent skills** (for guided research workflows):
+Install agent skills:
 ```bash
 npx skills add mims-harvard/ToolUniverse
 ```
 </details>
 
-**Python package** (for SDK usage):
+**Python developers** — install the SDK:
 ```bash
 uv pip install tooluniverse
 ```
-
-**[Shanghua Gao](https://shgao.site)**, the lead creator of this project, is currently on the job market.
 
 ## Building AI Scientists with ToolUniverse
 
@@ -72,11 +70,10 @@ ToolUniverse is an ecosystem for creating AI scientist systems from any large la
 - [**Async Operations**](https://zitniklab.hms.harvard.edu/ToolUniverse/expand_tooluniverse/async_tools_guide.html): Long-running tasks (protein docking, molecular simulations) with progress tracking and parallel execution
 - [**Tool Composition**](https://zitniklab.hms.harvard.edu/ToolUniverse/guide/tool_composition.html): Chain tools for sequential or parallel execution in self-directed workflows
 - [**Compact Mode**](https://zitniklab.hms.harvard.edu/ToolUniverse/guide/building_ai_scientists/compact_mode.html): Reduces 1000+ tools to 4-5 core discovery tools, saving ~99% context window
-- [**Agent Skills**](https://zitniklab.hms.harvard.edu/ToolUniverse/guide/skills_showcase.html): 50+ pre-built research workflows for drug discovery, precision oncology, rare disease diagnosis, and more
+- [**Agent Skills**](https://zitniklab.hms.harvard.edu/ToolUniverse/guide/skills_showcase.html): 50+ pre-built research workflows for drug discovery, precision oncology, rare disease diagnosis, pharmacovigilance, and more
 - [**Literature Search**](https://zitniklab.hms.harvard.edu/ToolUniverse/guide/literature_search_tools_tutorial.html): Unified search across PubMed, Semantic Scholar, ArXiv, BioRxiv, Europe PMC, and more
 - [**Two-Tier Result Caching**](https://zitniklab.hms.harvard.edu/ToolUniverse/guide/cache_system.html): In-memory LRU + SQLite persistence with per-tool fingerprinting for 10x speedup, offline support, and reproducibility
 - [**Continuous Expansion**](https://zitniklab.hms.harvard.edu/ToolUniverse/expand_tooluniverse/index.html): Register new tools locally or remotely without additional configuration
-- [**Agent Skills**](https://zitniklab.hms.harvard.edu/ToolUniverse/guide/skills_showcase.html): Pre-built research workflows installable with one command — drug discovery, precision oncology, rare disease diagnosis, pharmacovigilance, and more
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/eb15bd7c-4e73-464b-8d65-733877c96a51" width="888" />
@@ -86,12 +83,13 @@ ToolUniverse is an ecosystem for creating AI scientist systems from any large la
 
 *Building your project with ToolUniverse? Submit via [GitHub Pull Request](https://github.com/mims-harvard/ToolUniverse/pulls) or contact us.*
 
----
 **TxAgent: AI Agent for Therapeutic Reasoning** [[Project]](https://zitniklab.hms.harvard.edu/TxAgent) [[Paper]](https://arxiv.org/pdf/2503.10970) [[PyPI]](https://pypi.org/project/txagent/) [[GitHub]](https://github.com/mims-harvard/TxAgent) [[HuggingFace]](https://huggingface.co/collections/mims-harvard/txagent-67c8e54a9d03a429bb0c622c)
 > TxAgent leverages ToolUniverse's scientific tool ecosystem to solve complex therapeutic reasoning tasks.
 
 ---
-**Hypercholesterolemia Drug Discovery** [[Tutorial]](https://zitniklab.hms.harvard.edu/ToolUniverse/guide/tooluniverse_case_study.html) [[Colab]](https://colab.research.google.com/drive/1UwJ6RwyUoqI5risKQ365EeFdDQWOeOCv?usp=sharing)
+
+**Medea: An Omics AI Agent for Therapeutic Discovery** [[Project]](https://medea.openscientist.ai) [[Paper]](https://www.biorxiv.org/content/early/2026/01/20/2026.01.16.696667) [[GitHub]](https://github.com/mims-harvard/Medea)
+> Medea integrates ToolUniverse tools for multi-omics analysis to identify therapeutic targets and predict drug responses across cancer, autoimmune, and other diseases.
 
 ## Documentation
 
@@ -105,26 +103,14 @@ Full documentation: [zitniklab.hms.harvard.edu/ToolUniverse](https://zitniklab.h
 
 ## Community
 
+**[Shanghua Gao](https://shgao.site)**, the lead creator of this project, is currently on the job market.
+
 [Slack](https://join.slack.com/t/tooluniversehq/shared_invite/zt-3dic3eoio-5xxoJch7TLNibNQn5_AREQ) · [GitHub Issues](https://github.com/mims-harvard/ToolUniverse/issues) · [Shanghua Gao](mailto:shanghuagao@gmail.com) · [Marinka Zitnik](mailto:marinka@hms.harvard.edu)
 
-**We are actively looking for core contributors.** See the [Contributing Guide](https://zitniklab.hms.harvard.edu/ToolUniverse/expand_tooluniverse/contributing/index.html).
 
-### Leaders
-- [Shanghua Gao](https://shgao.site)
-- [Marinka Zitnik](https://zitniklab.hms.harvard.edu/)
+**Leaders:** [Shanghua Gao](https://shgao.site) · [Marinka Zitnik](https://zitniklab.hms.harvard.edu/)
 
-### Contributors
-- [Shanghua Gao](https://shgao.site)
-- [Richard Zhu](https://www.linkedin.com/in/richard-zhu-4236901a7/)
-- [Pengwei Sui](https://psui3905.github.io/)
-- [Zhenglun Kong](https://zlkong.github.io/homepage/)
-- [Sufian Aldogom](mailto:saldogom@mit.edu)
-- [Yepeng Huang](https://yepeng.notion.site/Yepeng-Huang-16ad8dd1740080c28d4bd3e3d7c1080c)
-- [Ayush Noori](https://www.ayushnoori.com/)
-- [Reza Shamji](mailto:reza_shamji@hms.harvard.edu)
-- [Krishna Parvataneni](mailto:krishna_parvataneni@hms.harvard.edu)
-- [Theodoros Tsiligkaridis](https://sites.google.com/view/theo-t)
-- [Marinka Zitnik](https://zitniklab.hms.harvard.edu/)
+**Contributors:** [Shanghua Gao](https://shgao.site) · [Richard Zhu](https://www.linkedin.com/in/richard-zhu-4236901a7/) · [Pengwei Sui](https://psui3905.github.io/) · [Zhenglun Kong](https://zlkong.github.io/homepage/) · [Sufian Aldogom](mailto:saldogom@mit.edu) · [Yepeng Huang](https://yepeng.notion.site/Yepeng-Huang-16ad8dd1740080c28d4bd3e3d7c1080c) · [Ayush Noori](https://www.ayushnoori.com/) · [Reza Shamji](mailto:reza_shamji@hms.harvard.edu) · [Krishna Parvataneni](mailto:krishna_parvataneni@hms.harvard.edu) · [Theodoros Tsiligkaridis](https://sites.google.com/view/theo-t) · [Marinka Zitnik](https://zitniklab.hms.harvard.edu/)
 
 ## Citation
 
