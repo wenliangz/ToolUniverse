@@ -474,7 +474,7 @@ See Also
 - :doc:`../guide/cache_system` - Caching system guide
 - :doc:`../guide/logging` - Logging configuration
 - :doc:`../help/troubleshooting` - Troubleshooting guide
-- :doc:`../installation` - Installation instructions
+- :doc:`../guide/python_guide` - Installation and Python API guide
 
 Complete Variable List
 ----------------------

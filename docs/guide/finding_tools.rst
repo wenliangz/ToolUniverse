@@ -30,42 +30,42 @@ Strategic Trade-offs
 Each method offers different advantages:
 
 .. list-table:: Tool Finder Comparison
-   :header-rows: 1
-   :widths: 20 25 25 25
+ :header-rows: 1
+ :widths: 20 25 25 25
 
-   * - Method
-     - Speed
-     - Semantic Understanding
-     - Resource Usage
-   * - **Keyword Search**
-     - Very Fast
-     - Basic
-     - Very Low
-   * - **LLM Search**
-     - Moderate
-     - Excellent
-     - High
-   * - **Embedding Search**
-     - Fast
-     - Good
-     - Moderate
+ * - Method
+ - Speed
+ - Semantic Understanding
+ - Resource Usage
+ * - **Keyword Search**
+ - Very Fast
+ - Basic
+ - Very Low
+ * - **LLM Search**
+ - Moderate
+ - Excellent
+ - High
+ * - **Embedding Search**
+ - Fast
+ - Good
+ - Moderate
 
 When to Use Each Method
 ------------------------
 
-**🔍 Keyword Search** - Use when:
+** Keyword Search** - Use when:
 - You know specific technical terms
 - You need fast results
 - Working with limited computational resources
 - Looking for tools with specific names or exact terminology
 
-**🧠 LLM Search** - Use when:
+** LLM Search** - Use when:
 - You have complex, multi-step research questions
 - Need intelligent interpretation of abstract goals
 - Want tool sequence recommendations
 - Have access to LLM APIs
 
-**🎯 Embedding Search** - Use when:
+** Embedding Search** - Use when:
 - You want semantic similarity matching
 - Need scalable search across large tool sets
 - Looking for conceptually similar tools
@@ -80,19 +80,19 @@ How Keyword Search Works
 Keyword search uses a sophisticated text processing pipeline:
 
 1. **Query Processing**:
-   - Tokenization via regular expressions
-   - Removal of 45+ common English stop words
-   - Suffix-based stemming using 20 morphological rules
-   - Generation of n-grams (bigrams and trigrams)
+ - Tokenization via regular expressions
+ - Removal of 45+ common English stop words
+ - Suffix-based stemming using 20 morphological rules
+ - Generation of n-grams (bigrams and trigrams)
 
 2. **Relevance Scoring**:
 
-   - Uses TF-IDF (Term Frequency-Inverse Document Frequency)
-   - Formula: ``Relevance = TF × IDF × log(1 + QueryFrequency)``
-   - Hierarchical bonus structure:
+ - Uses TF-IDF (Term Frequency-Inverse Document Frequency)
+ - Formula: ``Relevance = TF × IDF × log(1 + QueryFrequency)``
+ - Hierarchical bonus structure:
 
-     - Tool name matches: 2.0× multiplier
-     - Exact phrase matches: 1.5× multiplier
+ - Tool name matches: 2.0× multiplier
+ - Exact phrase matches: 1.5× multiplier
 
 3. **Fast Matching**: Pre-built index ensures rapid search without ML dependencies
 
@@ -496,11 +496,11 @@ Conclusion
 
 ToolUniverse's three tool finder methods provide powerful and flexible approaches to discovering the right tools for your research:
 
-**🔍 Keyword Search**: Perfect for precise, fast searches with technical terminology
+** Keyword Search**: Perfect for precise, fast searches with technical terminology
 
-**🧠 LLM Search**: Ideal for complex, multi-step research workflows requiring intelligence
+** LLM Search**: Ideal for complex, multi-step research workflows requiring intelligence
 
-**🎯 Embedding Search**: Excellent for semantic similarity and conceptual tool discovery
+** Embedding Search**: Excellent for semantic similarity and conceptual tool discovery
 
 **Key Takeaways**:
 
@@ -509,7 +509,7 @@ ToolUniverse's three tool finder methods provide powerful and flexible approache
 3. **Optimize queries** based on the search method's strengths
 4. **Use fallback strategies** when initial searches don't yield results
 
-Happy tool hunting! 🔬
+Happy tool hunting! 
 
 Further Resources
 =================

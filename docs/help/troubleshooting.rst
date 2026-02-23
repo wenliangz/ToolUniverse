@@ -191,7 +191,7 @@ When you encounter API errors, check this reference table:
      - Add API key for higher limits, enable caching with ``use_cache=True``, or add delays. See :doc:`../guide/cache_system`.
    * - **404 Not Found**
      - Invalid resource identifier
-     - Verify ID format (e.g., UniProt accession "P05067", ChEMBL ID "CHEMBL25"). Check :doc:`../glossary` for ID formats.
+     - Verify ID format (e.g., UniProt accession "P05067", ChEMBL ID "CHEMBL25"). Check :doc:`../reference/glossary` for ID formats.
    * - **502 Bad Gateway**
      - Service temporarily unavailable
      - Wait 30-60 seconds and retry. Check API provider's status page if error persists.
@@ -224,7 +224,7 @@ When you encounter API errors, check this reference table:
 
 1. **Identify which API key you need:**
 
-   See :doc:`../guide/api_keys` for a complete list of which tools require which API keys and how to obtain them.
+ See :doc:`../guide/api_keys` for a complete list of which tools require which API keys and how to obtain them.
 
 2. **Set API keys in environment:**
 
@@ -298,7 +298,7 @@ Many services limit how many requests you can make per second/minute. API keys t
 
 1. **Get an API key for higher limits:**
 
-   See :doc:`../guide/api_keys` for how to obtain API keys for each service.
+ See :doc:`../guide/api_keys` for how to obtain API keys for each service.
 
 2. **Add delays between requests:**
 
@@ -395,7 +395,7 @@ SSL Certificate errors
 
 3. **Corporate firewall:**
 
-   Contact your IT department for proper certificate configuration.
+ Contact your IT department for proper certificate configuration.
 
 Performance Issues
 ------------------
@@ -553,7 +553,7 @@ Claude/AI assistant not finding tools
 
 2. **Check Claude configuration:**
 
-   Ensure MCP server is properly configured in Claude Desktop settings.
+ Ensure MCP server is properly configured in Claude Desktop settings.
 
 **Solutions:**
 
@@ -632,17 +632,17 @@ If none of these solutions work:
 2. **Search GitHub issues**: `Issues <https://github.com/mims-harvard/ToolUniverse/issues>`_
 3. **Create a bug report** with:
 
-   - ToolUniverse version: ``tooluniverse.__version__``
-   - Python version: ``python --version``
-   - Operating system
-   - Full error message and traceback
-   - Minimal code example that reproduces the issue
+ - ToolUniverse version: ``tooluniverse.__version__``
+ - Python version: ``python --version``
+ - Operating system
+ - Full error message and traceback
+ - Minimal code example that reproduces the issue
 
 4. **Join our community**: Discord server link
 
 .. note::
 =========
-   When reporting issues, please run the diagnostic script first:
+ When reporting issues, please run the diagnostic script first:
 
    .. code-block:: python
 

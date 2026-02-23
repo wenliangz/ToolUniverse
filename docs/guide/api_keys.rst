@@ -6,7 +6,7 @@ This guide explains which API keys are required or recommended for ToolUniverse 
 .. note::
    **Looking for other environment variables?**
    
-   This page covers API keys only. For cache, logging, LLM, and other configuration options, see :doc:`reference/environment_variables`.
+   This page covers API keys only. For cache, logging, LLM, and other configuration options, see :doc:`../reference/environment_variables`.
 
 Overview
 --------
@@ -575,7 +575,5 @@ If you encounter issues with API keys or authentication:
 See Also
 --------
 
-- :doc:`installation` - Installation instructions
-- :doc:`getting_started` - Getting started guide
-- :doc:`guide/building_ai_scientists/index` - AI agent platform setup
-- :doc:`guide/hooks/hook_configuration` - Advanced hook configuration
+- :doc:`building_ai_scientists/index` - AI agent platform setup
+- :doc:`hooks/hook_configuration` - Advanced hook configuration

@@ -33,54 +33,54 @@ Tool Overview Table
 ~~~~~~~~~~~~~~~~~~~
 
 +------------------+------------------+------------------+------------------+
-| Tool Name        | Database         | Best For         | Key Features     |
+| Tool Name | Database | Best For | Key Features |
 +==================+==================+==================+==================+
-| ArXiv_search_    | ArXiv            | Preprints        | Physics, Math,   |
-| papers           |                  |                  | CS, Biology      |
+| ArXiv_search_ | ArXiv | Preprints | Physics, Math, |
+| papers | | | CS, Biology |
 +------------------+------------------+------------------+------------------+
-| Crossref_search_ | Crossref         | Scholarly        | DOI metadata,    |
-| works            |                  | Articles         | Rich metadata,   |
-|                  |                  |                  | HTML cleaning    |
+| Crossref_search_ | Crossref | Scholarly | DOI metadata, |
+| works | | Articles | Rich metadata, |
+| | | | HTML cleaning |
 +------------------+------------------+------------------+------------------+
-| PubMed_search_   | PubMed           | Medical/Life     | Medical          |
-| articles         |                  | Sciences         | literature,      |
-|                  |                  |                  | MeSH keywords    |
+| PubMed_search_ | PubMed | Medical/Life | Medical |
+| articles | | Sciences | literature, |
+| | | | MeSH keywords |
 +------------------+------------------+------------------+------------------+
-| SemanticScholar_ | Semantic Scholar | AI-powered       | AI ranking,      |
-| search_papers    |                  | Search           | Citations,       |
-|                  |                  |                  | Rate limit       |
-|                  |                  |                  | handling         |
+| SemanticScholar_ | Semantic Scholar | AI-powered | AI ranking, |
+| search_papers | | Search | Citations, |
+| | | | Rate limit |
+| | | | handling |
 +------------------+------------------+------------------+------------------+
-| openalex_        | OpenAlex         | Comprehensive    | Open access,     |
-| literature_      |                  | Academic         | Year filtering,  |
-| search           |                  | Search           | Abstract         |
-|                  |                  |                  | reconstruction   |
+| openalex_ | OpenAlex | Comprehensive | Open access, |
+| literature_ | | Academic | Year filtering, |
+| search | | Search | Abstract |
+| | | | reconstruction |
 +------------------+------------------+------------------+------------------+
-| EuropePMC_       | Europe PMC       | Biomedical       | European         |
-| search_articles  |                  | Literature       | research,        |
-|                  |                  |                  | Core+Lite modes  |
+| EuropePMC_ | Europe PMC | Biomedical | European |
+| search_articles | | Literature | research, |
+| | | | Core+Lite modes |
 +------------------+------------------+------------------+------------------+
-| DBLP_search_     | DBLP             | Computer         | CS bibliography, |
-| publications     |                  | Science          | Conference       |
-|                  |                  |                  | papers           |
+| DBLP_search_ | DBLP | Computer | CS bibliography, |
+| publications | | Science | Conference |
+| | | | papers |
 +------------------+------------------+------------------+------------------+
-| DOAJ_search_     | DOAJ             | Open Access      | Articles &       |
-| articles         |                  |                  | Journals,        |
-|                  |                  |                  | HTML cleaning    |
+| DOAJ_search_ | DOAJ | Open Access | Articles & |
+| articles | | | Journals, |
+| | | | HTML cleaning |
 +------------------+------------------+------------------+------------------+
-| BioRxiv_search_  | BioRxiv          | Biology          | Biology          |
-| preprints        |                  | Preprints        | preprints,       |
-|                  |                  |                  | Abstracts        |
+| BioRxiv_search_ | BioRxiv | Biology | Biology |
+| preprints | | Preprints | preprints, |
+| | | | Abstracts |
 +------------------+------------------+------------------+------------------+
-| MedRxiv_search_  | MedRxiv          | Medical          | Medical          |
-| preprints        |                  | Preprints        | preprints,       |
-|                  |                  |                  | Abstracts        |
+| MedRxiv_search_ | MedRxiv | Medical | Medical |
+| preprints | | Preprints | preprints, |
+| | | | Abstracts |
 +------------------+------------------+------------------+------------------+
-| HAL_search_      | HAL              | French Research  | French academic  |
-| archive          |                  | Archive          | papers           |
+| HAL_search_ | HAL | French Research | French academic |
+| archive | | Archive | papers |
 +------------------+------------------+------------------+------------------+
-| Unpaywall_       | Unpaywall        | Open Access      | OA status        |
-| check_oa_status  |                  | Status           | checking         |
+| Unpaywall_ | Unpaywall | Open Access | OA status |
+| check_oa_status | | Status | checking |
 +------------------+------------------+------------------+------------------+
 
 Enhanced Features
@@ -510,30 +510,30 @@ Best Practices
 --------------
 
 1. **Choose the Right Tool:**
-   - Use ArXiv for preprints in physics, math, CS
-   - Use PubMed for medical/life sciences
-   - Use Semantic Scholar for AI-powered ranking
-   - Use OpenAlex for comprehensive academic search
+ - Use ArXiv for preprints in physics, math, CS
+ - Use PubMed for medical/life sciences
+ - Use Semantic Scholar for AI-powered ranking
+ - Use OpenAlex for comprehensive academic search
 
 2. **Optimize Your Queries:**
-   - Use specific, relevant keywords
-   - Combine terms with appropriate operators
-   - Use filters to narrow results
+ - Use specific, relevant keywords
+ - Combine terms with appropriate operators
+ - Use filters to narrow results
 
 3. **Handle Rate Limits:**
-   - Some APIs have rate limits
-   - Implement delays between requests if needed
-   - Use error handling for 429 (Too Many Requests) errors
+ - Some APIs have rate limits
+ - Implement delays between requests if needed
+ - Use error handling for 429 (Too Many Requests) errors
 
 4. **Process Results Efficiently:**
-   - Check result types before processing
-   - Extract only needed fields
-   - Implement pagination for large result sets
+ - Check result types before processing
+ - Extract only needed fields
+ - Implement pagination for large result sets
 
 5. **Combine Multiple Sources:**
-   - Use different tools for comprehensive coverage
-   - Cross-reference results for validation
-   - Merge and deduplicate results
+ - Use different tools for comprehensive coverage
+ - Cross-reference results for validation
+ - Merge and deduplicate results
 
 Complete Example
 ----------------
@@ -628,24 +628,24 @@ Troubleshooting
 Common Issues and Solutions:
 
 1. **API Rate Limits:**
-   - Some services have rate limits
-   - Implement delays between requests
-   - Use error handling for 429 errors
+ - Some services have rate limits
+ - Implement delays between requests
+ - Use error handling for 429 errors
 
 2. **Missing Results:**
-   - Check query spelling and keywords
-   - Try different search terms
-   - Verify tool parameters
+ - Check query spelling and keywords
+ - Try different search terms
+ - Verify tool parameters
 
 3. **Authentication Errors:**
-   - Some tools require API keys
-   - Check your .env file configuration
-   - Verify API key validity
+ - Some tools require API keys
+ - Check your .env file configuration
+ - Verify API key validity
 
 4. **Network Issues:**
-   - Check internet connection
-   - Implement retry logic
-   - Handle timeout exceptions
+ - Check internet connection
+ - Implement retry logic
+ - Handle timeout exceptions
 
 For more help, see the :doc:`troubleshooting guide <../help/troubleshooting>`.
 
@@ -658,33 +658,33 @@ Common Parameters
 Most search tools accept these common parameters:
 
 +------------------+------------------+------------------+------------------+
-| Parameter        | Type             | Description      | Example          |
+| Parameter | Type | Description | Example |
 +==================+==================+==================+==================+
-| query            | string           | Search terms     | "machine         |
-|                  |                  |                  | learning"        |
+| query | string | Search terms | "machine |
+| | | | learning" |
 +------------------+------------------+------------------+------------------+
-| limit            | integer          | Max results      | 5                |
+| limit | integer | Max results | 5 |
 +------------------+------------------+------------------+------------------+
-| max_results      | integer          | Max results      | 5                |
-|                  |                  | (alternative)    |                  |
+| max_results | integer | Max results | 5 |
+| | | (alternative) | |
 +------------------+------------------+------------------+------------------+
-| sort_by          | string           | Sort order       | "relevance"      |
+| sort_by | string | Sort order | "relevance" |
 +------------------+------------------+------------------+------------------+
-| sort_order       | string           | Sort direction   | "descending"     |
+| sort_order | string | Sort direction | "descending" |
 +------------------+------------------+------------------+------------------+
-| filter           | string           | Result filters   | "type:journal-   |
-|                  |                  |                  | article"         |
+| filter | string | Result filters | "type:journal- |
+| | | | article" |
 +------------------+------------------+------------------+------------------+
-| year_from        | integer          | Start year       | 2020             |
+| year_from | integer | Start year | 2020 |
 +------------------+------------------+------------------+------------------+
-| year_to          | integer          | End year         | 2024             |
+| year_to | integer | End year | 2024 |
 +------------------+------------------+------------------+------------------+
-| open_access      | boolean          | Open access only | True             |
+| open_access | boolean | Open access only | True |
 +------------------+------------------+------------------+------------------+
-| type             | string           | Content type     | "articles"       |
+| type | string | Content type | "articles" |
 +------------------+------------------+------------------+------------------+
-| email            | string           | Contact email    | "user@example.   |
-|                  |                  | (required)       | com"             |
+| email | string | Contact email | "user@example. |
+| | | (required) | com" |
 +------------------+------------------+------------------+------------------+
 
 Quick Usage Examples

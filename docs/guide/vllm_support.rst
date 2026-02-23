@@ -107,13 +107,13 @@ Troubleshooting
 ---------------
 
 **"VLLM_SERVER_URL environment variable not set"**
-    Set the environment variable: ``export VLLM_SERVER_URL="http://localhost:8000"``
+ Set the environment variable: ``export VLLM_SERVER_URL="http://localhost:8000"``
 
 **"Model not found"**
-    Ensure ``model_id`` matches the model name loaded on your vLLM server
+ Ensure ``model_id`` matches the model name loaded on your vLLM server
 
 **Connection failed**
-    Verify vLLM server is running: ``curl http://localhost:8000/health`` (if available)
+ Verify vLLM server is running: ``curl http://localhost:8000/health`` (if available)
 
 **URL format**: Use base URL (e.g., ``http://localhost:8000``). ToolUniverse automatically appends ``/v1``.
 

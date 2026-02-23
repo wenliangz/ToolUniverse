@@ -1,6 +1,6 @@
 # MCP Tasks: Async Operations in ToolUniverse
 
-**Status**: ✅ Production Ready
+**Status**: Production Ready
 **Version**: 1.0.0
 **Last Updated**: 2026-02-09
 
@@ -14,11 +14,11 @@ ToolUniverse now supports **MCP Tasks** ([Model Context Protocol Tasks](https://
 
 MCP Tasks is the official Model Context Protocol feature for handling long-running operations. When a tool supports tasks, clients (like Claude Code, Claude Desktop, Cursor) automatically:
 
-- ✅ Get an immediate task ID (no waiting!)
-- ✅ Poll for status updates automatically
-- ✅ Display progress messages to the user
-- ✅ Retrieve results when complete
-- ✅ Support cancellation
+- Get an immediate task ID (no waiting!)
+- Poll for status updates automatically
+- Display progress messages to the user
+- Retrieve results when complete
+- Support cancellation
 
 **No manual polling or ID tracking required!**
 
@@ -28,8 +28,8 @@ MCP Tasks is the official Model Context Protocol feature for handling long-runni
 |---------|------------------|-------------------|
 | **Response Time** | 5-60 minutes | < 1 second |
 | **User Experience** | Frozen, no status | Progress updates |
-| **Parallel Jobs** | ❌ One at a time | ✅ Run multiple concurrently |
-| **Cancellation** | ❌ Not supported | ✅ Cancel anytime |
+| **Parallel Jobs** | One at a time | Run multiple concurrently |
+| **Cancellation** | Not supported | Cancel anytime |
 | **Client Integration** | Custom implementation | Native MCP support |
 
 ---
@@ -699,8 +699,8 @@ async def test_task_manager_lifecycle():
    ```
 
 2. **Verify polling logic:**
-   - Ensure tool checks both HTTP 200 and 202 status codes
-   - Check `response.json().get("status_code")` for ProteinsPlus
+ - Ensure tool checks both HTTP 200 and 202 status codes
+ - Check `response.json().get("status_code")` for ProteinsPlus
 
 3. **Increase timeout:**
    ```python
@@ -762,7 +762,7 @@ async def test_task_manager_lifecycle():
 
 ## Best Practices
 
-### ✅ Do
+### Do
 
 1. **Use MCP Tasks for long operations** (> 5 seconds)
 2. **Report progress regularly** (every 5-10 seconds)
@@ -772,7 +772,7 @@ async def test_task_manager_lifecycle():
 6. **Cache expensive operations** when deterministic
 7. **Use connection pooling** for HTTP-heavy tools
 
-### ❌ Don't
+### Don't
 
 1. **Don't use tasks for instant operations** (< 1 second)
 2. **Don't block event loop** (use `await asyncio.sleep()`, not `time.sleep()`)
@@ -868,4 +868,4 @@ Need help with MCP Tasks or async operations?
 
 ---
 
-**Ready to use MCP Tasks!** All tools marked with `"taskSupport": "required"` will automatically run as background tasks when called from MCP clients. 🚀
+**Ready to use MCP Tasks!** All tools marked with `"taskSupport": "required"` will automatically run as background tasks when called from MCP clients. 

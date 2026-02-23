@@ -2,8 +2,8 @@
 MCP Tool Name Shortening
 ==========================================
 
-**Version:** 1.0  
-**Status:** Production Ready ✅
+**Version:** 1.0 
+**Status:** Production Ready 
 
 Overview
 ========
@@ -49,10 +49,10 @@ The algorithm intelligently truncates tool names by:
 1. **Splitting by underscores** to identify words
 2. **Preserving category prefix** (first word): ``FDA``, ``UniProt``, ``euhealthinfo``
 3. **Truncating subsequent words**:
-   
-   - Short words (≤3 chars) kept intact: ``by``, ``get``, ``on``, ``or``, ``for``
-   - Medium words (4-6 chars): first 4 chars: ``drug`` → ``drug``
-   - Long words (>6 chars): first 4 chars: ``consultation`` → ``cons``
+ 
+ - Short words (≤3 chars) kept intact: ``by``, ``get``, ``on``, ``or``, ``for``
+ - Medium words (4-6 chars): first 4 chars: ``drug`` → ``drug``
+ - Long words (>6 chars): first 4 chars: ``consultation`` → ``cons``
 
 4. **Handling collisions**: Appends numeric suffix if shortened names clash
 
@@ -83,7 +83,7 @@ Examples
 When to Use This Feature
 =========================
 
-✅ USE in These Scenarios
+ USE in These Scenarios
 --------------------------
 
 MCP Integration (Automatic)
@@ -147,7 +147,7 @@ External API Integration with Length Constraints
 When NOT to Use This Feature
 =============================
 
-❌ DO NOT USE in These Scenarios
+ DO NOT USE in These Scenarios
 ---------------------------------
 
 Direct Python API Usage (Default)
@@ -340,34 +340,34 @@ Known Limitations
 -----------------
 
 1. **Maximum 999 Collisions per Base Name**
-   
-   - Collision handling uses numeric suffixes (``_2``, ``_3``, ..., ``_999``)
-   - Extremely unlikely in practice
+ 
+ - Collision handling uses numeric suffixes (``_2``, ``_3``, ..., ``_999``)
+ - Extremely unlikely in practice
 
 2. **Shortened Names May Be Ambiguous**
-   
-   - Different full names may shorten to similar results
-   - Collision handling adds suffixes to ensure uniqueness
+ 
+ - Different full names may shorten to similar results
+ - Collision handling adds suffixes to ensure uniqueness
 
 3. **No Shortening for Query Methods**
-   
-   - Methods like ``get_tool_info()`` still use original names
-   - No concrete use case for shortened names in queries yet
+ 
+ - Methods like ``get_tool_info()`` still use original names
+ - No concrete use case for shortened names in queries yet
 
 4. **Fixed Shortening Algorithm**
-   
-   - Algorithm is deterministic and not customizable per-tool
-   - Designed to preserve meaning while maximizing uniqueness
+ 
+ - Algorithm is deterministic and not customizable per-tool
+ - Designed to preserve meaning while maximizing uniqueness
 
 Edge Cases Handled
 ------------------
 
-✅ Collision handling - Numeric suffixes added  
-✅ Very short names - Returned unchanged  
-✅ Already at limit - Returned unchanged  
-✅ Non-ASCII characters - Handled correctly  
-✅ Empty strings - Handled gracefully  
-✅ Repeated calls - Cached for consistency  
+ Collision handling - Numeric suffixes added 
+ Very short names - Returned unchanged 
+ Already at limit - Returned unchanged 
+ Non-ASCII characters - Handled correctly 
+ Empty strings - Handled gracefully 
+ Repeated calls - Cached for consistency 
 
 Performance
 ===========
@@ -523,7 +523,7 @@ Key Takeaways
 4. **Simple implementation** - 380 lines, well-tested
 5. **Production ready** - All tests passing, validated with real tools
 
-✅ When to Use
+ When to Use
 --------------
 
 - **MCP integration** (automatic)
@@ -531,7 +531,7 @@ Key Takeaways
 - **External systems with name length limits**
 - **Testing and validation**
 
-❌ When NOT to Use
+ When NOT to Use
 ------------------
 
 - **Direct Python API** (no constraints)

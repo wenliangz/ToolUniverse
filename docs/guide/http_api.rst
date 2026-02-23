@@ -49,11 +49,11 @@ Official Client Features
 
 The official ``ToolUniverseClient`` includes:
 
-- ✅ Automatic method discovery: ``client.list_available_methods()``
-- ✅ Built-in help: ``client.help("method_name")``
-- ✅ Health check: ``client.health_check()``
-- ✅ Context manager support: ``with ToolUniverseClient(url) as client:``
-- ✅ All ToolUniverse methods via dynamic proxy
+- Automatic method discovery: ``client.list_available_methods()``
+- Built-in help: ``client.help("method_name")``
+- Health check: ``client.health_check()``
+- Context manager support: ``with ToolUniverseClient(url) as client:``
+- All ToolUniverse methods via dynamic proxy
 
 Custom Client Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -152,37 +152,37 @@ API Endpoints
 The server exposes the following REST endpoints:
 
 .. list-table:: API Endpoints Reference
-   :header-rows: 1
-   :widths: 20 10 40 30
+ :header-rows: 1
+ :widths: 20 10 40 30
 
-   * - Endpoint
-     - Method
-     - Purpose
-     - Client Usage
-   * - ``/health``
-     - GET
-     - Server health check
-     - ``client.health_check()``
-   * - ``/api/methods``
-     - GET
-     - List all ToolUniverse methods
-     - ``client.list_available_methods()``
-   * - ``/api/call``
-     - POST
-     - Call any ToolUniverse method
-     - ``client.method_name(**kwargs)``
-   * - ``/api/reset``
-     - POST
-     - Reset ToolUniverse instance
-     - ``client.reset_server(config)``
-   * - ``/docs``
-     - GET
-     - Interactive Swagger UI docs
-     - Open in browser
-   * - ``/redoc``
-     - GET
-     - Alternative ReDoc docs
-     - Open in browser
+ * - Endpoint
+ - Method
+ - Purpose
+ - Client Usage
+ * - ``/health``
+ - GET
+ - Server health check
+ - ``client.health_check()``
+ * - ``/api/methods``
+ - GET
+ - List all ToolUniverse methods
+ - ``client.list_available_methods()``
+ * - ``/api/call``
+ - POST
+ - Call any ToolUniverse method
+ - ``client.method_name(**kwargs)``
+ * - ``/api/reset``
+ - POST
+ - Reset ToolUniverse instance
+ - ``client.reset_server(config)``
+ * - ``/docs``
+ - GET
+ - Interactive Swagger UI docs
+ - Open in browser
+ * - ``/redoc``
+ - GET
+ - Alternative ReDoc docs
+ - Open in browser
 
 **Key distinction:**
 
@@ -195,7 +195,7 @@ Example Usage
 See ``examples/http_api_usage_example.py`` for comprehensive examples including:
 
 - Listing methods and getting help
-- Loading tools and getting specifications  
+- Loading tools and getting specifications 
 - Executing tools and checking health
 - Tool prompts preparation
 
@@ -220,10 +220,10 @@ For GPU-based inference workloads (default, recommended):
 
 **Why single worker for GPU?**
 
-- ✅ Single ToolUniverse instance → Single GPU model in memory (~2GB)
-- ✅ Multiple workers → Multiple GPU model copies (~16GB+ wasted memory)
-- ✅ High concurrency via async thread pool (20-100 concurrent operations)
-- ✅ Efficient GPU memory usage
+- Single ToolUniverse instance → Single GPU model in memory (~2GB)
+- Multiple workers → Multiple GPU model copies (~16GB+ wasted memory)
+- High concurrency via async thread pool (20-100 concurrent operations)
+- Efficient GPU memory usage
 
 Multi-Worker Configuration (CPU-Only Workloads)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -328,15 +328,15 @@ For GPU workloads, scale concurrency with thread pool size:
 Benefits
 --------
 
-1. ✅ **Zero Maintenance** - Add ToolUniverse methods → They automatically work over HTTP
-2. ✅ **Minimal Client** - Only needs ``requests`` + ``pydantic`` (no ToolUniverse package)
-3. ✅ **Full API Access** - All 49+ ToolUniverse methods available remotely
-4. ✅ **Stateful** - Server maintains ToolUniverse instance across requests
-5. ✅ **Type Discovery** - Client can query available methods at runtime
-6. ✅ **Automatic** - Both server and client use introspection/magic methods
-7. ✅ **Flexible Install** - Server needs full package, client uses ``tooluniverse[client]``
-8. ✅ **GPU-Optimized** - Single worker with async thread pool for efficient GPU usage
-9. ✅ **High Concurrency** - 20-100+ concurrent operations via async thread pool
+1. **Zero Maintenance** - Add ToolUniverse methods → They automatically work over HTTP
+2. **Minimal Client** - Only needs ``requests`` + ``pydantic`` (no ToolUniverse package)
+3. **Full API Access** - All 49+ ToolUniverse methods available remotely
+4. **Stateful** - Server maintains ToolUniverse instance across requests
+5. **Type Discovery** - Client can query available methods at runtime
+6. **Automatic** - Both server and client use introspection/magic methods
+7. **Flexible Install** - Server needs full package, client uses ``tooluniverse[client]``
+8. **GPU-Optimized** - Single worker with async thread pool for efficient GPU usage
+9. **High Concurrency** - 20-100+ concurrent operations via async thread pool
 
 Docker Deployment
 -----------------
@@ -464,7 +464,7 @@ Your custom client uses ``__getattr__`` to proxy ALL method calls to ``POST /api
 
 **The fix:**
 
-❌ **Wrong**: Custom client that proxies everything
+ **Wrong**: Custom client that proxies everything
 
 .. code-block:: python
 
@@ -477,7 +477,7 @@ Your custom client uses ``__getattr__`` to proxy ALL method calls to ``POST /api
 
     client.list_available_methods()  # ❌ Tries to call it on ToolUniverse (doesn't exist)
 
-✅ **Solution**: Use the official client
+ **Solution**: Use the official client
 
 .. code-block:: python
 

@@ -119,7 +119,7 @@ Technical terms and concepts used throughout ToolUniverse documentation.
 See Also
 --------
 
-- :doc:`reference/cli_tools` - Command-line tools
-- :doc:`reference/environment_variables` - Configuration variables
+- :doc:`cli_tools` - Command-line tools
+- :doc:`environment_variables` - Configuration variables
 - :doc:`../guide/api_keys` - API key configuration
-- :doc:`guide/interaction_protocol` - AI-Tool Interaction Protocol details
+- :doc:`../guide/interaction_protocol` - AI-Tool Interaction Protocol details

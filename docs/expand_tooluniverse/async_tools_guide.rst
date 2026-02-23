@@ -7,41 +7,41 @@ Creating Async Tools with AsyncPollingTool
    :keywords: async tools, long-running operations, polling, MCP tasks, ToolUniverse
 
 .. contents:: Table of Contents
-   :local:
-   :depth: 2
+ :local:
+ :depth: 2
 
 Overview
 ========
 
 Many scientific operations take minutes or hours to complete—protein docking, molecular dynamics simulations, large-scale data processing. ToolUniverse provides the **AsyncPollingTool** base class to handle these long-running operations elegantly:
 
-✅ **Automatic polling** - No manual loops needed
-✅ **Progress reporting** - Built-in status updates
-✅ **Non-blocking** - Server remains responsive
-✅ **MCP Tasks compatible** - Works with Model Context Protocol
-✅ **Consistent patterns** - All async tools behave the same way
+ **Automatic polling** - No manual loops needed
+ **Progress reporting** - Built-in status updates
+ **Non-blocking** - Server remains responsive
+ **MCP Tasks compatible** - Works with Model Context Protocol
+ **Consistent patterns** - All async tools behave the same way
 
 When to Use AsyncPollingTool
 ============================
 
 Use AsyncPollingTool when your tool:
 
-✅ **Takes >30 seconds** to complete
-✅ **Polls external APIs** for job status
-✅ **Returns job IDs** that require status checking
-✅ **Has multiple processing stages** (submit → poll → retrieve)
+ **Takes >30 seconds** to complete
+ **Polls external APIs** for job status
+ **Returns job IDs** that require status checking
+ **Has multiple processing stages** (submit → poll → retrieve)
 
 **Examples**:
-   - Protein structure prediction (5-60 minutes)
-   - Molecular docking (10-30 minutes)
-   - Large-scale sequence alignment (minutes to hours)
-   - Complex simulations (hours to days)
+ - Protein structure prediction (5-60 minutes)
+ - Molecular docking (10-30 minutes)
+ - Large-scale sequence alignment (minutes to hours)
+ - Complex simulations (hours to days)
 
 **Don't use** for:
-   - Quick API calls (<30 seconds)
-   - Synchronous operations
-   - Database queries
-   - Simple lookups
+ - Quick API calls (<30 seconds)
+ - Synchronous operations
+ - Database queries
+ - Simple lookups
 
 Quick Start
 ===========
@@ -126,7 +126,7 @@ Required Methods
 
 1. **submit_job(arguments) → job_id**
 
-   Submit the job to the external service.
+ Submit the job to the external service.
 
    .. code-block:: python
 
@@ -149,7 +149,7 @@ Required Methods
 
 2. **check_status(job_id) → status dict**
 
-   Check if job is complete and return results.
+ Check if job is complete and return results.
 
    .. code-block:: python
 
@@ -186,7 +186,7 @@ Optional Methods
 
 3. **format_result(result) → formatted dict**
 
-   Format the final result (optional, has default).
+ Format the final result (optional, has default).
 
    .. code-block:: python
 
@@ -203,13 +203,13 @@ Optional Methods
 What the Base Class Provides
 -----------------------------
 
-✅ **Automatic polling loop** - Calls ``check_status()`` repeatedly
-✅ **Non-blocking async** - Uses ``await asyncio.sleep()``
-✅ **Timeout handling** - Stops after ``max_duration`` seconds
-✅ **Progress reporting** - Updates via ``TaskProgress``
-✅ **Error handling** - Catches exceptions, returns error dicts
-✅ **Return schema** - Auto-generates oneOf structure
-✅ **run() method** - Orchestrates the entire workflow
+ **Automatic polling loop** - Calls ``check_status()`` repeatedly
+ **Non-blocking async** - Uses ``await asyncio.sleep()``
+ **Timeout handling** - Stops after ``max_duration`` seconds
+ **Progress reporting** - Updates via ``TaskProgress``
+ **Error handling** - Catches exceptions, returns error dicts
+ **Return schema** - Auto-generates oneOf structure
+ **run() method** - Orchestrates the entire workflow
 
 Configuration
 =============
@@ -477,10 +477,10 @@ How It Works
                 immediately     Task          Async
 
 The TaskManager handles:
-   - Creating background tasks
-   - Polling your tool's status
-   - Reporting progress to client
-   - Managing timeouts and cleanup
+ - Creating background tasks
+ - Polling your tool's status
+ - Reporting progress to client
+ - Managing timeouts and cleanup
 
 You don't need to do anything special—just inherit from AsyncPollingTool!
 
@@ -569,25 +569,25 @@ Best Practices
 Do's
 ----
 
-✅ **Keep submit_job lightweight** - Just submit and return ID
-✅ **Handle all status cases** - completed, failed, running, unknown
-✅ **Validate inputs early** - Fail fast in submit_job
-✅ **Use appropriate intervals** - 10-30s for most APIs
-✅ **Set realistic timeouts** - Consider actual job duration
-✅ **Return progress when available** - Better UX
-✅ **Use helper methods** - Keep methods focused and clean
-✅ **Test with mocks first** - Don't hit real APIs in unit tests
+ **Keep submit_job lightweight** - Just submit and return ID
+ **Handle all status cases** - completed, failed, running, unknown
+ **Validate inputs early** - Fail fast in submit_job
+ **Use appropriate intervals** - 10-30s for most APIs
+ **Set realistic timeouts** - Consider actual job duration
+ **Return progress when available** - Better UX
+ **Use helper methods** - Keep methods focused and clean
+ **Test with mocks first** - Don't hit real APIs in unit tests
 
 Don'ts
 ------
 
-❌ **Don't do work in submit_job** - Just submit to external service
-❌ **Don't block in check_status** - Should be a quick status check
-❌ **Don't poll too frequently** - Respect API rate limits (<10s is usually too much)
-❌ **Don't set infinite timeouts** - Always have max_duration
-❌ **Don't swallow errors** - Return {"error": "..."} or raise exception
-❌ **Don't use time.sleep()** - Use asyncio.sleep() or let base class handle it
-❌ **Don't return raw API responses** - Format consistently
+ **Don't do work in submit_job** - Just submit to external service
+ **Don't block in check_status** - Should be a quick status check
+ **Don't poll too frequently** - Respect API rate limits (<10s is usually too much)
+ **Don't set infinite timeouts** - Always have max_duration
+ **Don't swallow errors** - Return {"error": "..."} or raise exception
+ **Don't use time.sleep()** - Use asyncio.sleep() or let base class handle it
+ **Don't return raw API responses** - Format consistently
 
 Common Patterns
 ===============
@@ -716,10 +716,10 @@ If you have an existing async tool with manual polling:
            return self._check_status(job_id)
 
 **Result**:
-   - Eliminated 70+ lines of polling boilerplate
-   - Non-blocking async execution
-   - Automatic progress reporting
-   - MCP Tasks compatible
+ - Eliminated 70+ lines of polling boilerplate
+ - Non-blocking async execution
+ - Automatic progress reporting
+ - MCP Tasks compatible
 
 Troubleshooting
 ===============
@@ -730,9 +730,9 @@ Tool Never Completes
 **Symptoms**: Tool runs forever, never returns result
 
 **Causes**:
-   - ``check_status()`` never returns ``done=True``
-   - Wrong job_id format
-   - API endpoint changed
+ - ``check_status()`` never returns ``done=True``
+ - Wrong job_id format
+ - API endpoint changed
 
 **Debug**:
 
@@ -752,9 +752,9 @@ Job Times Out
 **Symptoms**: Tool returns timeout error
 
 **Causes**:
-   - ``max_duration`` too short
-   - Job actually takes longer than expected
-   - API is slow
+ - ``max_duration`` too short
+ - Job actually takes longer than expected
+ - API is slow
 
 **Fix**:
 
@@ -770,8 +770,8 @@ Progress Not Showing
 **Symptoms**: No progress updates visible
 
 **Causes**:
-   - Not returning ``progress`` in ``check_status()``
-   - Progress not changing between calls
+ - Not returning ``progress`` in ``check_status()``
+ - Progress not changing between calls
 
 **Fix**:
 
@@ -794,9 +794,9 @@ Tool Returns Error Dict
 **Symptoms**: Tool returns ``{"error": "..."}`` unexpectedly
 
 **Causes**:
-   - Exception in ``submit_job()``
-   - API returns error status
-   - Network error
+ - Exception in ``submit_job()``
+ - API returns error status
+ - Network error
 
 **Debug**:
 
@@ -896,10 +896,10 @@ AsyncPollingTool Class
 Further Reading
 ===============
 
-- :doc:`/expand_tooluniverse/comprehensive_tool_guide` - Complete tool development guide
-- :doc:`/expand_tooluniverse/local_tools/index` - Creating local tools
-- :doc:`/guide/building_ai_scientists/mcp_support` - MCP integration
-- :doc:`/api/tooluniverse.async_base` - API documentation
+- :doc:`comprehensive_tool_guide` - Complete tool development guide
+- :doc:`local_tools/index` - Creating local tools
+- :doc:`../guide/building_ai_scientists/mcp_support` - MCP integration
+- :doc:`../api/modules` - API documentation
 
 Examples
 --------

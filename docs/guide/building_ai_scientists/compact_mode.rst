@@ -31,16 +31,16 @@ Why Use Compact Mode?
 
 **When to use**:
 
-✅ **Always recommended** for MCP integration with Claude, Cursor, ChatGPT  
-✅ AI agent workflows with long conversations  
-✅ Complex multi-step research tasks  
-✅ Working with large datasets or outputs
+ **Always recommended** for MCP integration with Claude, Cursor, ChatGPT 
+ AI agent workflows with long conversations 
+ Complex multi-step research tasks 
+ Working with large datasets or outputs
 
 **When to skip**:
 
-❌ Python API usage (context windows don't apply)  
-❌ Single-use scripts or batch processing  
-❌ When you need to see all available tools at once
+ Python API usage (context windows don't apply) 
+ Single-use scripts or batch processing 
+ When you need to see all available tools at once
 
 Core Tools
 ----------
@@ -121,7 +121,7 @@ Add to ``~/.gemini/settings.json`` or project ``.gemini/settings.json``:
 - **Progressive disclosure**: Discover tools on demand using ``list_tools``, ``grep_tools``, and ``get_tool_info``
 
 .. note::
-   For Gemini CLI, you can also use the ``gemini-essential.yaml`` Space configuration which provides ~400-450 essential tools, staying within the 500 tool limit while providing direct access to commonly used tools. See :doc:`building_ai_scientists/gemini_cli` for details.
+   For Gemini CLI, you can also use the ``gemini-essential.yaml`` Space configuration which provides ~400-450 essential tools, staying within the 500 tool limit while providing direct access to commonly used tools. See :doc:`gemini_cli` for details.
 
 Usage
 -----
@@ -171,7 +171,7 @@ When to Use
 **Alternative for Gemini CLI:**
 - Use ``gemini-essential.yaml`` Space configuration for ~400-450 essential tools
 - Provides direct tool access while staying within 500 tool limit
-- See :doc:`building_ai_scientists/gemini_cli` for configuration details
+- See :doc:`gemini_cli` for configuration details
 
 Examples
 --------
@@ -181,6 +181,6 @@ See ``examples/compact_mode/`` for complete examples.
 Related Documentation
 ---------------------
 
-- :doc:`building_ai_scientists/mcp_support` - General MCP support
-- :doc:`building_ai_scientists/claude_desktop` - Claude Desktop integration
-- :doc:`building_ai_scientists/gemini_cli` - Gemini CLI integration with Space configuration
+- :doc:`mcp_support` - General MCP support
+- :doc:`claude_desktop` - Claude Desktop integration
+- :doc:`gemini_cli` - Gemini CLI integration with Space configuration

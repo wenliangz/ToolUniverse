@@ -307,7 +307,7 @@ Important Notes for MCP Clients
 3. **Tool Arguments**: When calling tools, arguments must match the tool's parameter schema exactly.
 
 .. seealso::
-   For detailed MCP server setup and usage, see :doc:`../tutorials/aiscientists/adding_mcp_tools_en`
+   For detailed MCP server setup and usage, see :doc:`building_ai_scientists/mcp_support`
 
 Summary
 --------

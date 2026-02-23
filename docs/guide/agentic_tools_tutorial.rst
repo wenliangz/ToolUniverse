@@ -9,11 +9,11 @@ What You'll Learn
 
 By the end of this tutorial, you'll be able to:
 
-✅ Understand what agentic tools are and when to use them
-✅ Create your own agentic tool from scratch
-✅ Configure LLM settings for optimal performance
-✅ Load and execute agentic tools in your workflows
-✅ Handle errors and troubleshoot common issues
+ Understand what agentic tools are and when to use them
+ Create your own agentic tool from scratch
+ Configure LLM settings for optimal performance
+ Load and execute agentic tools in your workflows
+ Handle errors and troubleshoot common issues
 
 What are Agentic Tools?
 =======================
@@ -30,24 +30,24 @@ Step 1: Understand the Components
 Every agentic tool has 5 essential parts:
 
 1️⃣ **Tool Metadata**
-   - Name and description
-   - Tool type identifier
+ - Name and description
+ - Tool type identifier
 
 2️⃣ **Prompt Template**
-   - Natural language instructions
-   - Placeholders for user inputs
+ - Natural language instructions
+ - Placeholders for user inputs
 
 3️⃣ **Input Parameters**
-   - What users need to provide
-   - Validation rules and descriptions
+ - What users need to provide
+ - Validation rules and descriptions
 
 4️⃣ **LLM Configuration**
-   - Which AI model to use
-   - Settings like temperature and response length
+ - Which AI model to use
+ - Settings like temperature and response length
 
 5️⃣ **Response Handling**
-   - Text or structured JSON output
-   - Metadata about execution
+ - Text or structured JSON output
+ - Metadata about execution
 
 Step 2: Choose Your LLM Provider
 ================================
@@ -55,24 +55,24 @@ Step 2: Choose Your LLM Provider
 ToolUniverse supports these AI providers:
 
 **OpenAI/Azure OpenAI**
-   - Models: GPT-4, GPT-4o, o1-mini, o1-preview
-   - Configuration: Set ``AZURE_OPENAI_API_KEY`` and ``AZURE_OPENAI_ENDPOINT``
+ - Models: GPT-4, GPT-4o, o1-mini, o1-preview
+ - Configuration: Set ``AZURE_OPENAI_API_KEY`` and ``AZURE_OPENAI_ENDPOINT``
 
 **Google Gemini**
-   - Models: Gemini 2.0 Flash, Gemini 2.5 Pro
-   - Configuration: Set ``GEMINI_API_KEY``
+ - Models: Gemini 2.0 Flash, Gemini 2.5 Pro
+ - Configuration: Set ``GEMINI_API_KEY``
 
 **OpenRouter**
-   - Access to multiple providers through one API
-   - Models: GPT-5, Claude Sonnet 4.5, and more
-   - Configuration: Set ``OPENROUTER_API_KEY``
-   - See :doc:`../guide/openrouter_support` for details
+ - Access to multiple providers through one API
+ - Models: GPT-5, Claude Sonnet 4.5, and more
+ - Configuration: Set ``OPENROUTER_API_KEY``
+ - See :doc:`../guide/openrouter_support` for details
 
 **vLLM (Self-Hosted)**
-   - Run models on your own infrastructure
-   - Models: Any model supported by vLLM (Llama, Mistral, Qwen, etc.)
-   - Configuration: Set ``VLLM_SERVER_URL``
-   - See :doc:`../guide/openrouter_support` for LLM provider configuration
+ - Run models on your own infrastructure
+ - Models: Any model supported by vLLM (Llama, Mistral, Qwen, etc.)
+ - Configuration: Set ``VLLM_SERVER_URL``
+ - See :doc:`../guide/openrouter_support` for LLM provider configuration
 
 
 Step 3: Create Your First Tool
@@ -187,8 +187,8 @@ Set up AI model settings:
 
 - ``api_type``: "CHATGPT", "GEMINI", "OPENROUTER", or "VLLM"
 - ``model_id``: Choose your model (see Step 2)
-  - For vLLM: Must match the model name loaded on your vLLM server
-  - Set ``VLLM_SERVER_URL`` environment variable when using vLLM
+ - For vLLM: Must match the model name loaded on your vLLM server
+ - Set ``VLLM_SERVER_URL`` environment variable when using vLLM
 - ``temperature``: 0.0-2.0 (higher = more creative)
 - ``return_json``: true for structured data, false for text
 

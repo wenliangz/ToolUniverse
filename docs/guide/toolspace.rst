@@ -53,57 +53,57 @@ Domain-Specific Spaces
 ~~~~~~~~~~~~~~~~~~~~~~
 
 **Protein Research** (`protein-research.yaml`)
-   Comprehensive tools for protein structure, function, and interaction research.
-   Includes: UniProt, RCSB PDB, AlphaFold, HPA, InterPro, protein visualization
-   `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/protein-research.yaml>`_
+ Comprehensive tools for protein structure, function, and interaction research.
+ Includes: UniProt, RCSB PDB, AlphaFold, HPA, InterPro, protein visualization
+ `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/protein-research.yaml>`_
 
 **Genomics** (`genomics.yaml`)
-   Tools for genomics and genetics research.
-   Includes: GWAS, Ensembl, ClinVar, dbSNP, gnomAD, GTEx, ENCODE, GDC
-   `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/genomics.yaml>`_
+ Tools for genomics and genetics research.
+ Includes: GWAS, Ensembl, ClinVar, dbSNP, gnomAD, GTEx, ENCODE, GDC
+ `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/genomics.yaml>`_
 
 **Bioinformatics** (`bioinformatics.yaml`)
-   Bioinformatics analysis and pathway research tools.
-   Includes: BLAST, Gene Ontology, KEGG, Reactome, Enrichr, HumanBase, WikiPathways
-   `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/bioinformatics.yaml>`_
+ Bioinformatics analysis and pathway research tools.
+ Includes: BLAST, Gene Ontology, KEGG, Reactome, Enrichr, HumanBase, WikiPathways
+ `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/bioinformatics.yaml>`_
 
 **Structural Biology** (`structural-biology.yaml`)
-   Protein and molecular structure analysis tools.
-   Includes: RCSB PDB, AlphaFold, EMDB, 3D visualization
-   `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/structural-biology.yaml>`_
+ Protein and molecular structure analysis tools.
+ Includes: RCSB PDB, AlphaFold, EMDB, 3D visualization
+ `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/structural-biology.yaml>`_
 
 **Cheminformatics** (`cheminformatics.yaml`)
-   Chemical compound research and ADMET prediction tools.
-   Includes: PubChem, ChEMBL, ADMET AI, molecular visualization
-   `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/cheminformatics.yaml>`_
+ Chemical compound research and ADMET prediction tools.
+ Includes: PubChem, ChEMBL, ADMET AI, molecular visualization
+ `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/cheminformatics.yaml>`_
 
 **Disease Research** (`disease-research.yaml`)
-   Disease research and target-disease association tools.
-   Includes: OpenTargets, Monarch, disease target scoring, GWAS, HPA
-   `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/disease-research.yaml>`_
+ Disease research and target-disease association tools.
+ Includes: OpenTargets, Monarch, disease target scoring, GWAS, HPA
+ `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/disease-research.yaml>`_
 
 **Drug Discovery** (`drug-discovery.yaml`)
-   Essential tools for drug discovery research.
-   Includes: ChEMBL, Clinical Trials, OpenTargets, FDA, PubChem, DrugBank, ADMET AI
-   `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/drug-discovery.yaml>`_
+ Essential tools for drug discovery research.
+ Includes: ChEMBL, Clinical Trials, OpenTargets, FDA, PubChem, DrugBank, ADMET AI
+ `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/drug-discovery.yaml>`_
 
 **Literature Search** (`literature-search.yaml`)
-   Scientific literature search and analysis tools.
-   Includes: EuropePMC, Semantic Scholar, PubTator, arXiv, Crossref, PubMed
-   `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/literature-search.yaml>`_
+ Scientific literature search and analysis tools.
+ Includes: EuropePMC, Semantic Scholar, PubTator, arXiv, Crossref, PubMed
+ `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/literature-search.yaml>`_
 
 **Clinical Research** (`clinical-research.yaml`)
-   Clinical research and regulatory affairs tools.
-   Includes: Clinical Trials, FDA, Clinical Guidelines, Monarch, EFO, HPA
-   `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/clinical-research.yaml>`_
+ Clinical research and regulatory affairs tools.
+ Includes: Clinical Trials, FDA, Clinical Guidelines, Monarch, EFO, HPA
+ `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/clinical-research.yaml>`_
 
 Comprehensive Workspace
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 **Full Workspace** (`full-workspace.yaml`)
-   Complete research environment with all major domains (449 tools from 32 categories).
-   Includes: LLM configuration, hooks, comprehensive tool coverage
-   `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/full-workspace.yaml>`_
+ Complete research environment with all major domains (449 tools from 32 categories).
+ Includes: LLM configuration, hooks, comprehensive tool coverage
+ `GitHub <https://github.com/mims-harvard/ToolUniverse/blob/main/examples/spaces/full-workspace.yaml>`_
 
 Loading Pre-configured Spaces
 -----------------------------
@@ -231,7 +231,7 @@ Creating Your Own Space
 1. Create a YAML file with the structure above
 2. Choose your tools using ``include_tools`` (recommended) or ``categories``
 3. Add LLM config and hooks if needed
-4. Validate: ``python -c "from tooluniverse.space import validate_yaml_file_with_schema; print('✅ Valid' if validate_yaml_file_with_schema('my-space.yaml')[0] else '❌ Invalid')"``
+4. Validate: ``python -c "from tooluniverse.space import validate_yaml_file_with_schema; print(' Valid' if validate_yaml_file_with_schema('my-space.yaml')[0] else ' Invalid')"``
 5. Load: ``tu.load_space("./my-space.yaml")``
 
 See `examples/spaces/ <https://github.com/mims-harvard/ToolUniverse/tree/main/examples/spaces>`_ for more examples.

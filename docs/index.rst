@@ -32,26 +32,16 @@ ToolUniverse is a unified ecosystem that transforms any large language model (LL
 
 With its **AI-Tool Interaction Protocol**, ToolUniverse provides a common interface for seamless communication between LLMs and tools, ensuring compatibility across platforms such as GPT, Claude, Gemini, and open-source models.
 
-🚀 New to ToolUniverse?
------------------------
+Get Started
+-----------
 
-**Choose your path to get started:**
+**Choose your path:**
 
 .. grid:: 1 1 2 2
    :gutter: 4
    :class-container: hero-grid
 
-   .. grid-item-card:: 🐍 Writing code?
-      :link: guide/python_guide
-      :link-type: doc
-      :class-card: choice-card python-card
-      :shadow: lg
-      
-      **Choose Python Developer**
-      
-      Use ToolUniverse's Python API directly in your code, Jupyter notebooks, or custom applications.
-
-   .. grid-item-card:: 🤖 Using AI chat?
+   .. grid-item-card:: Using AI chat?
       :link: guide/building_ai_scientists/index
       :link-type: doc
       :class-card: choice-card agent-card
@@ -61,6 +51,16 @@ With its **AI-Tool Interaction Protocol**, ToolUniverse provides a common interf
       
       Integrate ToolUniverse with Claude, ChatGPT, Gemini, or other AI agents for interactive research.
 
+   .. grid-item-card:: Writing code?
+      :link: guide/python_guide
+      :link-type: doc
+      :class-card: choice-card python-card
+      :shadow: lg
+      
+      **Choose Python Developer**
+      
+      Use ToolUniverse's Python API directly in your code, Jupyter notebooks, or custom applications.
+
 What Can You Do?
 ----------------
 
@@ -69,7 +69,7 @@ What Can You Do?
 .. grid:: 1 1 2 2
    :gutter: 3
 
-   .. grid-item-card:: 🔬 Research Skills
+   .. grid-item-card:: Research Skills
       :link: guide/skills_showcase
       :link-type: doc
       :shadow: md
@@ -81,7 +81,7 @@ What Can You Do?
       
       :bdg-info:`15 skills available`
 
-   .. grid-item-card:: 🛠️ Development Skills
+   .. grid-item-card:: Development Skills
       :link: guide/skills_showcase
       :link-type: doc
       :shadow: md
@@ -93,7 +93,7 @@ What Can You Do?
       
       :bdg-info:`6 skills available`
 
-   .. grid-item-card:: ⚙️ Setup & Configuration
+   .. grid-item-card:: Setup & Configuration
       :link: guide/skills_showcase
       :link-type: doc
       :shadow: md
@@ -105,7 +105,7 @@ What Can You Do?
       
       :bdg-info:`1 skill available`
 
-   .. grid-item-card:: ✨ General Purpose
+   .. grid-item-card:: General Purpose
       :link: guide/skills_showcase
       :link-type: doc
       :shadow: md
@@ -122,23 +122,15 @@ What Can You Do?
    :shadow:
    :expand:
 
-   ✨ **View All Skills**: Browse complete catalog with detailed descriptions and usage guides
+   View All Skills: Browse complete catalog with detailed descriptions and usage guides
 
-🌍 Explore More
----------------
+Explore More
+------------
 
-.. grid:: 1 1 2 3
+.. grid:: 1 1 2 2
    :gutter: 3
 
-   .. grid-item-card:: 📖 Complete Guide
-      :link: guide/index
-      :link-type: doc
-      :shadow: md
-      :class-card: hover-lift
-      
-      Comprehensive feature documentation
-
-   .. grid-item-card:: 🔧 Browse 1000+ Tools
+   .. grid-item-card:: Browse 1000+ Tools
       :link: tools/tools_config_index
       :link-type: doc
       :shadow: md
@@ -146,7 +138,7 @@ What Can You Do?
       
       Complete tool catalog with examples
 
-   .. grid-item-card:: ✨ AI Agent Skills
+   .. grid-item-card:: AI Agent Skills
       :link: guide/skills_showcase
       :link-type: doc
       :shadow: md
@@ -154,31 +146,7 @@ What Can You Do?
       
       Expert research workflows for AI agents
 
-   .. grid-item-card:: 🔗 AI-Tool Protocol
-      :link: guide/interaction_protocol
-      :link-type: doc
-      :shadow: md
-      :class-card: hover-lift
-      
-      Standardized AI-tool communication
-
-   .. grid-item-card:: 🔍 Tool Discovery
-      :link: guide/finding_tools
-      :link-type: doc
-      :shadow: md
-      :class-card: hover-lift
-      
-      Find tools by keyword or semantic search
-
-   .. grid-item-card:: 🔗 Tool Composition
-      :link: guide/tool_composition
-      :link-type: doc
-      :shadow: md
-      :class-card: hover-lift
-      
-      Chain tools into complex workflows
-
-   .. grid-item-card:: 📦 Expand ToolUniverse
+   .. grid-item-card:: Expand ToolUniverse
       :link: expand_tooluniverse/index
       :link-type: doc
       :shadow: md
@@ -186,23 +154,7 @@ What Can You Do?
       
       Add custom tools and APIs
 
-   .. grid-item-card:: 🌐 Deployment Options
-      :link: guide/building_ai_scientists/mcp_support
-      :link-type: doc
-      :shadow: md
-      :class-card: hover-lift
-      
-      Python API, MCP server, HTTP API
-
-   .. grid-item-card:: 🔌 API Reference
-      :link: api/modules
-      :link-type: doc
-      :shadow: md
-      :class-card: hover-lift
-      
-      Python API documentation
-
-   .. grid-item-card:: ❓ Troubleshooting
+   .. grid-item-card:: Troubleshooting
       :link: help/troubleshooting
       :link-type: doc
       :shadow: md
@@ -210,27 +162,27 @@ What Can You Do?
       
       Fix common issues
 
-🌍 Community & Support
-----------------------
+Community & Support
+-------------------
 
 .. grid:: 1 1 3 3
    :gutter: 3
 
-   .. grid-item-card:: 💬 Join Slack
+   .. grid-item-card:: Join Slack
       :link: https://join.slack.com/t/tooluniversehq/shared_invite/zt-3dic3eoio-5xxoJch7TLNibNQn5_AREQ
       :class-card: hover-lift
       :shadow: md
       
       Get help and connect with community
 
-   .. grid-item-card:: 🐛 Report Issues
+   .. grid-item-card:: Report Issues
       :link: https://github.com/mims-harvard/ToolUniverse/issues
       :class-card: hover-lift
       :shadow: md
       
       Bug reports and feature requests
 
-   .. grid-item-card:: 🌐 Visit Website
+   .. grid-item-card:: Visit Website
       :link: https://aiscientist.tools
       :class-card: hover-lift
       :shadow: md
@@ -242,12 +194,12 @@ What Can You Do?
    :outline:
    :expand:
 
-   📚 **Browse All Documentation** - Complete sitemap
+   Browse All Documentation - Complete sitemap
 
 .. toctree::
    :maxdepth: 3
    :hidden:
-   :caption: 🚀 Get Started
+   :caption: Get Started
 
    guide/python_guide
    guide/building_ai_scientists/index
@@ -257,43 +209,21 @@ What Can You Do?
 .. toctree::
    :maxdepth: 3
    :hidden:
-   :caption: 💡 Tutorials & Advanced
+   :caption: Tutorials
 
-   guide/index
    guide/agentic_tools_tutorial
    guide/literature_search_tools_tutorial
-   guide/literature_search_web_ui_tutorial
    guide/clinical_guidelines_tools
-   guide/euhealth_tools_tutorial
    guide/scientific_workflows
-   guide/expert_feedback
    guide/make_your_data_agent_searchable
-   guide/visualization_tutorial
-
    guide/hooks/index
    guide/cache_system
-   guide/logging
-   guide/openrouter_support
-   guide/streaming_tools
    guide/tools
-   guide/vllm_support
 
 .. toctree::
    :maxdepth: 3
    :hidden:
-   :caption: 🔨 Expand ToolUniverse
-
-   expand_tooluniverse/index
-   expand_tooluniverse/quick_start
-   expand_tooluniverse/local_tools/index
-   expand_tooluniverse/remote_tools/index
-   expand_tooluniverse/contributing/index
-   expand_tooluniverse/architecture
-
-.. toctree::
-   :maxdepth: 3
-   :hidden:
-   :caption: 🔧 Tools Catalog
+   :caption: Tools Catalog
 
    tools/tools_config_index
    tools/remote_tools
@@ -301,23 +231,22 @@ What Can You Do?
 .. toctree::
    :maxdepth: 3
    :hidden:
-   :caption: 🔌 API Reference
+   :caption: Expand ToolUniverse
 
-   api/modules
+   expand_tooluniverse/index
 
 .. toctree::
    :maxdepth: 3
    :hidden:
-   :caption: ❓ Help & Reference
+   :caption: Help & Reference
 
+   api/modules
    reference/cli_tools
    reference/environment_variables
    reference/glossary
    reference/data_sources
    help/index
-   expand_tooluniverse/reference/index
    about/index
-   help/wechat_community
 
 
 

@@ -14,7 +14,7 @@ The ``load_tools()`` method is the primary way to load tools when using ToolUniv
    **For complete Python API documentation**, see :doc:`../api/modules` for the full API reference.
 
 .. autofunction:: tooluniverse.execute_function.ToolUniverse.load_tools
-   :noindex:
+ :noindex:
 
 Basic Usage
 ~~~~~~~~~~~
@@ -328,7 +328,7 @@ Available Hook Types
 For detailed hook configuration, see :doc:`hooks/index`.
 
 
-🛠️ Practical Examples
+️ Practical Examples
 ----------------------
 
 Research Workflow Setup
@@ -378,7 +378,7 @@ Setting up for scientific research:
        --name "Drug Discovery Tools with File Archiving"
 
 
-🗂️ File Formats
+️ File Formats
 ----------------
 
 Tool Names File Format

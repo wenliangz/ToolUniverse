@@ -454,4 +454,4 @@ Contributors are recognized in:
 - Documentation acknowledgments
 - Annual contributor highlights
 
-Thank you for contributing to ToolUniverse! 🧬🔬
+Thank you for contributing to ToolUniverse! 

@@ -13,7 +13,7 @@ About ToolUniverse
    changelog
    faq
 
-📋 Project Information
+ Project Information
 -----------------------
 
 **Version**: 0.3.0
@@ -24,7 +24,7 @@ About ToolUniverse
 
 **Documentation**: You're reading it!
 
-🎯 Project Goals
+ Project Goals
 ----------------
 
 ToolUniverse aims to:
@@ -34,25 +34,25 @@ ToolUniverse aims to:
 * **Accelerate discovery** - Reduce time from question to insight
 * **Foster collaboration** - Community-driven tool development
 
-👥 Community
+ Community
 ------------
 
 * **Contributors**: Scientists, developers, and researchers worldwide
 * **Maintainers**: MIMS Lab at Harvard Medical School
 * **Users**: Research institutions, pharmaceutical companies, academic labs
 
-📈 Development
+ Development
 --------------
 
 * :doc:`contributing` - How to contribute code, tools, and documentation
 * :doc:`deployment` - Production deployment Tutorial
 
-📄 Legal
+ Legal
 --------
 
 * :doc:`license` - MIT License terms and data source licenses
 
-🙏 Acknowledgments
+ Acknowledgments
 ------------------
 
 ToolUniverse is built on the work of many scientific databases and APIs:

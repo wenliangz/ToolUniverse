@@ -6,7 +6,7 @@ This page contains detailed answers to frequently asked questions about ToolUniv
 .. tip::
    **Need a quick answer?**
    
-   For brief answers to the most common questions, see :doc:`../faq`. This page provides comprehensive information with detailed explanations, troubleshooting tips, and advanced topics.
+   For brief answers to the most common questions, see :doc:`faq`. This page provides comprehensive information with detailed explanations, troubleshooting tips, and advanced topics.
 
 General Questions
 -----------------
@@ -254,7 +254,7 @@ How do I contribute?
 3. Add your changes with tests
 4. Submit a pull request
 
-See our :doc:`about/contributing` Tutorial for detailed instructions.
+See our :doc:`../about/contributing` Tutorial for detailed instructions.
 
 Performance
 -----------

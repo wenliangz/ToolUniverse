@@ -129,11 +129,11 @@ Next Steps
 
 Ready to dive deeper? Choose your focus:
 
-* 🏗️ **Architecture**: :doc:`architecture` - Understand system design
-* ⚖️ **Comparison**: Review the tool type comparison table in :doc:`../contributing/index`
-* 🏠 **Local Tools**: :doc:`../local_tools/index` - Learn local tool development
-* 🔗 **Remote Tools**: :doc:`../remote_tools/index` - Learn remote tool integration
-* 🎁 **Contributing**: :doc:`../contributing/index` - Submit tools to ToolUniverse
+* ️ **Architecture**: :doc:`architecture` - Understand system design
+* ️ **Comparison**: Review the tool type comparison table in :doc:`../contributing/index`
+* **Local Tools**: :doc:`../local_tools/index` - Learn local tool development
+* **Remote Tools**: :doc:`../remote_tools/index` - Learn remote tool integration
+* **Contributing**: :doc:`../contributing/index` - Submit tools to ToolUniverse
 
 .. tip::
    **Reference First**: Understanding the architecture and differences between tool types will help you make better decisions about which approach to use for your specific needs.

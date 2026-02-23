@@ -55,36 +55,28 @@ html_theme_options = {
     # Navigation
     "nav_links": [
         {
-            "title": "🏠 Home",
+            "title": "aiscientist.tools",
+            "url": "https://aiscientist.tools",
+        },
+        {
+            "title": "Home",
             "url": "index",
         },
         {
-            "title": "💻 Python",
-            "url": "guide/python_guide",
-        },
-        {
-            "title": "📖 Tutorials",
-            "url": "guide/index",
-        },
-        {
-            "title": "🤖 AI Agents",
+            "title": "AI Agents",
             "url": "guide/building_ai_scientists/index",
         },
         {
-            "title": "🔧 Tools",
+            "title": "Python",
+            "url": "guide/python_guide",
+        },
+        {
+            "title": "Tutorials",
+            "url": "guide/index",
+        },
+        {
+            "title": "Tools",
             "url": "tools/tools_config_index",
-        },
-        {
-            "title": "🎯 Contribution",
-            "url": "expand_tooluniverse/index",
-        },
-        {
-            "title": "📚 API",
-            "url": "api/modules",
-        },
-        {
-            "title": "🔑 API Keys",
-            "url": "guide/api_keys",
         },
     ],
     

@@ -1,23 +1,27 @@
-Choose AI Agent Platform
-==============================
+Set Up ToolUniverse
+===================
 
-**Connect ToolUniverse to your favorite AI agent**
+Open your AI agent and run this single prompt to get started:
 
-Select your platform to get started with step-by-step setup instructions:
+.. code-block:: text
 
-Platforms
----------
+   Read https://aiscientist.tools/setup.md and set up ToolUniverse for me.
+
+Your agent will walk you through MCP configuration, API keys, and validation step by step.
+
+Choose your platform
+--------------------
 
 .. grid:: 1 1 2 3
    :gutter: 3
    :class-container: platform-grid
 
-   .. grid-item-card:: 
+   .. grid-item-card::
       :link: claude_desktop
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **Claude Desktop**
       ^^^
       Desktop app with native MCP integration
@@ -27,17 +31,17 @@ Platforms
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **Claude Code**
       ^^^
-      Code editor for AI scientist development
+      Terminal-based AI coding agent
 
    .. grid-item-card::
       :link: cursor
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **Cursor**
       ^^^
       AI-first code editor with MCP support
@@ -47,7 +51,7 @@ Platforms
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **Windsurf**
       ^^^
       Agentic IDE with autonomous coding agents
@@ -57,7 +61,7 @@ Platforms
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **Antigravity**
       ^^^
       Google's free agentic IDE with parallel agents
@@ -67,7 +71,7 @@ Platforms
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **Cline**
       ^^^
       VS Code extension with MCP integration
@@ -77,7 +81,7 @@ Platforms
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **Trae**
       ^^^
       AI coding assistant with MCP support
@@ -87,7 +91,7 @@ Platforms
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **OpenCode**
       ^^^
       Open-source AI coding platform
@@ -97,7 +101,7 @@ Platforms
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **Gemini CLI**
       ^^^
       Command-line interface with Google Gemini
@@ -107,7 +111,7 @@ Platforms
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **Qwen Code**
       ^^^
       Code editor for AI scientist workflows
@@ -117,7 +121,7 @@ Platforms
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **Codex CLI**
       ^^^
       Terminal-based interface with OpenAI Codex
@@ -127,10 +131,40 @@ Platforms
       :link-type: doc
       :class-card: platform-card hover-lift
       :shadow: md
-      
+
       **ChatGPT API**
       ^^^
       API for programmatic research automation
+
+MCP configuration
+-----------------
+
+All platforms use the same MCP config snippet:
+
+.. code-block:: json
+
+   {
+     "mcpServers": {
+       "tooluniverse": {
+         "command": "uvx",
+         "args": ["--refresh", "tooluniverse"],
+         "env": {"PYTHONIOENCODING": "utf-8"}
+       }
+     }
+   }
+
+For advanced MCP options, see :doc:`mcp_support`.
+
+Agent skills
+------------
+
+Skills are pre-built research workflows that guide your agent through complex tasks. Install all skills with one command:
+
+.. code-block:: bash
+
+   npx skills add mims-harvard/ToolUniverse
+
+Then ask your agent: *"research the drug metformin"*, *"find targets for Alzheimer's disease"*, or *"analyze protein structure for EGFR"*. See the full :doc:`../skills_showcase`.
 
 .. toctree::
    :maxdepth: 1
@@ -149,99 +183,6 @@ Platforms
    qwen_code
    codex_cli
    chatgpt_api
-
-.. tip:: 🚀 **Instant guided setup — works with any agent, no pre-installation needed**
-
-   Open your AI agent and paste this single message:
-
-   .. code-block:: text
-
-      Please read https://raw.githubusercontent.com/mims-harvard/ToolUniverse/main/skills/setup-tooluniverse/SKILL.md and follow it to help me set up ToolUniverse.
-
-   Your agent will fetch the interactive setup guide from GitHub and walk you through MCP configuration, API keys, and validation step by step — no setup required beforehand.
-
-   Or, install skills first with ``npx skills add mims-harvard/ToolUniverse``, then ask your agent **"setup tooluniverse"**.
-
-Common Setup Steps
-------------------
-
-All platforms follow this general pattern:
-
-.. card:: Step 1: Add MCP Configuration
-   :class-card: step-card
-
-   Add ToolUniverse to your MCP config file (location varies by platform):
-
-   .. code-block:: json
-
-      {
-        "mcpServers": {
-          "tooluniverse": {
-            "command": "uvx",
-            "args": ["--refresh", "tooluniverse"],
-            "env": {"PYTHONIOENCODING": "utf-8"}
-          }
-        }
-      }
-
-.. card:: Step 2: Install Agent Skills
-   :class-card: step-card
-
-   Install ToolUniverse skills for guided workflows:
-
-   .. code-block:: bash
-
-      npx skills add mims-harvard/ToolUniverse
-
-.. card:: Step 3: Verify MCP Connection
-   :class-card: step-card
-
-   Check if the MCP connector is working by asking your AI agent:
-
-   .. code-block:: text
-
-      "List available tools from ToolUniverse"
-
-   Or use the setup skill for interactive verification:
-
-   .. code-block:: text
-
-      "setup tooluniverse"
-
-.. important:: 🔑 **Configure API Keys for Full Capabilities**
-   
-   Many tools require API keys to function. Set up your API keys to unlock the full power of ToolUniverse:
-   
-   .. button-ref:: ../api_keys
-      :color: primary
-      :shadow:
-   
-      🔐 **API Keys Setup Guide**: Configure access to scientific databases and services
-
-Getting Help
-------------
-
-
-- **Setup issues?** Check the :doc:`../../help/troubleshooting` guide
-- **Questions?** Join our `Slack community <https://join.slack.com/t/tooluniversehq/shared_invite/zt-3dic3eoio-5xxoJch7TLNibNQn5_AREQ>`_
-- **Bug reports?** `Create an issue <https://github.com/mims-harvard/ToolUniverse/issues>`_
-
-Quick Links
------------
-
-.. button-ref:: ../python_guide
-   :color: secondary
-   :shadow:
-   :expand:
-
-   🐍 **Coding Agent?** Use ToolUniverse directly with Python API
-
-.. button-ref:: ../../index
-   :color: info
-   :shadow:
-   :expand:
-
-   🏠 **Back to Home**: Return to main documentation
 
 .. toctree::
    :maxdepth: 1

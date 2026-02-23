@@ -19,12 +19,12 @@ Optionally, share your collection and tool definition on **Hugging Face** so oth
 What you’ll do
 --------------
 
-1. Install ToolUniverse  
-2. Choose an embedding service (OpenAI, Azure, Hugging Face, or local)  
-3. Build your **collection** — your searchable library  
+1. Install ToolUniverse 
+2. Choose an embedding service (OpenAI, Azure, Hugging Face, or local) 
+3. Build your **collection** — your searchable library 
 4. Create an **agent tool JSON** that points to it
 5. Install your tool so ToolUniverse/Codex auto-detects it
-6. (Optional) Share it via Hugging Face for others to use  
+6. (Optional) Share it via Hugging Face for others to use 
 
 ---
 
@@ -118,22 +118,22 @@ All you need is either a **folder of text files** or a **JSON list of documents*
 What goes in `./cardiology_data`:
 * **Supported:** ``.txt`` and ``.md`` (your raw data files)
 
-Each file in  `./cardiology_data` automatically gets converted into a document with the following information:
-* ``doc_key`` = relative file path (e.g., ``biology/mitochondria.md``)  
-* ``text`` = file contents  
-* Basic metadata (title, path, source) which is auto-filled  
+Each file in `./cardiology_data` automatically gets converted into a document with the following information:
+* ``doc_key`` = relative file path (e.g., ``biology/mitochondria.md``) 
+* ``text`` = file contents 
+* Basic metadata (title, path, source) which is auto-filled 
 
 **Example:**
 .. code-block:: text
 
 cardiology_data/
-├── ekg_measurements.txt
-├── guidelines/
-│   ├── arrhythmia_classification.md
-│   └── cardiac_physiology.md
-└── case_studies/
-    ├── acute_mi_case.md
-    └── heart_failure_case.md
+ ekg_measurements.txt
+ guidelines/
+ arrhythmia_classification.md
+ cardiac_physiology.md
+ case_studies/
+ acute_mi_case.md
+ heart_failure_case.md
 
 **Result of running QuickBuild ( * Collection name: ``cardiology_tutorial`` )**
 
@@ -281,13 +281,13 @@ How it works
 
 * ToolUniverse has a built-in **search tool** (`EmbeddingCollectionSearchTool`) that queries the agent-searchable dataset you’ve built from your raw data. `
 * Your JSON simply tells ToolUniverse **which collection** to open and **which search options it supports**:
-      - the user’s search text (``query``),
-      - search type (``method``: keyword/embedding/hybrid),
-      - number of results (``top_k``),
-      - You can optionally control the hybrid mix with alpha (``alpha``).
+ - the user’s search text (``query``),
+ - search type (``method``: keyword/embedding/hybrid),
+ - number of results (``top_k``),
+ - You can optionally control the hybrid mix with alpha (``alpha``).
 
 ToolUniverse automatically resolves paths in ``<user_cache_dir>/embeddings/``.
-* Agents can now call ``cardiology_expert_search`` immediately after loading your JSON — no local setup needed.  
+* Agents can now call ``cardiology_expert_search`` immediately after loading your JSON — no local setup needed. 
 
 ---
 
@@ -487,29 +487,29 @@ Mini FAQ
 
 - **What’s “hybrid” search?** A smart mix of exact words + meaning. Start here.
 
-- **Do I need to set an embedding dimension?** No — it’s detected automatically.  
+- **Do I need to set an embedding dimension?** No — it’s detected automatically. 
 
 - **Changed models?** Rebuild; dimensions are auto-handled. 
 
-- **Re-running build?** Safe. Duplicates (same ``doc_key``) are ignored; new text is added.  
+- **Re-running build?** Safe. Duplicates (same ``doc_key``) are ignored; new text is added. 
 
-- **“No results”?** Try ``--method keyword`` or confirm the ``--collection`` name.  
+- **“No results”?** Try ``--method keyword`` or confirm the ``--collection`` name. 
 
-- **Where are my searchable datasets stored locally?** ``<user_cache_dir>/embeddings/``. Examples:  
-  - macOS → ``~/Library/Caches/ToolUniverse``  
-  - Linux → ``~/.cache/tooluniverse``  
-  - Windows → ``%LOCALAPPDATA%\\ToolUniverse``  
+- **Where are my searchable datasets stored locally?** ``<user_cache_dir>/embeddings/``. Examples: 
+ - macOS → ``~/Library/Caches/ToolUniverse`` 
+ - Linux → ``~/.cache/tooluniverse`` 
+ - Windows → ``%LOCALAPPDATA%\\ToolUniverse`` 
 
-- **Where do my tools live?**  
-  ``~/.tooluniverse/data/user_tools/`` (auto-loaded)
-  
-- **Where does my data upload?** ``tu-datastore sync-hf upload`` targets your **own** HF account by default (based on your token).  
+- **Where do my tools live?** 
+ ``~/.tooluniverse/data/user_tools/`` (auto-loaded)
+ 
+- **Where does my data upload?** ``tu-datastore sync-hf upload`` targets your **own** HF account by default (based on your token). 
 
 - **What is the`EmbeddingCollectionSearchTool`?**
-  -`EmbeddingCollectionSearchTool` is a **real ToolUniverse tool** (registered in code). Check ``src/tooluniverse/database_setup/generic_embedding_search_tool.py`` for details.  
-  - We don’t ship a pre-bound JSON for it because the collection name is yours.
-  - Use the example JSON under ``docs/tools/``, set ``"fields.collection"`` to your collection (e.g., ``"cardiology_tutorial"``), and load it
-  - If you prefer not to create a JSON, you can also instantiate the tool directly from Python and pass the collection name via ``fields``
+ -`EmbeddingCollectionSearchTool` is a **real ToolUniverse tool** (registered in code). Check ``src/tooluniverse/database_setup/generic_embedding_search_tool.py`` for details. 
+ - We don’t ship a pre-bound JSON for it because the collection name is yours.
+ - Use the example JSON under ``docs/tools/``, set ``"fields.collection"`` to your collection (e.g., ``"cardiology_tutorial"``), and load it
+ - If you prefer not to create a JSON, you can also instantiate the tool directly from Python and pass the collection name via ``fields``
 
 - **Can I upload my tool with the datastore?** Yes, pass one or more files via ``--tool-json`` during ``sync-hf upload``; they’re stored at the dataset root.
 
@@ -517,10 +517,10 @@ Mini FAQ
 
 - **Is upload private by default?** Yes auto upload **private** datasets unless you opt out (CLI: ``--no-private``; tool: set ``"private": false``).
 
-- **Do I have to pass --db to search/build?**  
-  - No — both commands write and read from your cache automatically.  
-  - Use `--db` only if you want a **custom output path** (for example, a shared directory).  
-  - When using the **JSON tool** or agents, no paths are ever needed — everything resolves automatically from the collection name.
+- **Do I have to pass --db to search/build?** 
+ - No — both commands write and read from your cache automatically. 
+ - Use `--db` only if you want a **custom output path** (for example, a shared directory). 
+ - When using the **JSON tool** or agents, no paths are ever needed — everything resolves automatically from the collection name.
 
 - **When building my custom datastore what if I want to use different provider(s) and/or model(s) for my embeddings?** You can use a different provider/model when building your searchable datastore like we do in the example below — just make sure that if you want to keep the initial provider/model based datastore, you give this new build's collection a new name or else it will override the initial build.
 
@@ -539,7 +539,7 @@ Glossary
 - **doc_key** — unique ID per document
 - **text** — the searchable content.
 - **metadata** — optional tags or annotations.
-- **FAISS** — vector index used for "search by meaning".   You don't need to configure its dimensions—**detected automatically**.
+- **FAISS** — vector index used for "search by meaning". You don't need to configure its dimensions—**detected automatically**.
 - **tu-datastore** — CLI for building, searching, and syncing collections.
 
 ---
@@ -547,16 +547,16 @@ Glossary
 Deeper Reference
 ----------------
 
-- CLI orchestration – ``src/tooluniverse/database_setup/cli.py``  
-- Content store / keyword search – ``src/tooluniverse/database_setup/sqlite_store.py``  
-- Vector index (FAISS) – ``src/tooluniverse/database_setup/vector_store.py``  
-- Embedding providers – ``src/tooluniverse/database_setup/embedder.py``  
-- Hybrid retrieval – ``src/tooluniverse/database_setup/search.py``  
-- Build/search pipeline – ``src/tooluniverse/database_setup/pipeline.py``  
-- HF upload/download helpers – ``src/tooluniverse/database_setup/hf/sync_hf.py``  
-- Programmatic build/sync tools – ``src/tooluniverse/database_setup/embedding_database.py`` / ``embedding_sync.py``  (Check these files for support on using `build`, `sync-hf` as first-class ToolUniverse tools, so you can call them programmatically in CI, notebooks, or an agent if you prefer.)
-- Agent search tool – ``src/tooluniverse/database_setup/generic_embedding_search_tool.py``  
-- Example tool JSON – ``docs/examples/make_your_agent_searchable_example/make_your_agent_searchable_example_JSON.json``  
+- CLI orchestration – ``src/tooluniverse/database_setup/cli.py`` 
+- Content store / keyword search – ``src/tooluniverse/database_setup/sqlite_store.py`` 
+- Vector index (FAISS) – ``src/tooluniverse/database_setup/vector_store.py`` 
+- Embedding providers – ``src/tooluniverse/database_setup/embedder.py`` 
+- Hybrid retrieval – ``src/tooluniverse/database_setup/search.py`` 
+- Build/search pipeline – ``src/tooluniverse/database_setup/pipeline.py`` 
+- HF upload/download helpers – ``src/tooluniverse/database_setup/hf/sync_hf.py`` 
+- Programmatic build/sync tools – ``src/tooluniverse/database_setup/embedding_database.py`` / ``embedding_sync.py`` (Check these files for support on using `build`, `sync-hf` as first-class ToolUniverse tools, so you can call them programmatically in CI, notebooks, or an agent if you prefer.)
+- Agent search tool – ``src/tooluniverse/database_setup/generic_embedding_search_tool.py`` 
+- Example tool JSON – ``docs/examples/make_your_agent_searchable_example/make_your_agent_searchable_example_JSON.json`` 
 
 **Developer note: database_setup tests**
 

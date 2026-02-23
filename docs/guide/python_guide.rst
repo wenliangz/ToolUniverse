@@ -41,9 +41,9 @@ Choose your preferred installation method:
          cd ToolUniverse
          uv sync  # or: pip install -e .[dev]
 
-.. tip:: 🎯 **Pro Tip**
-   
-   Use ``uv`` for faster installations and better dependency management. Install it with: ``curl -LsSf https://astral.sh/uv/install.sh | sh``
+.. tip:: **Pro Tip**
+ 
+ Use ``uv`` for faster installations and better dependency management. Install it with: ``curl -LsSf https://astral.sh/uv/install.sh | sh``
 
 Verify Installation
 ~~~~~~~~~~~~~~~~~~~
@@ -56,9 +56,9 @@ Check that ToolUniverse is installed correctly:
    print(f"ToolUniverse version: {tooluniverse.__version__}")
    print("✅ Installation successful!")
 
-.. success:: ✅ **Installation Complete**
-   
-   You're ready to start using ToolUniverse!
+.. success:: **Installation Complete**
+ 
+ You're ready to start using ToolUniverse!
 
 Quick Start
 -----------
@@ -66,9 +66,9 @@ Quick Start
 Get your first scientific query running in 5 minutes:
 
 .. card:: Step 1: Initialize ToolUniverse
-   :class-card: step-card completed
+ :class-card: step-card completed
 
-   Create a ToolUniverse instance:
+ Create a ToolUniverse instance:
 
    .. code-block:: python
 
@@ -78,9 +78,9 @@ Get your first scientific query running in 5 minutes:
       tu = ToolUniverse()
 
 .. card:: Step 2: Load Tools
-   :class-card: step-card completed
+ :class-card: step-card completed
 
-   Load the scientific tools ecosystem:
+ Load the scientific tools ecosystem:
 
    .. code-block:: python
 
@@ -101,9 +101,9 @@ Get your first scientific query running in 5 minutes:
          tu.load_tools(tool_type=['uniprot', 'ChEMBL', 'opentarget'])
 
 .. card:: Step 3: Execute Your First Tool
-   :class-card: step-card current
+ :class-card: step-card current
 
-   Query scientific databases:
+ Query scientific databases:
 
    .. code-block:: python
 
@@ -115,9 +115,9 @@ Get your first scientific query running in 5 minutes:
 
       print(result)
 
-.. important:: ⚡ **Success!**
-   
-   You now have access to 1000+ scientific tools for drug discovery, protein analysis, literature search, and more!
+.. important:: **Success!**
+ 
+ You now have access to 1000+ scientific tools for drug discovery, protein analysis, literature search, and more!
 
 Tool Execution
 ~~~~~~~~~~~~~~
@@ -173,15 +173,15 @@ Tool Finders
 ToolUniverse has **three ways** to find tools. Don't browse 1000+ tools manually—use Tool Finder!
 
 .. grid:: 1 1 2 2
-   :gutter: 3
+ :gutter: 3
 
-   .. grid-item-card:: 🔍 Keyword Search
-      :class-card: hover-lift
-      :shadow: md
+ .. grid-item-card:: Keyword Search
+ :class-card: hover-lift
+ :shadow: md
 
-      **Fast text matching**
-      
-      Best for: Exact terms you know
+ **Fast text matching**
+ 
+ Best for: Exact terms you know
 
       .. code-block:: python
 
@@ -388,11 +388,11 @@ API Keys
 
 Some tools require API keys for enhanced performance:
 
-.. dropdown:: 🔑 Setting Up API Keys
-   :animate: fade-in-slide-down
-   :color: primary
+.. dropdown:: Setting Up API Keys
+ :animate: fade-in-slide-down
+ :color: primary
 
-   **Environment Variables** (Recommended)
+ **Environment Variables** (Recommended)
 
    .. code-block:: bash
 
@@ -454,53 +454,53 @@ Advanced Features
 -----------------
 
 .. grid:: 1 1 2 2
-   :gutter: 3
+ :gutter: 3
 
-   .. grid-item-card:: 🔗 Tool Composition
-      :link: tool_composition
-      :link-type: doc
-      :class-card: hover-lift
-      :shadow: md
+ .. grid-item-card:: Tool Composition
+ :link: tool_composition
+ :link-type: doc
+ :class-card: hover-lift
+ :shadow: md
 
-      Chain multiple tools into scientific workflows
+ Chain multiple tools into scientific workflows
 
-   .. grid-item-card:: 🎣 Hooks System
-      :link: hooks/index
-      :link-type: doc
-      :class-card: hover-lift
-      :shadow: md
+ .. grid-item-card:: Hooks System
+ :link: hooks/index
+ :link-type: doc
+ :class-card: hover-lift
+ :shadow: md
 
-      Intelligent output processing and summarization
+ Intelligent output processing and summarization
 
-   .. grid-item-card:: 💾 Cache System
-      :link: cache_system
-      :link-type: doc
-      :class-card: hover-lift
-      :shadow: md
+ .. grid-item-card:: Cache System
+ :link: cache_system
+ :link-type: doc
+ :class-card: hover-lift
+ :shadow: md
 
-      Optimize performance with smart caching
+ Optimize performance with smart caching
 
-   .. grid-item-card:: 🌐 HTTP API
-      :link: http_api
-      :link-type: doc
-      :class-card: hover-lift
-      :shadow: md
+ .. grid-item-card:: HTTP API
+ :link: http_api
+ :link-type: doc
+ :class-card: hover-lift
+ :shadow: md
 
-      Deploy ToolUniverse as a remote service
+ Deploy ToolUniverse as a remote service
 
 .. button-ref:: tooluniverse_case_study
-   :color: primary
-   :shadow:
-   :expand:
+ :color: primary
+ :shadow:
+ :expand:
 
-   📚 **Complete Case Study**: Drug discovery workflow with Gemini 2.5 Pro
+ **Complete Case Study**: Drug discovery workflow with Gemini 2.5 Pro
 
 .. button-ref:: ../api/modules
-   :color: secondary
-   :shadow:
-   :expand:
+ :color: secondary
+ :shadow:
+ :expand:
 
-   🔌 **API Reference**: Detailed Python API documentation
+ **API Reference**: Detailed Python API documentation
 
 .. toctree::
    :maxdepth: 2
@@ -521,9 +521,9 @@ Advanced Features
 Need Help?
 ----------
 
-- 📖 **Documentation**: :doc:`../index`
-- 🐛 **Issues**: `GitHub Issues <https://github.com/mims-harvard/ToolUniverse/issues>`_
-- 💬 **Community**: `Slack Channel <https://join.slack.com/t/tooluniversehq/shared_invite/zt-3dic3eoio-5xxoJch7TLNibNQn5_AREQ>`_
-- ❓ **FAQ**: :doc:`../help/faq`
+- **Documentation**: :doc:`../index`
+- **Issues**: `GitHub Issues <https://github.com/mims-harvard/ToolUniverse/issues>`_
+- **Community**: `Slack Channel <https://join.slack.com/t/tooluniversehq/shared_invite/zt-3dic3eoio-5xxoJch7TLNibNQn5_AREQ>`_
+- **FAQ**: :doc:`../help/faq`
 
 

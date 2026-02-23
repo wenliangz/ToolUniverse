@@ -16,9 +16,9 @@ Quick Checklist
 6. **Use with ToolUniverse** via ``run()``
 
 .. note::
-   💡 **Self-Use**: This tutorial covers using tools in your own projects.
+    **Self-Use**: This tutorial covers using tools in your own projects.
    
-   🚀 **Contributing**: If you want to contribute tools to the ToolUniverse repository, see the contributing guide for additional steps.
+    **Contributing**: If you want to contribute tools to the ToolUniverse repository, see the contributing guide for additional steps.
 
 Step 1: Your First Tool (Simplest Example)
 ===========================================
@@ -471,10 +471,10 @@ Next Steps
 
 Now that you can create local tools:
 
-* 🔗 **Remote Tools**: Learn about remote tool integration
-* 🚀 **Contributing**: Submit your tools to ToolUniverse
-* 🤖 **AI Integration**: Connect your tools with AI assistants
-* 🔬 **Scientific Workflows**: Build research pipelines
+* **Remote Tools**: Learn about remote tool integration
+* **Contributing**: Submit your tools to ToolUniverse
+* **AI Integration**: Connect your tools with AI assistants
+* **Scientific Workflows**: Build research pipelines
 
 .. tip::
    **Development tip**: Start simple, test thoroughly, and gradually add complexity. The ToolUniverse community is here to help if you get stuck!

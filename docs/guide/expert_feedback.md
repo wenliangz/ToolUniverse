@@ -6,12 +6,12 @@ The Human Expert Feedback System is a sophisticated **human-in-the-loop** consul
 
 ### Key Capabilities
 
-- **🔄 Real-time Consultation**: Submit questions to human experts and receive responses in real-time
-- **🌐 Modern Web Interface**: Beautiful, responsive dashboard with auto-refresh for expert interactions
-- **⚡ MCP Integration**: Built on Model Context Protocol for seamless ToolUniverse integration
-- **🎨 Priority Management**: Support for normal, high, and urgent priority requests with visual indicators
-- **📱 Multi-Interface**: Web-based and terminal-based interfaces for different user preferences
-- **🔌 Flexible Deployment**: Auto-port discovery and custom configuration options
+- ** Real-time Consultation**: Submit questions to human experts and receive responses in real-time
+- ** Modern Web Interface**: Beautiful, responsive dashboard with auto-refresh for expert interactions
+- ** MCP Integration**: Built on Model Context Protocol for seamless ToolUniverse integration
+- ** Priority Management**: Support for normal, high, and urgent priority requests with visual indicators
+- ** Multi-Interface**: Web-based and terminal-based interfaces for different user preferences
+- ** Flexible Deployment**: Auto-port discovery and custom configuration options
 
 ### Use Cases
 
@@ -112,7 +112,7 @@ tooluniverse-expert-feedback-web
 
 ## Files
 
-- **`tooluniverse-expert-feedback`** -  Router server
+- **`tooluniverse-expert-feedback`** - Router server
 - **`tooluniverse-expert-feedback-web`** - Launcher Router-Expert with auto-detection
 - **`simple_test.py`** - Basic test script
 
@@ -126,4 +126,4 @@ tooluniverse-expert-feedback-web
 
 ---
 
-*🧑‍⚕️ Built for professionals and AI systems*
+*‍️ Built for professionals and AI systems*
