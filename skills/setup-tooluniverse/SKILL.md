@@ -68,6 +68,8 @@ Based on results:
 - **Multiple detected**: Ask which one to configure.
 - **None detected**: Ask Question 1.
 
+⚠️ **If Claude Desktop is detected or selected**: Step 2 for Claude Desktop is completely different from all other clients. Remind yourself of this before starting Step 2 — you must fetch and follow CLAUDE_DESKTOP.md instead of the standard config instructions.
+
 **Question 1 (only if not auto-detected):** Which app are you using?
 Cursor · Claude Desktop · VS Code / Copilot · Windsurf · Claude Code · Gemini CLI · Qwen Code · Codex (OpenAI) · Cline · Trae · Antigravity · OpenCode · Other
 
@@ -136,7 +138,18 @@ Verify: `uvx --version`
 
 ## Step 2: Add ToolUniverse to your MCP config
 
-**Validate uvx tooluniverse works before touching any config:**
+### 🖥️ Claude Desktop users — your path diverges here
+
+**Fetch and read this file now, then follow it entirely for Step 2:**
+https://raw.githubusercontent.com/mims-harvard/ToolUniverse/main/skills/setup-tooluniverse/CLAUDE_DESKTOP.md
+
+CLAUDE_DESKTOP.md contains all Claude Desktop-specific instructions: the PATH fix (Claude Desktop is a GUI app that cannot see `uvx` in your shell PATH), the correct config to write, the one-liner to safely create or merge it, how to restart, and how to verify. **Do not use the standard config below for Claude Desktop — it will silently fail.** After completing CLAUDE_DESKTOP.md, skip to Step 3.
+
+---
+
+### All other clients — standard config
+
+**First, validate uvx tooluniverse works before touching any config:**
 
 ```bash
 uvx tooluniverse --help
@@ -154,20 +167,12 @@ cat <CONFIG_PATH> 2>/dev/null || echo "CONFIG_NOT_FOUND"
 - **Exists, no `tooluniverse` entry**: Merge the `tooluniverse` block into the existing `mcpServers`.
 - **Already has `tooluniverse`**: "ToolUniverse is already configured — I'll skip rewriting to avoid overwriting any API keys." Only overwrite if user asks.
 
----
-
-🛑 **Claude Desktop users — STOP here and read [CLAUDE_DESKTOP.md](https://raw.githubusercontent.com/mims-harvard/ToolUniverse/main/skills/setup-tooluniverse/CLAUDE_DESKTOP.md) before writing any config.**
-
-Claude Desktop is a GUI app that does not inherit your shell's PATH. Pasting the standard `"command": "uvx"` config will silently fail with "ENOENT" unless uvx is in a system path the app can find. [CLAUDE_DESKTOP.md](https://raw.githubusercontent.com/mims-harvard/ToolUniverse/main/skills/setup-tooluniverse/CLAUDE_DESKTOP.md) walks through the PATH fix (Homebrew recommended) and provides the correct config for your setup. Come back here once the PATH issue is resolved.
-
----
-
-**Ask (non-Claude-Desktop users):** "Would you like ToolUniverse to auto-update whenever your app starts? (~1–2s startup overhead, recommended: yes)"
+**Ask:** "Would you like ToolUniverse to auto-update whenever your app starts? (~1–2s startup overhead, recommended: yes)"
 
 - **Yes** → use `["--refresh", "tooluniverse"]` in args
 - **No** → use `["tooluniverse"]`; upgrade manually with `uv cache clean tooluniverse`
 
-**Standard config (Cursor, Windsurf, Claude Code, Gemini CLI, Qwen Code, Trae, Cline — and Claude Desktop once PATH is fixed):**
+**Standard config (Cursor, Windsurf, Claude Code, Gemini CLI, Qwen Code, Trae, Cline):**
 ```json
 {
   "mcpServers": {
@@ -203,7 +208,7 @@ Replace `CONFIG_PATH` with the path for the user's client:
 | Client | Config File |
 |--------|-------------|
 | **Cursor** | `~/.cursor/mcp.json` |
-| **Claude Desktop** | `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) · `%APPDATA%\Claude\...` (Win) · `~/.config/Claude/...` (Linux) |
+| **Claude Desktop** | ← See CLAUDE_DESKTOP.md above |
 | **Claude Code** | `~/.claude.json` or `.mcp.json` |
 | **Windsurf** | `~/.codeium/windsurf/mcp_config.json` |
 | **VS Code (Copilot)** | `.vscode/mcp.json` — uses `"servers"` key, needs `"type": "stdio"` — see [MCP_CONFIG.md](https://raw.githubusercontent.com/mims-harvard/ToolUniverse/main/skills/setup-tooluniverse/MCP_CONFIG.md) |
