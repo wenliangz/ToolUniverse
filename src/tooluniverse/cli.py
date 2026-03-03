@@ -1369,6 +1369,24 @@ def cmd_test(args: argparse.Namespace) -> None:
                         f"return_schema mismatch: {exc.message} (at {list(exc.absolute_path)})"
                     )
 
+        # BUG-25B-01: warn when data is empty on success — test example may be stale
+        warnings = []
+        if (
+            not failures
+            and isinstance(result, dict)
+            and result.get("status") == "success"
+        ):
+            data_val = result.get("data")
+            if (
+                data_val is not None
+                and isinstance(data_val, list)
+                and len(data_val) == 0
+            ):
+                warnings.append(
+                    "data is empty [] — test example may use a stale/invalid ID "
+                    "or the query legitimately returns no results"
+                )
+
         if failures:
             if not use_json:
                 print(f"  {_fail(label)}  [{elapsed:.2f}s]")
@@ -1382,13 +1400,19 @@ def cmd_test(args: argparse.Namespace) -> None:
                         "passed": False,
                         "elapsed": round(elapsed, 3),
                         "failures": failures,
+                        "warnings": warnings,
                         "result": result,
                     }
                 )
         else:
             if not use_json:
                 preview = _json.dumps(result, default=str)[:120]
-                print(f"  {_ok(label)}  [{elapsed:.2f}s]  {preview}…")
+                if warnings:
+                    print(f"  {_warn(label)}  [{elapsed:.2f}s]  {preview}…")
+                    for w in warnings:
+                        print(f"    ! {w}")
+                else:
+                    print(f"  {_ok(label)}  [{elapsed:.2f}s]  {preview}…")
             else:
                 json_test_results.append(
                     {
@@ -1396,6 +1420,7 @@ def cmd_test(args: argparse.Namespace) -> None:
                         "passed": True,
                         "elapsed": round(elapsed, 3),
                         "failures": [],
+                        "warnings": warnings,
                         "result": result,
                     }
                 )

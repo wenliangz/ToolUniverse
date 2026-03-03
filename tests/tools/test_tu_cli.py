@@ -5215,3 +5215,56 @@ class TestRound25Fixes:
         result = tool.handle_error(plain_err)
         assert result is not None
         assert "Something went wrong" in str(result)
+
+
+class TestRound25BFixes:
+    """Tests for BUG-25B-03 (tu test empty data warning) and related."""
+
+    def _make_tu(self, return_value):
+        from unittest.mock import MagicMock
+        tu = MagicMock()
+        tool_def = {"name": "FakeTool", "description": "x", "test_examples": [{"q": "hi"}]}
+        tu.all_tool_dict = {"FakeTool": tool_def}
+        tu.run_one_function = MagicMock(return_value=return_value)
+        return tu
+
+    @pytest.mark.unit
+    def test_cmd_test_warns_when_data_is_empty_list(self, monkeypatch, capsys):
+        """BUG-25B-03: tu test shows a '!' warning when result has data:[] on success."""
+        import tooluniverse.cli as m
+
+        tu = self._make_tu({"status": "success", "data": []})
+        monkeypatch.setattr(m, "_get_tu", lambda: tu)
+        m.cmd_test(argparse.Namespace(tool_name="FakeTool", config=None, args_json=None, json=False))
+        out, _ = capsys.readouterr()
+        # Should show '!' warning (not '✓') and mention the empty data issue
+        assert "!" in out
+        assert "empty" in out.lower()
+
+    @pytest.mark.unit
+    def test_cmd_test_no_warning_when_data_is_nonempty(self, monkeypatch, capsys):
+        """BUG-25B-03: tu test shows '✓' (no warning) when data is non-empty."""
+        import tooluniverse.cli as m
+
+        tu = self._make_tu({"status": "success", "data": [{"id": "X"}]})
+        monkeypatch.setattr(m, "_get_tu", lambda: tu)
+        m.cmd_test(argparse.Namespace(tool_name="FakeTool", config=None, args_json=None, json=False))
+        out, _ = capsys.readouterr()
+        assert "✓" in out
+        assert "empty" not in out.lower()
+
+    @pytest.mark.unit
+    def test_cmd_test_json_includes_warnings_field(self, monkeypatch, capsys):
+        """BUG-25B-03: --json output includes 'warnings' array when data is empty."""
+        import tooluniverse.cli as m
+
+        tu = self._make_tu({"status": "success", "data": []})
+        monkeypatch.setattr(m, "_get_tu", lambda: tu)
+        m.cmd_test(argparse.Namespace(tool_name="FakeTool", config=None, args_json=None, json=True))
+        out, _ = capsys.readouterr()
+        import json as _j
+        d = _j.loads(out)
+        assert "tests" in d
+        first = d["tests"][0]
+        assert "warnings" in first
+        assert len(first["warnings"]) > 0
