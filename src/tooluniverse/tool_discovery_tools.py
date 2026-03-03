@@ -136,9 +136,9 @@ class GrepToolsTool(BaseTool):
                     # Simple case-insensitive text matching
                     matched = pattern.lower() in search_text.lower()
                 elif search_mode == "regex":
-                    # Regex pattern matching
+                    # Regex pattern matching — case-sensitive by default
                     try:
-                        regex = re.compile(pattern, re.IGNORECASE)
+                        regex = re.compile(pattern)
                         matched = regex.search(search_text)
                     except re.error as e:
                         return {"error": f"Invalid regex pattern: {str(e)}"}
@@ -155,16 +155,20 @@ class GrepToolsTool(BaseTool):
                     matching_tools.append(
                         {
                             "name": tool_name,
+                            "category": _get_tool_category(
+                                tool, tool_name, self.tooluniverse
+                            ),
+                            "type": tool.get("type", "Unknown"),
                             "description": tool.get("description", ""),
                         }
                     )
 
         # Apply pagination
         total_matches = len(matching_tools)
-        if offset > 0 or limit:
+        if offset > 0 or limit is not None:
             matching_tools = (
                 matching_tools[offset : offset + limit]
-                if limit
+                if limit is not None
                 else matching_tools[offset:]
             )
 
@@ -172,9 +176,15 @@ class GrepToolsTool(BaseTool):
             "total_matches": total_matches,
             "limit": limit,
             "offset": offset,
-            "has_more": (offset + len(matching_tools)) < total_matches
-            if limit
-            else False,
+            # BUG-R14B-05: limit=0 means "count only, return no items". has_more would be
+            # misleading True here; always False when limit=0 so callers don't loop.
+            "has_more": (
+                False
+                if limit == 0
+                else (
+                    limit is not None and (offset + len(matching_tools)) < total_matches
+                )
+            ),
             "pattern": pattern,
             "field": field,
             "search_mode": search_mode,
@@ -281,26 +291,26 @@ class ListToolsTool(BaseTool):
                                 tools_by_category[category] = []
                             tools_by_category[category].append(tool_name)
 
+                    # BUG-R10A-02: capture true total BEFORE per-category pagination
+                    true_total = sum(len(names) for names in tools_by_category.values())
+
                     # Apply pagination to each category if needed
-                    if limit or offset > 0:
+                    if limit is not None or offset > 0:
                         paginated_by_category = {}
                         for cat, names in tools_by_category.items():
-                            if offset > 0 or limit:
+                            if offset > 0 or limit is not None:
                                 paginated_by_category[cat] = (
                                     names[offset : offset + limit]
-                                    if limit
+                                    if limit is not None
                                     else names[offset:]
                                 )
                             else:
                                 paginated_by_category[cat] = names
                         tools_by_category = paginated_by_category
 
-                    total_count = sum(
-                        len(names) for names in tools_by_category.values()
-                    )
                     return {
                         "tools_by_category": tools_by_category,
-                        "total_tools": total_count,
+                        "total_tools": true_total,
                         "limit": limit,
                         "offset": offset,
                         "has_more": False,  # Pagination per category is complex, set to False for now
@@ -308,10 +318,10 @@ class ListToolsTool(BaseTool):
                 else:
                     # Apply pagination
                     total_count = len(tool_names)
-                    if offset > 0 or limit:
+                    if offset > 0 or limit is not None:
                         tool_names = (
                             tool_names[offset : offset + limit]
-                            if limit
+                            if limit is not None
                             else tool_names[offset:]
                         )
 
@@ -320,9 +330,16 @@ class ListToolsTool(BaseTool):
                         "total_tools": total_count,
                         "limit": limit,
                         "offset": offset,
-                        "has_more": (offset + len(tool_names)) < total_count
-                        if limit
-                        else False,
+                        # BUG-R14B-05: limit=0 is a count-only probe; has_more=False so
+                        # callers don't enter an infinite pagination loop.
+                        "has_more": (
+                            False
+                            if limit == 0
+                            else (
+                                limit is not None
+                                and (offset + len(tool_names)) < total_count
+                            )
+                        ),
                         "tools": tool_names,
                     }
 
@@ -349,7 +366,6 @@ class ListToolsTool(BaseTool):
                     # Group by category
                     tools_by_category = {}
                     for tool_info in tools_info:
-                        # Need to get category from original tool
                         tool_name = tool_info["name"]
                         tool = self.tooluniverse.all_tool_dict.get(tool_name)
                         if tool:
@@ -360,26 +376,26 @@ class ListToolsTool(BaseTool):
                                 tools_by_category[category] = []
                             tools_by_category[category].append(tool_info)
 
+                    # BUG-R10A-02: capture true total BEFORE per-category pagination
+                    true_total = sum(len(infos) for infos in tools_by_category.values())
+
                     # Apply pagination to each category if needed
-                    if limit or offset > 0:
+                    if limit is not None or offset > 0:
                         paginated_by_category = {}
                         for cat, infos in tools_by_category.items():
-                            if offset > 0 or limit:
+                            if offset > 0 or limit is not None:
                                 paginated_by_category[cat] = (
                                     infos[offset : offset + limit]
-                                    if limit
+                                    if limit is not None
                                     else infos[offset:]
                                 )
                             else:
                                 paginated_by_category[cat] = infos
                         tools_by_category = paginated_by_category
 
-                    total_count = sum(
-                        len(infos) for infos in tools_by_category.values()
-                    )
                     return {
                         "tools_by_category": tools_by_category,
-                        "total_tools": total_count,
+                        "total_tools": true_total,
                         "limit": limit,
                         "offset": offset,
                         "has_more": False,  # Pagination per category is complex, set to False for now
@@ -387,10 +403,10 @@ class ListToolsTool(BaseTool):
                 else:
                     # Apply pagination
                     total_count = len(tools_info)
-                    if offset > 0 or limit:
+                    if offset > 0 or limit is not None:
                         tools_info = (
                             tools_info[offset : offset + limit]
-                            if limit
+                            if limit is not None
                             else tools_info[offset:]
                         )
 
@@ -398,9 +414,14 @@ class ListToolsTool(BaseTool):
                         "total_tools": total_count,
                         "limit": limit,
                         "offset": offset,
-                        "has_more": (offset + len(tools_info)) < total_count
-                        if limit
-                        else False,
+                        "has_more": (
+                            total_count > offset
+                            if limit == 0
+                            else (
+                                limit is not None
+                                and (offset + len(tools_info)) < total_count
+                            )
+                        ),
                         "tools": tools_info,
                     }
 
@@ -410,7 +431,12 @@ class ListToolsTool(BaseTool):
                 for tool_name, tool in tools:
                     category = _get_tool_category(tool, tool_name, self.tooluniverse)
                     category_counts[category] = category_counts.get(category, 0) + 1
-                return {"categories": category_counts}
+                # BUG-R12A-09/R12B-04: include summary metadata for machine consumers
+                return {
+                    "total_categories": len(category_counts),
+                    "total_tools": sum(category_counts.values()),
+                    "categories": category_counts,
+                }
 
             elif mode == "by_category":
                 # Return tools grouped by category (names only)
@@ -424,27 +450,32 @@ class ListToolsTool(BaseTool):
                             tools_by_category[category] = []
                         tools_by_category[category].append(tool_name)
 
+                # BUG-R10A-02: capture true total BEFORE per-category pagination
+                true_total = sum(len(names) for names in tools_by_category.values())
+
                 # Apply pagination to each category if needed
-                if limit or offset > 0:
+                if limit is not None or offset > 0:
                     paginated_by_category = {}
                     for cat, names in tools_by_category.items():
-                        if offset > 0 or limit:
+                        if offset > 0 or limit is not None:
                             paginated_by_category[cat] = (
                                 names[offset : offset + limit]
-                                if limit
+                                if limit is not None
                                 else names[offset:]
                             )
                         else:
                             paginated_by_category[cat] = names
                     tools_by_category = paginated_by_category
 
-                total_count = sum(len(names) for names in tools_by_category.values())
                 return {
                     "tools_by_category": tools_by_category,
-                    "total_tools": total_count,
+                    "total_tools": true_total,
+                    # BUG-R12A-02: clarify that limit/offset apply per-category
+                    "per_category_limit": limit,
+                    "per_category_offset": offset,
                     "limit": limit,
                     "offset": offset,
-                    "has_more": False,  # Pagination per category is complex, set to False for now
+                    "has_more": False,  # has_more tracks inter-category pagination (unsupported)
                 }
 
             elif mode == "summary":
@@ -483,26 +514,26 @@ class ListToolsTool(BaseTool):
                                 tools_by_category[category] = []
                             tools_by_category[category].append(tool_info)
 
+                    # BUG-R10A-02: capture true total BEFORE per-category pagination
+                    true_total = sum(len(infos) for infos in tools_by_category.values())
+
                     # Apply pagination to each category if needed
-                    if limit or offset > 0:
+                    if limit is not None or offset > 0:
                         paginated_by_category = {}
                         for cat, infos in tools_by_category.items():
-                            if offset > 0 or limit:
+                            if offset > 0 or limit is not None:
                                 paginated_by_category[cat] = (
                                     infos[offset : offset + limit]
-                                    if limit
+                                    if limit is not None
                                     else infos[offset:]
                                 )
                             else:
                                 paginated_by_category[cat] = infos
                         tools_by_category = paginated_by_category
 
-                    total_count = sum(
-                        len(infos) for infos in tools_by_category.values()
-                    )
                     return {
                         "tools_by_category": tools_by_category,
-                        "total_tools": total_count,
+                        "total_tools": true_total,
                         "limit": limit,
                         "offset": offset,
                         "has_more": False,  # Pagination per category is complex, set to False for now
@@ -510,10 +541,10 @@ class ListToolsTool(BaseTool):
                 else:
                     # Apply pagination
                     total_count = len(tools_info)
-                    if offset > 0 or limit:
+                    if offset > 0 or limit is not None:
                         tools_info = (
                             tools_info[offset : offset + limit]
-                            if limit
+                            if limit is not None
                             else tools_info[offset:]
                         )
 
@@ -521,15 +552,33 @@ class ListToolsTool(BaseTool):
                         "total_tools": total_count,
                         "limit": limit,
                         "offset": offset,
-                        "has_more": (offset + len(tools_info)) < total_count
-                        if limit
-                        else False,
+                        "has_more": (
+                            total_count > offset
+                            if limit == 0
+                            else (
+                                limit is not None
+                                and (offset + len(tools_info)) < total_count
+                            )
+                        ),
                         "tools": tools_info,
                     }
 
             elif mode == "custom":
                 # Return user-specified fields
                 fields = arguments.get("fields", [])
+                # BUG-R12A-01: normalize comma-separated strings like "name,type" → ["name", "type"]
+                if isinstance(fields, str):
+                    fields = [f.strip() for f in fields.split(",") if f.strip()]
+                elif isinstance(fields, list):
+                    normalized = []
+                    for f in fields:
+                        if isinstance(f, str) and "," in f:
+                            normalized.extend(
+                                p.strip() for p in f.split(",") if p.strip()
+                            )
+                        elif isinstance(f, str) and f.strip():
+                            normalized.append(f.strip())
+                    fields = normalized
                 if not fields:
                     return {"error": ("fields parameter is required for mode='custom'")}
 
@@ -549,10 +598,10 @@ class ListToolsTool(BaseTool):
 
                 # Apply pagination
                 total_count = len(tools_info)
-                if offset > 0 or limit:
+                if offset > 0 or limit is not None:
                     tools_info = (
                         tools_info[offset : offset + limit]
-                        if limit
+                        if limit is not None
                         else tools_info[offset:]
                     )
 
@@ -560,9 +609,14 @@ class ListToolsTool(BaseTool):
                     "total_tools": total_count,
                     "limit": limit,
                     "offset": offset,
-                    "has_more": (offset + len(tools_info)) < total_count
-                    if limit
-                    else False,
+                    "has_more": (
+                        total_count > offset
+                        if limit == 0
+                        else (
+                            limit is not None
+                            and (offset + len(tools_info)) < total_count
+                        )
+                    ),
                     "tools": tools_info,
                 }
 
@@ -639,6 +693,9 @@ class GetToolInfoTool(BaseTool):
                         results.append(
                             {
                                 "name": tool_name,
+                                "category": _get_tool_category(
+                                    tool_config, tool_name, self.tooluniverse
+                                ),
                                 "description": tool_config.get("description", ""),
                             }
                         )
