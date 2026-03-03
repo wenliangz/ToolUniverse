@@ -254,16 +254,13 @@ class TestList:
         assert "error" not in d
 
     @pytest.mark.unit
-    def test_list_offset_beyond_end_exits_1(self, monkeypatch, tu, capsys):
-        """Offset beyond total exits 1 (offset-past-end) and still outputs JSON with total_tools."""
+    def test_list_offset_beyond_end_exits_0(self, monkeypatch, tu, capsys):
+        """R21A-06: offset beyond total exits 0 (natural pagination termination, not an error)."""
         from tooluniverse.cli import cmd_list
 
-        with pytest.raises(SystemExit) as exc_info:
-            _run(
-                monkeypatch, cmd_list, _args(mode="names", limit=10, offset=999999, json=True), tu, capsys
-            )
-        assert exc_info.value.code == 1
-        out, _ = capsys.readouterr()
+        out, _ = _run(
+            monkeypatch, cmd_list, _args(mode="names", limit=10, offset=999999, json=True), tu, capsys
+        )
         d = _j(out)
         assert d["tools"] == []
         assert d["has_more"] is False
@@ -2907,14 +2904,15 @@ class TestRunJsonErrorToStdout:
 class TestRound9Fixes:
     """Tests for BUG-R9A-01..05 and BUG-R9B-01..04."""
 
-    # BUG-R9A-01: cmd_list exits 1 when offset is past end
+    # R21A-06: cmd_list now exits 0 when offset is past end (natural pagination termination)
     @pytest.mark.unit
-    def test_cmd_list_offset_past_end_exits_1(self, monkeypatch, tu, capsys):
-        """BUG-R9A-01: tu list --offset 9999999 should exit 1."""
+    def test_cmd_list_offset_past_end_exits_0(self, monkeypatch, tu, capsys):
+        """R21A-06: tu list --offset 9999999 exits 0 (offset-past-end is not an error)."""
         from tooluniverse.cli import cmd_list
-        with pytest.raises(SystemExit) as exc_info:
-            _run(monkeypatch, cmd_list, _args(mode="names", limit=10, offset=999999, json=True), tu, capsys)
-        assert exc_info.value.code == 1
+        out, _ = _run(monkeypatch, cmd_list, _args(mode="names", limit=10, offset=999999, json=True), tu, capsys)
+        d = _j(out)
+        assert d["tools"] == []
+        assert d["has_more"] is False
 
     # BUG-R9A-02: _render_grep distinguishes limit=0 from offset-past-end
     @pytest.mark.unit
@@ -3318,16 +3316,14 @@ class TestRound11Fixes:
         assert d.get("has_more") is True
 
     @pytest.mark.unit
-    def test_list_limit_zero_has_more_true_with_offset_past_end(self, monkeypatch, tu, capsys):
-        """BUG-R11A-02: list --limit 0 --offset beyond total has_more is False."""
+    def test_list_limit_zero_offset_past_end_exits_0(self, monkeypatch, tu, capsys):
+        """R21A-06: list --limit 0 --offset beyond total exits 0 (not an error)."""
         from tooluniverse.cli import cmd_list
-        with pytest.raises(SystemExit):
-            _run(monkeypatch, cmd_list,
-                 _args(mode="names", limit=0, offset=999999, json=True),
-                 tu, capsys)
-        out, _ = capsys.readouterr()
+        out, _ = _run(monkeypatch, cmd_list,
+                      _args(mode="names", limit=0, offset=999999, json=True),
+                      tu, capsys)
         d = _j(out)
-        # offset past end → has_more False even with limit=0
+        # offset past end: limit=0 count-probe signal is False when nothing remains
         assert d.get("has_more") is False
 
     # BUG-R11B-01: info --json always returns {"tools": [...]} envelope
@@ -4198,3 +4194,65 @@ class TestRound21PreFixes:
         result = _render_find(d)
         assert "[1–3]" in result, "First page should show [1-3] range"
         assert "next: --offset 3" in result
+
+
+class TestRound21Fixes:
+    """Tests for R21A bugs fixed before Round 22 agents launched."""
+
+    # R21A-03: next_offset missing from basic/summary/custom modes
+    @pytest.mark.unit
+    def test_list_basic_mode_has_next_offset(self, monkeypatch, tu, capsys):
+        """R21A-03: tu list --mode basic --limit N includes next_offset when has_more=True."""
+        from tooluniverse.cli import cmd_list
+        out, _ = _run(monkeypatch, cmd_list,
+                      _args(mode="basic", limit=5, json=True), tu, capsys)
+        d = _j(out)
+        if d.get("has_more"):
+            expected = d["offset"] + len(d["tools"])
+            assert "next_offset" in d, "basic mode must include next_offset"
+            assert d["next_offset"] == expected
+
+    @pytest.mark.unit
+    def test_list_summary_mode_has_next_offset(self, monkeypatch, tu, capsys):
+        """R21A-03: tu list --mode summary --limit N includes next_offset when has_more=True."""
+        from tooluniverse.cli import cmd_list
+        out, _ = _run(monkeypatch, cmd_list,
+                      _args(mode="summary", limit=5, json=True), tu, capsys)
+        d = _j(out)
+        if d.get("has_more"):
+            expected = d["offset"] + len(d["tools"])
+            assert "next_offset" in d, "summary mode must include next_offset"
+            assert d["next_offset"] == expected
+
+    @pytest.mark.unit
+    def test_list_custom_mode_has_next_offset(self, monkeypatch, tu, capsys):
+        """R21A-03: tu list --mode custom --fields name --limit N includes next_offset."""
+        from tooluniverse.cli import cmd_list
+        out, _ = _run(monkeypatch, cmd_list,
+                      _args(mode="custom", limit=5, fields=["name"], json=True), tu, capsys)
+        d = _j(out)
+        if d.get("has_more"):
+            expected = d["offset"] + len(d["tools"])
+            assert "next_offset" in d, "custom mode must include next_offset"
+            assert d["next_offset"] == expected
+
+    @pytest.mark.unit
+    def test_list_basic_mode_limit_zero_next_offset_none(self, monkeypatch, tu, capsys):
+        """R21A-03: tu list --mode basic --limit 0 → next_offset is None (count probe)."""
+        from tooluniverse.cli import cmd_list
+        out, _ = _run(monkeypatch, cmd_list,
+                      _args(mode="basic", limit=0, json=True), tu, capsys)
+        d = _j(out)
+        assert d.get("next_offset") is None, "limit=0 probe should have next_offset=None"
+
+    # R21A-06: list offset past end now exits 0
+    @pytest.mark.unit
+    def test_list_offset_past_end_exits_0(self, monkeypatch, tu, capsys):
+        """R21A-06: tu list --offset 999999 exits 0 (not an error; natural pagination end)."""
+        from tooluniverse.cli import cmd_list
+        out, _ = _run(monkeypatch, cmd_list,
+                      _args(mode="names", limit=10, offset=999999, json=True), tu, capsys)
+        d = _j(out)
+        assert d["tools"] == []
+        assert d["has_more"] is False
+        assert d["total_tools"] > 0  # total count still accurate

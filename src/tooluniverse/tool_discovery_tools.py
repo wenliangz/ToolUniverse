@@ -422,18 +422,23 @@ class ListToolsTool(BaseTool):
                             else tools_info[offset:]
                         )
 
+                    _has_more_basic = (
+                        total_count > offset
+                        if limit == 0
+                        else (
+                            limit is not None
+                            and (offset + len(tools_info)) < total_count
+                        )
+                    )
                     return {
                         "total_tools": total_count,
                         "limit": limit,
                         "offset": offset,
-                        "has_more": (
-                            total_count > offset
-                            if limit == 0
-                            else (
-                                limit is not None
-                                and (offset + len(tools_info)) < total_count
-                            )
-                        ),
+                        "has_more": _has_more_basic,
+                        # R21A-03: next_offset for pipeline convenience (None at limit=0)
+                        "next_offset": (offset + len(tools_info))
+                        if (_has_more_basic and limit != 0)
+                        else None,
                         "tools": tools_info,
                     }
 
@@ -560,18 +565,23 @@ class ListToolsTool(BaseTool):
                             else tools_info[offset:]
                         )
 
+                    _has_more_summary = (
+                        total_count > offset
+                        if limit == 0
+                        else (
+                            limit is not None
+                            and (offset + len(tools_info)) < total_count
+                        )
+                    )
                     return {
                         "total_tools": total_count,
                         "limit": limit,
                         "offset": offset,
-                        "has_more": (
-                            total_count > offset
-                            if limit == 0
-                            else (
-                                limit is not None
-                                and (offset + len(tools_info)) < total_count
-                            )
-                        ),
+                        "has_more": _has_more_summary,
+                        # R21A-03: next_offset for pipeline convenience (None at limit=0)
+                        "next_offset": (offset + len(tools_info))
+                        if (_has_more_summary and limit != 0)
+                        else None,
                         "tools": tools_info,
                     }
 
@@ -617,18 +627,22 @@ class ListToolsTool(BaseTool):
                         else tools_info[offset:]
                     )
 
+                _has_more_custom = (
+                    total_count > offset
+                    if limit == 0
+                    else (
+                        limit is not None and (offset + len(tools_info)) < total_count
+                    )
+                )
                 return {
                     "total_tools": total_count,
                     "limit": limit,
                     "offset": offset,
-                    "has_more": (
-                        total_count > offset
-                        if limit == 0
-                        else (
-                            limit is not None
-                            and (offset + len(tools_info)) < total_count
-                        )
-                    ),
+                    "has_more": _has_more_custom,
+                    # R21A-03: next_offset for pipeline convenience (None at limit=0)
+                    "next_offset": (offset + len(tools_info))
+                    if (_has_more_custom and limit != 0)
+                    else None,
                     "tools": tools_info,
                 }
 

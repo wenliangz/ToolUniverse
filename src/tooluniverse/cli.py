@@ -686,14 +686,9 @@ def cmd_list(args: argparse.Namespace) -> None:
     if isinstance(result, dict):
         if "error" in result:
             sys.exit(1)
-        # Exit 1 when offset is past end for "tools"-based modes (names/basic/summary/custom).
-        # by_category mode doesn't track pre-pagination total, so skip it there.
-        if "tools_by_category" not in result:
-            tools = result.get("tools", [])
-            total = result.get("total_tools", 0)
-            offset = result.get("offset", 0)
-            if not tools and offset and total:
-                sys.exit(1)
+        # R21A-06: do NOT exit 1 when offset is past end of results. An empty
+        # page at a high offset is normal pagination termination, not an error.
+        # This is consistent with `find` (BUG-R14B-02) and `grep` behavior.
 
 
 def cmd_grep(args: argparse.Namespace) -> None:
