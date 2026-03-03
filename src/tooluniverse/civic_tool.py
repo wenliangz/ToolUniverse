@@ -211,9 +211,13 @@ class CIViCTool(BaseTool):
                 gene_id = self._lookup_gene_id(gene_name)
                 if gene_id is None:
                     return {"error": f"Gene '{gene_name}' not found in CIViC database"}
-                result = self._get_variants_for_gene_id(
-                    gene_id, arguments.get("limit", 200)
-                )
+                # BUG-43B-01: when gene+query combined, always fetch up to 200 variants
+                # before client-side filtering; the user's limit applies to the OUTPUT,
+                # not the pre-filter fetch — otherwise alphabetically early variants may
+                # block clinically important ones (e.g. FLT3 ITD at position >10).
+                user_limit = arguments.get("limit")
+                fetch_limit = 200 if query_term else (user_limit or 200)
+                result = self._get_variants_for_gene_id(gene_id, fetch_limit)
                 # If query also provided, filter returned variants by name client-side
                 if query_term and isinstance(result.get("data"), dict):
                     gene_data = result["data"].get("gene", {})
@@ -222,6 +226,9 @@ class CIViCTool(BaseTool):
                     filtered = [
                         v for v in nodes if q_lower in v.get("name", "").lower()
                     ]
+                    # Truncate to user-requested limit AFTER filtering
+                    if user_limit:
+                        filtered = filtered[:user_limit]
                     gene_data.get("variants", {})["nodes"] = filtered
                     # BUG-43A-04: when gene+query filter returns empty, add a helpful note.
                     # CIViC stores fusions as molecular profiles (not gene variants).

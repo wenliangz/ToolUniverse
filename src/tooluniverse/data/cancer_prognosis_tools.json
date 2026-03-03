@@ -157,7 +157,7 @@
             "integer",
             "null"
           ],
-          "description": "Maximum number of sample records to return (default 500, max 2000)"
+          "description": "Upper bound on sample records to return (default 500, max 2000). Actual count may be lower if some samples lack expression data for the requested gene."
         }
       },
       "required": [
