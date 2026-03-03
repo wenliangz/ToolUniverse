@@ -206,11 +206,12 @@ class CIViCTool(BaseTool):
                     f"use the variant ID to distinguish them."
                 )
             return {
+                "status": "success",
                 "data": data,
                 "metadata": metadata,
             }
         except Exception as e:
-            return {"error": f"CIViC API request failed: {str(e)}"}
+            return {"status": "error", "error": f"CIViC API request failed: {str(e)}"}
 
     def run(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Execute the CIViC GraphQL API call."""
@@ -389,6 +390,7 @@ class CIViCTool(BaseTool):
                 }
 
             return {
+                "status": "success",
                 "data": data.get("data", {}),
                 "metadata": {
                     "source": "CIViC (Clinical Interpretation of Variants in Cancer)",
@@ -398,8 +400,16 @@ class CIViCTool(BaseTool):
             }
 
         except requests.RequestException as e:
-            return {"error": f"CIViC API request failed: {str(e)}", "query": arguments}
+            return {
+                "status": "error",
+                "error": f"CIViC API request failed: {str(e)}",
+                "query": arguments,
+            }
         except ValueError as e:
-            return {"error": str(e), "query": arguments}
+            return {"status": "error", "error": str(e), "query": arguments}
         except Exception as e:
-            return {"error": f"Unexpected error: {str(e)}", "query": arguments}
+            return {
+                "status": "error",
+                "error": f"Unexpected error: {str(e)}",
+                "query": arguments,
+            }

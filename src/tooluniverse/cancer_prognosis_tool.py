@@ -169,6 +169,22 @@ class CancerPrognosisTool(BaseTool):
                 time.sleep(2**attempt)
         return None
 
+    def _get_expression_units(self, profile_id):
+        # type: (str) -> str
+        """BUG-49A-M1: Infer expression data type/units from the cBioPortal profile ID string."""
+        pid = profile_id.lower()
+        if "rna_seq_v2_mrna" in pid:
+            return "RSEM (RNA Seq V2 normalized expected read counts)"
+        if "rna_seq_mrna" in pid:
+            return "RPKM (RNA-seq reads per kilobase per million)"
+        if "mrna_median_all_sample" in pid or "mrna_median" in pid:
+            return "median mRNA expression (microarray or RNA-seq)"
+        if "_zscores" in pid:
+            return "z-scores (relative expression normalized within study)"
+        if "mrna" in pid:
+            return "mRNA expression"
+        return "expression values"
+
     def _get_mrna_profile(self, study_id):
         # type: (str) -> Optional[str]
         """Find the best mRNA expression profile for a study."""
@@ -458,6 +474,32 @@ class CancerPrognosisTool(BaseTool):
             else (sorted_vals[n // 2 - 1] + sorted_vals[n // 2]) / 2
         )
 
+        # BUG-49A-M1: derive expression units from profile_id so users know the scale
+        expression_units = self._get_expression_units(profile_id)
+
+        # BUG-49A-M3: detect patients with multiple samples (primary vs. recurrent aliquots).
+        # TCGA samples are suffixed -01 (primary), -02 (recurrence), etc. Joining on patient_id
+        # downstream will silently double-count these patients in survival analysis.
+        patient_sample_counts: Dict[str, int] = {}
+        for v in values:
+            pid = v.get("patient_id", "")
+            if pid:
+                patient_sample_counts[pid] = patient_sample_counts.get(pid, 0) + 1
+        multi_sample_patients = sorted(
+            p for p, c in patient_sample_counts.items() if c > 1
+        )
+        multi_sample_note = ""
+        if multi_sample_patients:
+            multi_sample_note = (
+                " WARNING: {} patient(s) have multiple samples (e.g., primary + recurrence). "
+                "Joining on patient_id will double-count these patients. "
+                "Affected patients: {}.".format(
+                    len(multi_sample_patients),
+                    ", ".join(multi_sample_patients[:5])
+                    + (" ..." if len(multi_sample_patients) > 5 else ""),
+                )
+            )
+
         return {
             "status": "success",
             "data": {
@@ -465,6 +507,7 @@ class CancerPrognosisTool(BaseTool):
                 "gene": gene,
                 "entrez_gene_id": entrez_id,
                 "profile_id": profile_id,
+                "expression_units": expression_units,
                 "n_samples_with_expression_data": len(values),
                 "n_samples_returned": len(values[:max_samples]),
                 "expression_summary": {
@@ -474,8 +517,8 @@ class CancerPrognosisTool(BaseTool):
                     "max": round(sorted_vals[-1], 4),
                 },
                 "samples": values[:max_samples],
-                "note": "Values are from {} profile. Use with Survival tools for expression-survival analysis.".format(
-                    profile_id
+                "note": "Values are from {} profile ({}). Use with Survival tools for expression-survival analysis.{}".format(
+                    profile_id, expression_units, multi_sample_note
                 ),
             },
         }

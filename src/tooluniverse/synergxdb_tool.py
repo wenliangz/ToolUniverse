@@ -340,11 +340,57 @@ class SYNERGxDBTool(BaseTool):
                 )
             elif drug_id_1 or drug_id_2:
                 found_id = drug_id_1 or drug_id_2
-                msg = (
-                    f"No combination data found for drug ID {found_id} matching the specified "
-                    "filters. Try removing tissue/dataset filters or use SYNERGxDB_list_datasets "
-                    "to see available datasets for this drug."
-                )
+                id_param = "drugId1" if drug_id_1 else "drugId2"
+                # BUG-49A-H2: if a tissue/dataset filter was active, probe what data the drug
+                # actually has — "try removing filters" is misleading if the drug has no data
+                # in any tissue. Show available tissues so the user knows the real situation.
+                if sample or dataset:
+                    probe = self._make_request(
+                        "combos/", {id_param: found_id, "page": 1, "perPage": 20}
+                    )
+                    if probe.get("ok") and probe.get("data"):
+                        probe_data = probe["data"]
+                        tissues = sorted(
+                            {x.get("sample", "") for x in probe_data if x.get("sample")}
+                        )
+                        sources = sorted(
+                            {
+                                x.get("sourceName", "")
+                                for x in probe_data
+                                if x.get("sourceName")
+                            }
+                        )
+                        filter_desc = (
+                            f" (tissue='{sample}')"
+                            if sample
+                            else f" (dataset={dataset!r})"
+                        )
+                        tissue_str = (
+                            ", ".join(f"'{t}'" for t in tissues)
+                            if tissues
+                            else "none found"
+                        )
+                        source_str = ", ".join(sources) if sources else "unknown"
+                        msg = (
+                            f"No combination data found for drug ID {found_id}{filter_desc}. "
+                            f"This drug has no data for the requested filter. "
+                            f"Available tissues in the first 20 records: {tissue_str} "
+                            f"(sources: {source_str}). "
+                            f"Run SYNERGxDB_search_combos with only {id_param}={found_id} "
+                            f"(no tissue/dataset filter) to see all available combinations."
+                        )
+                    else:
+                        msg = (
+                            f"No combination data found for drug ID {found_id} in SYNERGxDB. "
+                            "This drug has no tested combinations in any of the 9 integrated "
+                            "screening studies (NCI-ALMANAC, MERCK, AstraZeneca, etc.)."
+                        )
+                else:
+                    msg = (
+                        f"No combination data found for drug ID {found_id} in SYNERGxDB. "
+                        "This drug may not have any tested combinations in the 9 integrated studies. "
+                        "Use SYNERGxDB_list_datasets to see available data."
+                    )
             else:
                 msg = (
                     "No combination data found for the given parameters. "

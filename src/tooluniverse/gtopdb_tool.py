@@ -1,8 +1,16 @@
+import re
 import requests
 from typing import Any, Dict
 from .base_tool import BaseTool
 from .http_utils import request_with_retry
 from .tool_registry import register_tool
+
+
+def _strip_html(text: Any) -> Any:
+    """Strip HTML tags from a string (BUG-49A-H3: GtoPdb returns raw HTML in some fields)."""
+    if not isinstance(text, str):
+        return text
+    return re.sub(r"<[^>]+>", "", text).strip()
 
 
 @register_tool("GtoPdbRESTTool")
@@ -232,6 +240,18 @@ class GtoPdbRESTTool(BaseTool):
                 }
             data = response.json()
 
+            # BUG-49A-H3: strip raw HTML tags from GtoPdb API fields.
+            # GtoPdb returns HTML-formatted display values in some fields
+            # (e.g., originalAffinity="6.3x10<sup>-6</sup>", ligandName="compound 5 [Smith <i>et al</i>., 2020]").
+            # Strip tags so LLMs and downstream code receive plain text.
+            _HTML_FIELDS = ("originalAffinity", "ligandName", "authors", "name")
+            if isinstance(data, list):
+                for item in data:
+                    if isinstance(item, dict):
+                        for field in _HTML_FIELDS:
+                            if field in item:
+                                item[field] = _strip_html(item[field])
+
             # BUG-38B-02: client-side filter by ligandId when requested
             # (/ligands/{id}/interactions always returns [], so we fetch all and filter)
             ligand_id_filter = getattr(self, "_pending_ligand_id_filter", None)
@@ -316,6 +336,30 @@ class GtoPdbRESTTool(BaseTool):
                         "id": first.get("ligandId"),
                         "name": first.get("ligandName"),
                     }
+                # BUG-49B-002: when no approved drugs are in the returned interactions,
+                # add a coverage note. GtoPdb's kinase inhibitor and enzyme inhibitor
+                # coverage is incomplete — approved drugs like imatinib (ABL1), olaparib
+                # (PARP1), and erlotinib (EGFR) may be absent. Suggest ChEMBL for approved drugs.
+                has_approved = any(
+                    item.get("approved") for item in data if isinstance(item, dict)
+                )
+                if not has_approved and isinstance(data, list) and len(data) > 0:
+                    result["coverage_note"] = (
+                        "None of the returned interactions are for approved drugs. GtoPdb's "
+                        "kinase inhibitor and enzyme inhibitor coverage may be incomplete — "
+                        "approved drugs for this target may not be represented. For a complete "
+                        "list of approved drugs and clinical compounds, use ChEMBL_get_drug_mechanisms "
+                        "or ChEMBL_search_compounds with the target name."
+                    )
+
+            # BUG-49A-M5: for ligand search results, add a hint about getting interaction data.
+            if isinstance(data, list) and data and "/ligands" in url and "?" in url:
+                result["hint"] = (
+                    "To find pharmacological interactions for a specific ligand, call "
+                    "GtoPdb_get_interactions with ligandId=<id>. To find all ligands "
+                    "interacting with a specific target, call GtoPdb_get_interactions with "
+                    "targetId or gene_symbol."
+                )
 
             return result
         except Exception as e:
