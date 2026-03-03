@@ -418,6 +418,7 @@ class GtoPdbRESTTool(BaseTool):
             # BUG-47A-04: increased default from 20 to 50 — interaction-rich targets
             # like EGFR (90 interactions) would only show 22% of data at limit=20.
             limit = arguments.get("limit", arguments.get("max_results", 50))
+            total_available = len(data) if isinstance(data, list) else None
             if isinstance(data, list) and len(data) > limit:
                 data = data[:limit]
 
@@ -427,6 +428,14 @@ class GtoPdbRESTTool(BaseTool):
                 "url": url,
                 "count": len(data) if isinstance(data, list) else 1,
             }
+            # BUG-60A-003: disclose truncation so users know data was cut off
+            if total_available is not None and total_available > len(data):
+                result["total_available"] = total_available
+                result["returned"] = len(data)
+                result["truncation_note"] = (
+                    f"Returned {len(data)} of {total_available} total interactions."
+                    f" Increase limit (e.g., limit={total_available}) to retrieve all."
+                )
 
             # BUG-54B-002: multi-word name search hint when results empty
             name_q = arguments.get("name") or arguments.get("query")

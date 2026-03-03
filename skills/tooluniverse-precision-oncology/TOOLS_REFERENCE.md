@@ -529,6 +529,46 @@ papers = tu.tools.PubMed_search_articles(
 
 ---
 
+## Prognosis & Survival Tools
+
+### CancerPrognosis
+
+| Tool | Purpose | Key Parameters |
+|------|---------|----------------|
+| `CancerPrognosis_get_survival_data` | OS/DFS survival curves for TCGA cancers | `cancer` (TCGA code, e.g. `"BRCA"`), `limit` |
+| `CancerPrognosis_get_gene_expression` | mRNA expression by cancer type | `cancer`, `gene` |
+| `CancerPrognosis_search_studies` | Find non-TCGA studies in cBioPortal | `keyword` |
+
+**Supported TCGA codes** (33 total): ACC, BLCA, BRCA, CESC, CHOL, COAD, DLBC, ESCA, GBM, HNSC, KICH, KIRC, KIRP, LAML, LGG, LIHC, LUAD, LUSC, MESO, OV, PAAD, PCPG, PRAD, READ, SARC, SKCM, STAD, TGCT, THCA, THYM, UCEC, UCS, UVM
+
+**Non-TCGA cancer type routing** — these cancers are NOT in TCGA; use `CancerPrognosis_search_studies`:
+
+| Cancer | Keyword for search_studies | Notes |
+|--------|---------------------------|-------|
+| CLL / Chronic lymphocytic leukemia | `"CLL"` or `"leukemia"` | Most CLL studies are WES-only (no survival/expression data) |
+| SLL | `"CLL"` | Treated as CLL in cBioPortal |
+| Multiple myeloma (MM) | `"myeloma"` | |
+| Follicular lymphoma (FL) | `"follicular"` | |
+| Mantle cell lymphoma (MCL) | `"mantle"` | |
+| Osteosarcoma | `"osteosarcoma"` | |
+| Ewing sarcoma | `"sarcoma"` | |
+| Neuroblastoma | `"neuroblastoma"` | |
+| Medulloblastoma | `"medulloblastoma"` | |
+| Pancreatic ductal adenocarcinoma | `"pancreatic"` | TCGA code is PAAD |
+| AML / Acute myeloid leukemia | `"leukemia"` | TCGA code is LAML |
+| Glioblastoma | `"glioblastoma"` | TCGA code is GBM |
+
+**Workflow for non-TCGA cancers:**
+```
+1. CancerPrognosis_search_studies(keyword="<disease>")
+   → identify study_id (e.g. "msk_impact_2017")
+2. CancerPrognosis_get_survival_data(cancer="<study_id>")
+   → check if OS_MONTHS / DFS_MONTHS fields present
+3. If no survival data: study is mutation-only (WES) — note limitation in report
+```
+
+---
+
 ## Fallback Chain Details
 
 ### Variant Interpretation
@@ -539,6 +579,11 @@ CIViC → COSMIC_get_mutations_by_gene → ClinVar → OncoKB (manual) → PubMe
 ### Somatic Mutation Analysis (NEW)
 ```
 COSMIC_get_mutations_by_gene (somatic) → CIViC (clinical) → ClinVar (germline) → PubMed
+```
+
+### Prognosis / Survival
+```
+CancerPrognosis_get_survival_data (TCGA) → CancerPrognosis_search_studies → CancerPrognosis_get_gene_expression
 ```
 
 ### Drug Information

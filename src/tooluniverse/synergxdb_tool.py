@@ -136,10 +136,12 @@ class SYNERGxDBTool(BaseTool):
     }
 
     # BUG-46B-05: Map common tissue aliases to SYNERGxDB tissue column values.
-    # Valid SYNERGxDB tissue names: "colorectal", "blood", "breast", "lung", "ovary",
-    # "skin", "CNS", "prostate", "kidney", "pancreas", "gastric".
+    # Valid SYNERGxDB tissue names (from /api/cell_lines/): "blood", "bone", "brain",
+    # "breast", "cervix", "colorectal", "kidney", "liver", "lung", "mesothelioma",
+    # "ovary", "pancreas", "prostate", "skin", "upper digestive tract", "gastric".
     # "colon" silently returns 0 results — must be "colorectal".
     # "melanoma" silently returns 0 results — must be "skin" (BUG-48B-07).
+    # BUG-60B-002: API uses "brain" not "CNS" — CNS/glioma aliases must map to "brain".
     _TISSUE_ALIASES: Dict[str, str] = {
         "colon": "colorectal",
         "rectal": "colorectal",
@@ -152,9 +154,12 @@ class SYNERGxDBTool(BaseTool):
         "luad": "lung",
         "brca": "breast",
         "melanoma": "skin",  # BUG-48B-07: SYNERGxDB uses "skin" not "melanoma"
-        "gbm": "CNS",
-        "glioblastoma": "CNS",
-        "glioma": "CNS",
+        "cns": "brain",  # BUG-60B-002: API column value is "brain" not "CNS"
+        "gbm": "brain",
+        "glioblastoma": "brain",
+        "glioma": "brain",
+        "upper gi": "upper digestive tract",
+        "gastroesophageal": "upper digestive tract",
     }
 
     # BUG-45A-03: SYNERGxDB stores some drugs under IUPAC/chemical names instead of
@@ -236,19 +241,25 @@ class SYNERGxDBTool(BaseTool):
             sample = self._TISSUE_ALIASES.get(sample.lower(), sample)
             # BUG-59A-009: validate tissue at input — unrecognized tissue silently returns 0
             # results when both drugs are found, giving a misleading "not tested together" message.
+            # BUG-60B-002/003: use actual API tissue values from /api/cell_lines/
             _valid_tissues = set(self._TISSUE_ALIASES.values())
             _valid_tissues.update(
                 {
-                    "colorectal",
                     "blood",
+                    "bone",
+                    "brain",
                     "breast",
-                    "lung",
-                    "ovary",
-                    "skin",
-                    "CNS",
-                    "prostate",
+                    "cervix",
+                    "colorectal",
                     "kidney",
+                    "liver",
+                    "lung",
+                    "mesothelioma",
+                    "ovary",
                     "pancreas",
+                    "prostate",
+                    "skin",
+                    "upper digestive tract",
                     "gastric",
                 }
             )

@@ -708,6 +708,23 @@ class CIViCTool(BaseTool):
                             + therapy_hint
                         )
 
+            # BUG-60A-001: when evidence items ARE returned under ACCEPTED-only filter,
+            # disclose the filter so users know SUBMITTED items may also exist.
+            if tool_name == "civic_search_evidence_items":
+                evidence_nodes = (
+                    result.get("data", {}).get("evidenceItems", {}).get("nodes", [])
+                )
+                if len(evidence_nodes) > 0:
+                    _status_used = arguments.get(
+                        "status", self.variable_defaults.get("status", "ACCEPTED")
+                    )
+                    if str(_status_used).upper() == "ACCEPTED":
+                        result["status_note"] = (
+                            f"Showing {len(evidence_nodes)} ACCEPTED (peer-reviewed) evidence"
+                            " items. Additional SUBMITTED (pre-review) items may exist —"
+                            " add status='SUBMITTED' to include them."
+                        )
+
             return result
 
         except requests.RequestException as e:

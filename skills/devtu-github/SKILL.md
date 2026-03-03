@@ -84,10 +84,31 @@ git add src/tooluniverse/specific_file.py tests/specific_test.py
 git commit -m "Clear, descriptive message"
 ```
 
-9. **Push**:
+9. **Rebase onto latest main BEFORE pushing** (CRITICAL — prevents PR conflicts):
 
 ```bash
-git push origin <branch-name>
+git fetch origin
+git stash            # stash any uncommitted work
+git rebase origin/main
+git stash pop        # restore uncommitted work
+```
+
+If rebase conflicts arise, resolve them (keep our newer changes), then:
+```bash
+git add <conflicted-file>
+git rebase --continue
+```
+
+10. **Push** (force-with-lease after a rebase):
+
+```bash
+git push --force-with-lease origin <branch-name>
+```
+
+After pushing, verify the PR is conflict-free:
+```bash
+gh pr view <PR-number> --json mergeable,mergeStateStatus
+# Must show: "mergeable":"MERGEABLE"
 ```
 
 ## Files That Must NEVER Be Pushed
