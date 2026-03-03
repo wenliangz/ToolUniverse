@@ -112,7 +112,7 @@
   },
   {
     "name": "GtoPdb_get_interactions",
-    "description": "Get pharmacological interactions between targets and ligands from the Guide to Pharmacology database. Returns binding affinity (Ki, Kd, IC50, EC50), action type (agonist, antagonist, inhibitor, etc.), species, and assay information. Essential for drug discovery and pharmacology research. No authentication required.",
+    "description": "Get pharmacological interactions between targets and ligands from the Guide to Pharmacology database. Provide targetId (from GtoPdb_search_targets) or ligandId (from GtoPdb_search_ligands) to filter interactions. Returns binding affinity (Ki, Kd, IC50, EC50), action type (agonist, antagonist, inhibitor, etc.), species, and assay information. Essential for drug discovery and pharmacology research. No authentication required.",
     "parameter": {
       "type": "object",
       "properties": {
@@ -135,7 +135,7 @@
       "endpoint": "https://www.guidetopharmacology.org/services/interactions",
       "params": {}
     },
-    "type": "BaseRESTTool",
+    "type": "GtoPdbRESTTool",
     "test_examples": [
       {"targetId": 20},
       {"targetId": 2486, "species": "Human"},

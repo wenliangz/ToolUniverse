@@ -121,8 +121,15 @@ class ChEMBLRESTTool(BaseTool):
 
         # BUG-26B-03/13: Map `q` to `pref_name__icontains` so that intuitive
         # text searches work (ChEMBL uses field__lookup syntax, not q=).
-        if "q" in args and args["q"] is not None:
-            params["pref_name__icontains"] = args["q"]
+        # Also map `query` as a natural alias for name-based search.
+        name_query = args.get("q") or args.get("query")
+        if name_query is not None:
+            params["pref_name__icontains"] = name_query
+
+        # BUG-30B-05: Map `drug_chembl_id` to `molecule_chembl_id__exact` so
+        # ChEMBL_get_drug_mechanisms accepts the same ID param as ChEMBL_get_drug.
+        if "drug_chembl_id" in args and args["drug_chembl_id"] is not None:
+            params["molecule_chembl_id__exact"] = args["drug_chembl_id"]
 
         # Add any filter parameters (ChEMBL uses field__filter syntax)
         # e.g., molecule_chembl_id__exact, pref_name__icontains
@@ -137,11 +144,12 @@ class ChEMBLRESTTool(BaseTool):
                     "only",
                     "ordering",
                     "q",  # handled above: mapped to pref_name__icontains
+                    "query",  # handled above: alias for q
                     "chembl_id",
                     "target_chembl_id",
                     "assay_chembl_id",
                     "activity_id",
-                    "drug_chembl_id",
+                    "drug_chembl_id",  # handled above: mapped to molecule_chembl_id__exact
                 ]
                 and value is not None
             ):

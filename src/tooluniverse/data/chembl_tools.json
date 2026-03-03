@@ -1172,13 +1172,17 @@
   {
     "type": "ChEMBLRESTTool",
     "name": "ChEMBL_search_drugs",
-    "description": "Search drugs by name, approval status, or other criteria.",
+    "description": "Search drugs by name, approval status, or other criteria. Use the `query` parameter to search by drug name (e.g., {\"query\": \"sotorasib\"}). Use `max_phase` to filter by development phase.",
     "fields": {
       "endpoint": "/drug.json"
     },
     "parameter": {
       "type": "object",
       "properties": {
+        "query": {
+          "type": "string",
+          "description": "Drug name to search for (partial match, case-insensitive). E.g., \"sotorasib\", \"olaparib\", \"imatinib\"."
+        },
         "max_phase": {
           "type": "integer",
           "description": "Filter by maximum development phase (0-4)"
@@ -1247,13 +1251,13 @@
           "type": "integer",
           "default": 0
         },
-        "molecule_chembl_id__exact": {
+        "drug_chembl_id": {
           "type": "string",
-          "description": "ChEMBL molecule ID (e.g., \"CHEMBL1201581\"). To find a molecule ID, use ChEMBL_search_drugs."
+          "description": "ChEMBL drug/molecule ID (e.g., \"CHEMBL1201581\" for adalimumab, \"CHEMBL4535757\" for sotorasib). To find a drug ID, use ChEMBL_search_drugs with a drug name."
         }
       },
       "required": [
-        "molecule_chembl_id__exact"
+        "drug_chembl_id"
       ]
     },
     "return_schema": {

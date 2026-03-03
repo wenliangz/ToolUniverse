@@ -275,6 +275,19 @@ class CancerPrognosisTool(BaseTool):
                 rec["age"] = patient_ages[pid]
             os_records.append(rec)
 
+        # Create DFS patient-level list
+        dfs_records = []
+        for pid in dfs_patients[:max_patients]:
+            rec = {
+                "patient_id": pid,
+                "dfs_months": dfs_months[pid],
+                "dfs_status": dfs_status[pid],
+                "event": 1
+                if "Recurred" in dfs_status[pid] or dfs_status[pid].startswith("1:")
+                else 0,
+            }
+            dfs_records.append(rec)
+
         result = {
             "status": "success",
             "data": {
@@ -284,23 +297,16 @@ class CancerPrognosisTool(BaseTool):
                 else cancer,
                 "total_patients": len(all_patients),
                 "overall_survival": {
-                    "n_patients": len(os_patients),
-                    "n_events": sum(
-                        1
-                        for pid in os_patients
-                        if "DECEASED" in os_status[pid].upper()
-                        or os_status[pid].startswith("1:")
-                    ),
+                    "total_patients_with_os_data": len(os_patients),
+                    "n_patients": len(os_records),
+                    "n_events": sum(1 for r in os_records if r["event"] == 1),
                     "patients": os_records,
                 },
                 "disease_free_survival": {
-                    "n_patients": len(dfs_patients),
-                    "n_events": sum(
-                        1
-                        for pid in dfs_patients
-                        if "Recurred" in dfs_status[pid]
-                        or dfs_status[pid].startswith("1:")
-                    ),
+                    "total_patients_with_dfs_data": len(dfs_patients),
+                    "n_patients": len(dfs_records),
+                    "n_events": sum(1 for r in dfs_records if r["event"] == 1),
+                    "patients": dfs_records,
                 },
                 "note": "Use Survival_kaplan_meier or Survival_log_rank_test tools for analysis of this data",
             },

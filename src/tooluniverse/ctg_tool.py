@@ -143,6 +143,9 @@ class ClinicalTrialsTool(RESTfulTool):
             "next_page_token": "pageToken",
             "intervention": "query.intr",
             "sponsor": "query.spons",
+            # Natural aliases
+            "condition": "query.cond",
+            "status": "filter.overallStatus",
         }
 
         params = {"format": "json", "countTotal": "true"}
@@ -154,6 +157,12 @@ class ClinicalTrialsTool(RESTfulTool):
                 "BriefSummary",
                 "Condition",
                 "Phase",
+                "StartDate",
+                "CompletionDate",
+                "StudyType",
+                "EnrollmentCount",
+                "InterventionName",
+                "LeadSponsorName",
             ]
         )
 
@@ -198,9 +207,13 @@ class ClinicalTrialsTool(RESTfulTool):
                     "conditions": proto.get("conditionsModule", {}).get(
                         "conditions", []
                     ),
-                    "interventions": proto.get("armsInterventionsModule", {}).get(
-                        "interventionNames", []
-                    ),
+                    "interventions": [
+                        iv.get("name")
+                        for iv in proto.get("armsInterventionsModule", {}).get(
+                            "interventions", []
+                        )
+                        if iv.get("name")
+                    ][:5],
                     "sponsor": (
                         proto.get("sponsorCollaboratorsModule", {}).get("leadSponsor")
                         or {}

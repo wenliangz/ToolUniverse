@@ -286,7 +286,7 @@
   },
   {
     "name": "civic_get_evidence_item",
-    "description": "Get detailed information about a specific evidence item in CIViC database by evidence ID. Evidence items link molecular profiles or variants to clinical outcomes, therapies, or disease states with curated literature support. Returns evidence description, level (A-E), type (PREDICTIVE, DIAGNOSTIC, PROGNOSTIC), and associated information.",
+    "description": "Get detailed information about a specific evidence item in CIViC database by evidence ID. Evidence items link molecular profiles or variants to clinical outcomes, therapies, or disease states with curated literature support. Returns evidence description, level (A-E), type (PREDICTIVE, DIAGNOSTIC, PROGNOSTIC), significance, direction, status, disease, therapies, molecular profile, and citation.",
     "type": "CIViCTool",
     "parameter": {
       "type": "object",
@@ -301,7 +301,7 @@
       ]
     },
     "fields": {
-      "query": "query GetEvidenceItem($evidence_id: Int!) { evidenceItem(id: $evidence_id) { id description evidenceLevel evidenceType } }",
+      "query": "query GetEvidenceItem($evidence_id: Int!) { evidenceItem(id: $evidence_id) { id description evidenceLevel evidenceType evidenceDirection significance status disease { name } therapies { name } molecularProfile { id name } source { citation } } }",
       "operation_name": "GetEvidenceItem"
     },
     "return_schema": {
@@ -341,7 +341,7 @@
   },
   {
     "name": "civic_search_evidence_items",
-    "description": "Search for evidence items in CIViC database. Evidence items are curated statements linking variants or molecular profiles to clinical outcomes, therapies, or disease states. Returns a list of evidence items with descriptions, evidence levels (A-E), and evidence types (PREDICTIVE, DIAGNOSTIC, PROGNOSTIC).",
+    "description": "Search for evidence items in CIViC database. Evidence items are curated statements linking variants or molecular profiles to clinical outcomes, therapies, or disease states. Returns evidence with disease, therapies, significance, direction, and citation. To filter by gene or variant, use civic_get_molecular_profile or civic_search_molecular_profiles first, then retrieve evidence via molecular profile.",
     "type": "CIViCTool",
     "parameter": {
       "type": "object",
@@ -350,12 +350,17 @@
           "type": "integer",
           "description": "Maximum number of evidence items to return (default: 20, recommended max: 100)",
           "default": 20
+        },
+        "status": {
+          "type": "string",
+          "description": "Filter by curation status: ACCEPTED, REJECTED, or SUBMITTED (default: ACCEPTED)",
+          "enum": ["ACCEPTED", "REJECTED", "SUBMITTED"]
         }
       },
       "required": []
     },
     "fields": {
-      "query": "query SearchEvidenceItems($limit: Int) { evidenceItems(first: $limit) { nodes { id description evidenceLevel evidenceType } } }",
+      "query": "query SearchEvidenceItems($limit: Int, $status: EvidenceStatusFilter) { evidenceItems(first: $limit, status: $status) { nodes { id description evidenceLevel evidenceType evidenceDirection significance status disease { name } therapies { name } molecularProfile { id name } source { citation } } } }",
       "operation_name": "SearchEvidenceItems"
     },
     "return_schema": {
