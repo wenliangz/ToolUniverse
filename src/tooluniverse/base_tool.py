@@ -293,13 +293,36 @@ class BaseTool:
         if isinstance(exception, ValueError):
             return ToolValidationError(f"Validation error: {exception}")
 
+        # BUG-25A-01: for HTTP errors, include the response body so callers see
+        # the upstream API's actual message rather than a generic "Base API error".
+        response = getattr(exception, "response", None)
+        response_detail = ""
+        if response is not None:
+            try:
+                body = response.json()
+                # Surface common error fields used across APIs
+                for key in ("message", "error", "detail", "description", "reason"):
+                    if key in body:
+                        response_detail = f" — API said: {body[key]}"
+                        break
+                else:
+                    # Fall back to raw text (truncated to avoid noise)
+                    text = response.text
+                    if text:
+                        response_detail = f" — API response: {text[:200]}"
+            except Exception:
+                text = getattr(response, "text", "")
+                if text:
+                    response_detail = f" — API response: {text[:200]}"
+
         error_str = str(exception).lower()
+        full_msg = f"{exception}{response_detail}"
 
         for keywords, error_class, prefix in self._ERROR_CLASSIFICATION:
             if any(kw in error_str for kw in keywords):
-                return error_class(f"{prefix}: {exception}")
+                return error_class(f"{prefix}: {full_msg}")
 
-        return ToolServerError(f"Unexpected error: {exception}")
+        return ToolServerError(f"Unexpected error: {full_msg}")
 
     def get_cache_key(self, arguments: Dict[str, Any]) -> str:
         """

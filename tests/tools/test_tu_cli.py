@@ -5185,3 +5185,33 @@ class TestRound25Fixes:
         assert "did you mean" in err_str.lower()
         assert param_name in err_str
         assert param_name.lower() in err_str
+    @pytest.mark.unit
+    def test_handle_error_includes_response_body_on_http_error(self, tu):
+        """BUG-25A-01: handle_error extracts the API response body from HTTPError."""
+        import unittest.mock as mock
+        from tooluniverse.base_tool import BaseTool
+
+        tool = tu._get_tool_instance("list_tools")
+
+        # Simulate a requests.HTTPError with a JSON response body
+        fake_response = mock.MagicMock()
+        fake_response.json.return_value = {"message": "Invalid API token"}
+        fake_response.text = '{"message": "Invalid API token"}'
+        fake_response.status_code = 401
+
+        http_err = Exception("401 Client Error: Unauthorized")
+        http_err.response = fake_response
+
+        result = tool.handle_error(http_err)
+        err_str = str(result)
+        # Should mention the upstream API message
+        assert "Invalid API token" in err_str
+
+    @pytest.mark.unit
+    def test_handle_error_no_response_falls_back_gracefully(self, tu):
+        """BUG-25A-01: handle_error works normally when exception has no response."""
+        plain_err = RuntimeError("Something went wrong")
+        tool = tu._get_tool_instance("list_tools")
+        result = tool.handle_error(plain_err)
+        assert result is not None
+        assert "Something went wrong" in str(result)
