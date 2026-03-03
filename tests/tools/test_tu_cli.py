@@ -3057,19 +3057,19 @@ class TestRound9Fixes:
         assert d.get("total_tools", 0) > 0
 
     @pytest.mark.unit
-    def test_grep_limit_zero_exits_0_has_more_false(self, monkeypatch, tu, capsys):
-        """BUG-R11A-01+R14B-05: grep --limit 0 exits 0 and has_more: false."""
+    def test_grep_limit_zero_exits_0_has_more_true(self, monkeypatch, tu, capsys):
+        """BUG-R18A-10: grep --limit 0 exits 0; has_more reflects real data availability."""
         from tooluniverse.cli import cmd_grep
-        # BUG-R11A-01: --limit 0 is a count probe, should exit 0
         out, _ = _run(
             monkeypatch, cmd_grep,
             _args(pattern="protein", limit=0, json=True),
             tu, capsys,
         )
         d = _j(out)
-        # R14B-05 fix: limit=0 → has_more=False so callers don't infinite-loop
-        assert d.get("has_more") is False
+        # R18A-10 fix: limit=0 → has_more=True when total_matches > 0,
+        # consistent with find behavior (count-probe correctly signals data exists).
         assert d.get("total_matches", 0) > 0
+        assert d.get("has_more") is True
 
 
 class TestRound10Fixes:
@@ -3687,14 +3687,15 @@ class TestRound14Fixes:
         assert d["total_tools"] > 0
 
     @pytest.mark.unit
-    def test_grep_limit_zero_has_more_false(self, monkeypatch, tu, capsys):
-        """R14B-05: grep --limit 0 should have has_more: false (count-only probe)."""
+    def test_grep_limit_zero_has_more_true(self, monkeypatch, tu, capsys):
+        """R18A-10: grep --limit 0 has_more=True when matches exist (count-probe)."""
         from tooluniverse.cli import cmd_grep
         out, _ = _run(monkeypatch, cmd_grep,
                       _args(pattern="protein", limit=0, json=True), tu, capsys)
         d = _j(out)
-        assert d["has_more"] is False
+        # R18A-10 fix: has_more now correctly reflects data availability (True when > 0)
         assert d["total_matches"] > 0
+        assert d["has_more"] is True
 
 class TestRound15Fixes:
     """Tests covering bug fixes from Round 15 simulation agents."""
@@ -3900,7 +3901,8 @@ class TestRound17Fixes:
         }
         result = _render_find(d)
         assert "end of results" not in result
-        assert "use --offset" in result
+        # R18B-08: hint now says "next: --offset N" instead of generic "use --offset"
+        assert "--offset" in result
 
     @pytest.mark.unit
     def test_render_grep_last_page_shows_end_of_results(self):
@@ -3916,4 +3918,91 @@ class TestRound17Fixes:
         }
         result = _render_grep(d)
         assert "end of results" in result
-        assert "use --offset" not in result
+        assert "next: --offset" not in result
+
+
+class TestRound18Fixes:
+    """Tests for bugs found in R18A and R18B simulation rounds."""
+
+    # R18B-10: spurious ambiguity warning suppressed on exact-match category
+    @pytest.mark.unit
+    def test_resolve_categories_exact_match_no_warning(self, monkeypatch, tu, capsys):
+        """R18B-10: exact-match category (e.g. 'uniprot') should NOT warn about prefix siblings."""
+        from tooluniverse.cli import _resolve_categories
+
+        # Find a real category that is a prefix of another (if any), or mock
+        cats = list(tu.tool_category_dicts.keys())
+        # Pick a category that actually exists in the registry
+        if not cats:
+            pytest.skip("No categories available")
+        cat = cats[0]
+        resolved, had_unknown = _resolve_categories(tu, [cat])
+        _, err = capsys.readouterr()
+        # Exact match → no warning, resolves to itself
+        assert cat in resolved
+        assert "Warning: category input" not in err
+
+    # R18A-10: grep limit=0 now returns has_more=True (consistent with find)
+    @pytest.mark.unit
+    def test_grep_limit_zero_has_more_reflects_availability(self, monkeypatch, tu, capsys):
+        """R18A-10: grep --limit 0 has_more=True when matches exist (count-probe)."""
+        from tooluniverse.cli import cmd_grep
+        out, _ = _run(monkeypatch, cmd_grep,
+                      _args(pattern="UniProt", limit=0, json=True), tu, capsys)
+        d = _j(out)
+        assert d["total_matches"] > 0
+        assert d["has_more"] is True
+
+    # R18B-08/R17B-08: pagination footer shows range and next-offset hint
+    @pytest.mark.unit
+    def test_render_find_pagination_shows_range_and_next_offset(self):
+        """R18B-08: _render_find shows range [N-M] and 'next: --offset X' when has_more."""
+        from tooluniverse.cli import _render_find
+        d = {
+            "tools": [
+                {"name": f"Tool{i}", "description": f"desc{i}", "relevance_score": 0.9}
+                for i in range(5)
+            ],
+            "total_matches": 50,
+            "limit": 5,
+            "offset": 5,
+            "has_more": True,
+        }
+        result = _render_find(d)
+        # Range [6-10] shown when offset=5, 5 tools
+        assert "[6–10]" in result
+        # next offset hint
+        assert "next: --offset 10" in result
+
+    @pytest.mark.unit
+    def test_render_grep_pagination_shows_range_and_next_offset(self):
+        """R18B-08: _render_grep shows range [N-M] and 'next: --offset X' when has_more."""
+        from tooluniverse.cli import _render_grep
+        d = {
+            "tools": [{"name": f"Tool{i}", "description": f"desc{i}"} for i in range(3)],
+            "total_matches": 20,
+            "limit": 3,
+            "offset": 6,
+            "has_more": True,
+        }
+        result = _render_grep(d)
+        # Range [7-9] (offset=6, 3 tools)
+        assert "[7–9]" in result
+        assert "next: --offset 9" in result
+
+    @pytest.mark.unit
+    def test_render_find_no_range_on_first_page(self):
+        """R18B-08: no range shown on first page (offset=0)."""
+        from tooluniverse.cli import _render_find
+        d = {
+            "tools": [
+                {"name": "T1", "description": "d1", "relevance_score": 0.5}
+            ],
+            "total_matches": 10,
+            "limit": 1,
+            "offset": 0,
+            "has_more": True,
+        }
+        result = _render_find(d)
+        assert "[1–" not in result  # no bracket range on first page
+        assert "next: --offset 1" in result  # but next-offset hint is there

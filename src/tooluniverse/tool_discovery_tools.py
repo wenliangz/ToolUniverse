@@ -176,10 +176,11 @@ class GrepToolsTool(BaseTool):
             "total_matches": total_matches,
             "limit": limit,
             "offset": offset,
-            # BUG-R14B-05: limit=0 means "count only, return no items". has_more would be
-            # misleading True here; always False when limit=0 so callers don't loop.
+            # BUG-R18A-10: limit=0 is a count-probe; has_more should reflect whether
+            # there ARE more results (consistent with find_tools behavior).
+            # has_more: true at limit=0 correctly signals "there is data if you raise limit".
             "has_more": (
-                False
+                total_matches > 0
                 if limit == 0
                 else (
                     limit is not None and (offset + len(matching_tools)) < total_matches

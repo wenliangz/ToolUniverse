@@ -243,14 +243,19 @@ def _render_grep(d: dict) -> str:
         lines.append(f"{t.get('name', ''):<{col1}}  {_trunc(t.get('description', ''))}")
     has_more = d.get("has_more", False)
     offset = d.get("offset", 0)
+    # BUG-R18B-08/R17B-08: show range (e.g. "11–20 of 59") when paginating.
+    first = offset + 1
+    last = offset + len(tools)
+    range_str = f"  [{first}–{last}]" if offset else ""
     if has_more:
-        more_hint = "  (use --offset to page)"
+        next_offset = offset + len(tools)
+        more_hint = f"  (more — next: --offset {next_offset})"
     elif offset and tools:
         # BUG-R17B-07: signal "end of results" when paging lands on the last page
         more_hint = "  (end of results)"
     else:
         more_hint = ""
-    lines.append(f"\n{len(tools)} of {total} matches{more_hint}")
+    lines.append(f"\n{len(tools)} of {total} matches{range_str}{more_hint}")
     return "\n".join(lines)
 
 
@@ -292,14 +297,19 @@ def _render_find(d: dict) -> str:
     total = d.get("total_matches", len(tools))
     has_more = d.get("has_more", total > len(tools))
     offset = d.get("offset", 0)
+    # BUG-R18B-08/R17B-08: show range (e.g. "11–20 of 285") when paginating.
+    first = offset + 1
+    last = offset + len(tools)
+    range_str = f"  [{first}–{last}]" if offset else ""
     if has_more:
-        more_hint = "  (use --offset to page)"
+        next_offset = offset + len(tools)
+        more_hint = f"  (more — next: --offset {next_offset})"
     elif offset and tools:
         # BUG-R17B-07: signal "end of results" when paging lands on the last page
         more_hint = "  (end of results)"
     else:
         more_hint = ""
-    lines.append(f"\n{len(tools)} of {total} results{more_hint}")
+    lines.append(f"\n{len(tools)} of {total} results{range_str}{more_hint}")
     return "\n".join(lines)
 
 
@@ -469,28 +479,11 @@ def _resolve_categories(tu, names: list) -> tuple:
         # 1. Exact case-insensitive match.
         if name_lower in lower_map:
             exact_key = lower_map[name_lower]
-            # Also check for categories where the exact key is a prefix
-            # (e.g. user typed "GTEx", exact=gtex, but gtex_v2 also exists).
-            extended = [
-                k
-                for k in full_actual
-                if k.lower().startswith(name_lower) and k != exact_key
-            ]
-            if extended:
-                all_matches = [exact_key] + extended
-                all_sorted = sorted(all_matches, key=_tool_count, reverse=True)
-                best = all_sorted[0]
-                candidates_info = ", ".join(
-                    f"{c!r} ({_tool_count(c)} tools)" for c in all_sorted
-                )
-                print(
-                    f"Warning: category input {name!r} matches {candidates_info}. "
-                    f"Resolving to {best!r} (most tools).",
-                    file=sys.stderr,
-                )
-                resolved.append(best)
-            else:
-                resolved.append(exact_key)
+            # BUG-R18B-10: If there is an exact (case-insensitive) match, use it
+            # silently.  Do NOT warn about categories that merely share this as a
+            # prefix (e.g. user typed "uniprot" → use "uniprot", ignore "uniprot_ref").
+            # The spurious warning was confusing and caused users to doubt their input.
+            resolved.append(exact_key)
             continue
 
         # 2. Prefix matches.
