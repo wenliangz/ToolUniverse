@@ -110,7 +110,11 @@
         },
         "gene": {
           "type": "string",
-          "description": "Gene symbol (e.g., BRAF, TP53, EGFR, KRAS, PIK3CA)"
+          "description": "Gene symbol (e.g., BRAF, TP53, EGFR, KRAS, PIK3CA). Alias: gene_name also accepted."
+        },
+        "gene_name": {
+          "type": "string",
+          "description": "Alias for gene parameter. Gene symbol (e.g., FLT3, BRAF, TP53)."
         },
         "max_results": {
           "type": "integer",

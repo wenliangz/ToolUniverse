@@ -13,7 +13,15 @@
         },
         "name": {
           "type": "string",
-          "description": "Gene symbol/name to search for (e.g., \"EGFR\", \"BRAF\", \"BRCA1\"). If not provided, returns genes in alphabetical order up to the limit."
+          "description": "Gene symbol to search for (e.g., \"EGFR\", \"BRAF\", \"BRCA1\"). Alias: use 'query' or 'gene_name' instead."
+        },
+        "query": {
+          "type": "string",
+          "description": "Gene symbol to search for (e.g., \"FLT3\", \"KRAS\", \"TP53\"). Alias for 'name'."
+        },
+        "gene_name": {
+          "type": "string",
+          "description": "Gene symbol to search for. Alias for 'name'."
         }
       },
       "required": []
@@ -22,7 +30,9 @@
       "query": "query GetGenes($limit: Int, $entrezSymbols: [String!]) { genes(first: $limit, entrezSymbols: $entrezSymbols) { nodes { id name description entrezId } } }",
       "operation_name": "GetGenes",
       "array_wrap": {
-        "name": "entrezSymbols"
+        "name": "entrezSymbols",
+        "query": "entrezSymbols",
+        "gene_name": "entrezSymbols"
       }
     },
     "return_schema": {
@@ -606,15 +616,15 @@
           "description": "Maximum number of molecular profiles to return (default: 20, recommended max: 100)",
           "default": 20
         },
-        "name": {
+        "query": {
           "type": "string",
-          "description": "Filter by molecular profile name (e.g., 'BRAF V600E', 'EGFR T790M'). Returns profiles whose name contains this string."
+          "description": "Filter by molecular profile name (e.g., 'BRAF V600E', 'EGFR T790M', 'FLT3 ITD'). Returns profiles whose name contains this string."
         }
       },
       "required": []
     },
     "fields": {
-      "query": "query SearchMolecularProfiles($limit: Int, $name: String) { molecularProfiles(first: $limit, name: $name) { nodes { id name } } }",
+      "query": "query SearchMolecularProfiles($limit: Int, $query: String) { molecularProfiles(first: $limit, name: $query) { nodes { id name } } }",
       "operation_name": "SearchMolecularProfiles"
     },
     "return_schema": {
@@ -647,6 +657,10 @@
       }
     },
     "test_examples": [
+      {
+        "query": "BRAF V600E",
+        "limit": 5
+      },
       {
         "limit": 10
       }

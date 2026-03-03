@@ -64,6 +64,7 @@ class GtoPdbRESTTool(BaseTool):
                 "affinity_parameter": "affinityParameter",
                 "min_affinity": "affinity",
                 "approved_only": "approved",
+                "query": "name",  # alias: query → name (GtoPdb API uses ?name=)
             }
 
             api_params = {}

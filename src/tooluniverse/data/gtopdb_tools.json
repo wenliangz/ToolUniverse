@@ -6,12 +6,25 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Target name or gene symbol to search. Examples: 'dopamine', 'serotonin receptor', 'EGFR', 'beta-adrenoceptor', 'TRPV1'"
         },
         "type": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Target type filter. Values: 'GPCR', 'Ion channel', 'Nuclear receptor', 'Enzyme', 'Transporter', 'Catalytic receptor'"
+        },
+        "query": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Name/keyword to search for. Alias for the \"name\" parameter."
         }
       },
       "required": []
@@ -22,9 +35,16 @@
     },
     "type": "BaseRESTTool",
     "test_examples": [
-      {"name": "dopamine"},
-      {"name": "serotonin", "type": "GPCR"},
-      {"name": "EGFR"}
+      {
+        "name": "dopamine"
+      },
+      {
+        "name": "serotonin",
+        "type": "GPCR"
+      },
+      {
+        "name": "EGFR"
+      }
     ],
     "return_schema": {
       "oneOf": [
@@ -34,20 +54,57 @@
           "items": {
             "type": "object",
             "properties": {
-              "targetId": {"type": "integer", "description": "GtoPdb target ID"},
-              "name": {"type": "string", "description": "Full target name"},
-              "abbreviation": {"type": ["string", "null"], "description": "Common abbreviation"},
-              "type": {"type": "string", "description": "Target type (GPCR, Ion channel, etc.)"},
-              "familyIds": {"type": "array", "items": {"type": "integer"}, "description": "Family IDs"},
-              "subunitIds": {"type": "array", "items": {"type": "integer"}},
-              "complexIds": {"type": "array", "items": {"type": "integer"}}
+              "targetId": {
+                "type": "integer",
+                "description": "GtoPdb target ID"
+              },
+              "name": {
+                "type": "string",
+                "description": "Full target name"
+              },
+              "abbreviation": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Common abbreviation"
+              },
+              "type": {
+                "type": "string",
+                "description": "Target type (GPCR, Ion channel, etc.)"
+              },
+              "familyIds": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                },
+                "description": "Family IDs"
+              },
+              "subunitIds": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "complexIds": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
             }
           }
         },
         {
           "type": "object",
-          "properties": {"error": {"type": "string"}},
-          "required": ["error"]
+          "properties": {
+            "error": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "error"
+          ]
         }
       ]
     }
@@ -59,16 +116,32 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Ligand name or INN to search. Examples: 'aspirin', 'morphine', 'dopamine', 'caffeine', 'insulin'"
         },
         "type": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Ligand type filter. Values: 'Approved', 'Synthetic organic', 'Natural product', 'Endogenous peptide', 'Antibody', 'Inorganic'"
         },
         "approved": {
-          "type": ["boolean", "null"],
+          "type": [
+            "boolean",
+            "null"
+          ],
           "description": "Filter to approved drugs only (true) or all ligands (false/omit)"
+        },
+        "query": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Name/keyword to search for. Alias for the \"name\" parameter."
         }
       },
       "required": []
@@ -79,9 +152,17 @@
     },
     "type": "BaseRESTTool",
     "test_examples": [
-      {"name": "aspirin"},
-      {"name": "morphine", "approved": true},
-      {"name": "dopamine", "type": "Endogenous peptide"}
+      {
+        "name": "aspirin"
+      },
+      {
+        "name": "morphine",
+        "approved": true
+      },
+      {
+        "name": "dopamine",
+        "type": "Endogenous peptide"
+      }
     ],
     "return_schema": {
       "oneOf": [
@@ -91,21 +172,59 @@
           "items": {
             "type": "object",
             "properties": {
-              "ligandId": {"type": "integer", "description": "GtoPdb ligand ID"},
-              "name": {"type": "string", "description": "Ligand name"},
-              "type": {"type": "string", "description": "Ligand type"},
-              "abbreviation": {"type": ["string", "null"]},
-              "inn": {"type": ["string", "null"], "description": "International Non-proprietary Name"},
-              "approvalSource": {"type": ["string", "null"], "description": "FDA/EMA approval source"},
-              "approved": {"type": "boolean", "description": "Is an approved drug"},
-              "whoEssential": {"type": "boolean", "description": "On WHO Essential Medicines List"}
+              "ligandId": {
+                "type": "integer",
+                "description": "GtoPdb ligand ID"
+              },
+              "name": {
+                "type": "string",
+                "description": "Ligand name"
+              },
+              "type": {
+                "type": "string",
+                "description": "Ligand type"
+              },
+              "abbreviation": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "inn": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "International Non-proprietary Name"
+              },
+              "approvalSource": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "FDA/EMA approval source"
+              },
+              "approved": {
+                "type": "boolean",
+                "description": "Is an approved drug"
+              },
+              "whoEssential": {
+                "type": "boolean",
+                "description": "On WHO Essential Medicines List"
+              }
             }
           }
         },
         {
           "type": "object",
-          "properties": {"error": {"type": "string"}},
-          "required": ["error"]
+          "properties": {
+            "error": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "error"
+          ]
         }
       ]
     }
@@ -117,15 +236,24 @@
       "type": "object",
       "properties": {
         "targetId": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "description": "GtoPdb target ID. Get from GtoPdb_search_targets. Examples: 2486 (dopamine beta-hydroxylase), 20 (5-HT1A receptor)"
         },
         "ligandId": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "description": "GtoPdb ligand ID. Get from GtoPdb_search_ligands. Examples: 5765 (aspirin), 7093 (morphine)"
         },
         "species": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Filter by species. Examples: 'Human', 'Mouse', 'Rat'"
         }
       },
@@ -137,9 +265,16 @@
     },
     "type": "GtoPdbRESTTool",
     "test_examples": [
-      {"targetId": 20},
-      {"targetId": 2486, "species": "Human"},
-      {"ligandId": 7093}
+      {
+        "targetId": 20
+      },
+      {
+        "targetId": 2486,
+        "species": "Human"
+      },
+      {
+        "ligandId": 7093
+      }
     ],
     "return_schema": {
       "oneOf": [
@@ -149,23 +284,66 @@
           "items": {
             "type": "object",
             "properties": {
-              "targetId": {"type": "integer"},
-              "targetName": {"type": "string", "description": "Target name"},
-              "ligandId": {"type": ["integer", "null"]},
-              "ligandName": {"type": "string", "description": "Ligand name"},
-              "type": {"type": "string", "description": "Interaction type (Agonist, Antagonist, Inhibitor, etc.)"},
-              "targetSpecies": {"type": "string", "description": "Species (Human, Mouse, Rat)"},
-              "primaryTarget": {"type": "boolean", "description": "Is primary target"},
-              "endogenous": {"type": "boolean", "description": "Is endogenous ligand"},
-              "affinityUnits": {"type": ["string", "null"], "description": "Affinity units (pKi, pIC50, etc.)"},
-              "affinityMedian": {"type": ["number", "null"], "description": "Median affinity value"}
+              "targetId": {
+                "type": "integer"
+              },
+              "targetName": {
+                "type": "string",
+                "description": "Target name"
+              },
+              "ligandId": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "ligandName": {
+                "type": "string",
+                "description": "Ligand name"
+              },
+              "type": {
+                "type": "string",
+                "description": "Interaction type (Agonist, Antagonist, Inhibitor, etc.)"
+              },
+              "targetSpecies": {
+                "type": "string",
+                "description": "Species (Human, Mouse, Rat)"
+              },
+              "primaryTarget": {
+                "type": "boolean",
+                "description": "Is primary target"
+              },
+              "endogenous": {
+                "type": "boolean",
+                "description": "Is endogenous ligand"
+              },
+              "affinityUnits": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Affinity units (pKi, pIC50, etc.)"
+              },
+              "affinityMedian": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "Median affinity value"
+              }
             }
           }
         },
         {
           "type": "object",
-          "properties": {"error": {"type": "string"}},
-          "required": ["error"]
+          "properties": {
+            "error": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "error"
+          ]
         }
       ]
     }

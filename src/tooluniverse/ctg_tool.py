@@ -41,6 +41,8 @@ class ClinicalTrialsTool(RESTfulTool):
             "outcome": "query.outc",
             "overall_status": "filter.overallStatus",
             "query_term": "query.term",
+            "query": "query.term",  # alias: agents naturally pass 'query'
+            "status": "filter.overallStatus",  # alias: agents naturally pass 'status'
         }
 
     def _map_param_names(self, arguments):

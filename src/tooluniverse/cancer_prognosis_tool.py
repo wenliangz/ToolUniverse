@@ -444,9 +444,10 @@ class CancerPrognosisTool(BaseTool):
 
         limit = min(int(arguments.get("limit", 20)), 100)
         # cBioPortal /api/studies does not support keyword filtering — fetch all and filter locally
+        # Use DETAILED projection to get accurate sample counts (SUMMARY returns allSampleCount=1)
         data = self._api_get(
             "/studies",
-            params={"projection": "SUMMARY", "pageSize": 1000},
+            params={"projection": "DETAILED", "pageSize": 1000},
         )
         if data is None:
             return {"status": "error", "error": "Failed to search cBioPortal studies"}
