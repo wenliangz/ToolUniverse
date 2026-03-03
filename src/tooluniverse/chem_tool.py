@@ -8,7 +8,7 @@ This module provides tools for accessing the ChEMBL database:
 
 import requests
 from urllib.parse import quote
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 # from rdkit import Chem
 from .base_tool import BaseTool
@@ -188,6 +188,30 @@ class ChEMBLRESTTool(BaseTool):
 
         return params
 
+    def _lookup_chembl_id_by_name(self, drug_name: str) -> Optional[str]:
+        """Look up a ChEMBL molecule ID by preferred name (case-insensitive).
+
+        Tries exact match first, then falls back to contains match.
+        Returns the ChEMBL ID of the first matching molecule, or None.
+        """
+        base = f"{self.base_url}/molecule.json"
+        headers = {"Accept": "application/json", "User-Agent": "ToolUniverse/1.0"}
+        for lookup_params in (
+            {"pref_name__iexact": drug_name, "format": "json", "limit": 5},
+            {"pref_name__icontains": drug_name, "format": "json", "limit": 5},
+        ):
+            try:
+                resp = requests.get(
+                    base, params=lookup_params, headers=headers, timeout=10
+                )
+                resp.raise_for_status()
+                molecules = resp.json().get("molecules", [])
+                if molecules:
+                    return molecules[0].get("molecule_chembl_id")
+            except Exception:
+                pass
+        return None
+
     def run(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Execute the ChEMBL API call"""
         try:
@@ -207,13 +231,28 @@ class ChEMBLRESTTool(BaseTool):
                     or arguments.get("drug_chembl_id__exact")  # BUG-40A-01
                 )
                 if not mol_id:
-                    return {
-                        "status": "error",
-                        "error": "drug_chembl_id is required for ChEMBL_get_drug_mechanisms. "
-                        "Provide the ChEMBL ID of the drug (e.g., 'CHEMBL25' for aspirin). "
-                        "Use ChEMBL_search_drugs or ChEMBL_search_molecules to find the ID first. "
-                        "Aliases accepted: drug_chembl_id, molecule_chembl_id, chembl_id.",
-                    }
+                    # BUG-42A-01: auto-lookup ChEMBL ID by drug_name if provided
+                    drug_name = arguments.get("drug_name")
+                    if drug_name:
+                        mol_id = self._lookup_chembl_id_by_name(drug_name)
+                        if mol_id:
+                            arguments = dict(arguments)
+                            arguments["drug_chembl_id"] = mol_id
+                            params = self._build_params(arguments)
+                        else:
+                            return {
+                                "status": "error",
+                                "error": f"Drug '{drug_name}' not found in ChEMBL database. "
+                                "Try ChEMBL_search_molecules or ChEMBL_search_drugs to find the ChEMBL ID first.",
+                            }
+                    else:
+                        return {
+                            "status": "error",
+                            "error": "drug_chembl_id is required for ChEMBL_get_drug_mechanisms. "
+                            "Provide the ChEMBL ID (e.g., 'CHEMBL25' for aspirin) or drug_name "
+                            "for automatic lookup (e.g., 'trastuzumab', 'lapatinib'). "
+                            "Aliases accepted: drug_chembl_id, molecule_chembl_id, chembl_id.",
+                        }
 
             # BUG-40B-03: ChEMBL_search_mechanisms — drug_name is not a valid ChEMBL
             # API parameter; it is silently ignored, returning unrelated mechanisms.

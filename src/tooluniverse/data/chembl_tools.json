@@ -1244,7 +1244,7 @@
   {
     "type": "ChEMBLRESTTool",
     "name": "ChEMBL_get_drug_mechanisms",
-    "description": "Get mechanisms of action for a drug by ChEMBL drug ID. To find a drug ID, use ChEMBL_search_drugs with a drug name.",
+    "description": "Get mechanisms of action for a drug by ChEMBL drug ID or drug name. Accepts drug_chembl_id (e.g., 'CHEMBL1201581') or drug_name (e.g., 'trastuzumab') — drug_name triggers automatic ChEMBL ID lookup.",
     "fields": {
       "endpoint": "/mechanism.json"
     },
@@ -1262,7 +1262,11 @@
         },
         "drug_chembl_id": {
           "type": "string",
-          "description": "ChEMBL drug/molecule ID (e.g., \"CHEMBL1201581\" for adalimumab, \"CHEMBL4535757\" for sotorasib). To find a drug ID, use ChEMBL_search_drugs with a drug name."
+          "description": "ChEMBL drug/molecule ID (e.g., \"CHEMBL1201581\" for adalimumab, \"CHEMBL4535757\" for sotorasib)."
+        },
+        "drug_name": {
+          "type": "string",
+          "description": "Drug name for automatic ChEMBL ID lookup (e.g., \"trastuzumab\", \"lapatinib\", \"aspirin\"). Case-insensitive. Triggers internal ChEMBL molecule search — use drug_chembl_id if you already know the ID."
         },
         "molecule_chembl_id": {
           "type": "string",
