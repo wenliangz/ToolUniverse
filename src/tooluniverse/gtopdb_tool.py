@@ -7,10 +7,19 @@ from .tool_registry import register_tool
 
 
 def _strip_html(text: Any) -> Any:
-    """Strip HTML tags from a string (BUG-49A-H3: GtoPdb returns raw HTML in some fields)."""
+    """Strip HTML tags and decode HTML entities from a string.
+
+    BUG-49A-H3: GtoPdb returns raw HTML tags in some fields (e.g., <sup>, <i>).
+    BUG-51B-002: GtoPdb also returns HTML entities (e.g., &ouml; → ö, &alpha; → α).
+    """
     if not isinstance(text, str):
         return text
-    return re.sub(r"<[^>]+>", "", text).strip()
+    # First strip tags, then decode entities
+    stripped = re.sub(r"<[^>]+>", "", text).strip()
+    # Decode common HTML entities
+    import html
+
+    return html.unescape(stripped)
 
 
 @register_tool("GtoPdbRESTTool")
@@ -353,12 +362,18 @@ class GtoPdbRESTTool(BaseTool):
                     )
 
             # BUG-49A-M5: for ligand search results, add a hint about getting interaction data.
+            # BUG-51A-001: warn that ligandId-based lookups often fail for enzyme/kinase
+            # inhibitors (PARP, HDAC, CDK, etc.) because GtoPdb indexes interactions by TARGET.
+            # In those cases, querying by gene_symbol or targetId is more reliable.
             if isinstance(data, list) and data and "/ligands" in url and "?" in url:
                 result["hint"] = (
-                    "To find pharmacological interactions for a specific ligand, call "
-                    "GtoPdb_get_interactions with ligandId=<id>. To find all ligands "
-                    "interacting with a specific target, call GtoPdb_get_interactions with "
-                    "targetId or gene_symbol."
+                    "To find pharmacological interactions for a specific ligand, try "
+                    "GtoPdb_get_interactions with ligandId=<id>. IMPORTANT: For enzyme "
+                    "and kinase inhibitors (e.g., PARP inhibitors, CDK inhibitors, HDAC "
+                    "inhibitors, kinase inhibitors), GtoPdb indexes interactions by TARGET, "
+                    "and ligandId-based queries often return empty results even for approved "
+                    "drugs. In that case, query by gene_symbol (e.g., gene_symbol='PARP1') "
+                    "or targetId from GtoPdb_search_targets for more complete results."
                 )
 
             return result

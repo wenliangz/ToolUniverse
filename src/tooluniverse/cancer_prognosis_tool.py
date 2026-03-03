@@ -490,27 +490,40 @@ class CancerPrognosisTool(BaseTool):
         )
         multi_sample_note = ""
         # BUG-50B-001: structured duplicate_aliquot_warning field (in addition to note)
+        # BUG-51A-004: clarify that detection covers ALL fetched samples, not just the
+        # max_samples slice returned. This prevents confusion when the user sees the warning
+        # but doesn't find the affected patients in the returned sample slice.
         duplicate_aliquot_warning = None
         if multi_sample_patients:
             multi_sample_note = (
-                " WARNING: {} patient(s) have multiple samples (e.g., primary + recurrence). "
+                " WARNING: {} patient(s) have multiple samples (e.g., primary + recurrence) "
+                "detected across all {} fetched expression records. "
                 "Joining on patient_id will double-count these patients. "
                 "Affected patients: {}.".format(
                     len(multi_sample_patients),
+                    len(values),
                     ", ".join(multi_sample_patients[:5])
                     + (" ..." if len(multi_sample_patients) > 5 else ""),
                 )
             )
             duplicate_aliquot_warning = {
                 "n_affected_patients": len(multi_sample_patients),
+                "detection_scope": "all_fetched_samples",
+                "n_samples_checked": len(values),
                 "affected_patient_ids": multi_sample_patients[:10],
-                "message": "These patients have multiple samples (e.g., primary + recurrence aliquots). "
+                "message": "These patients have multiple samples (e.g., primary + recurrence aliquots) "
+                "detected across all fetched expression records (not just the returned slice). "
                 "Joining on patient_id will double-count them in survival analysis. "
                 "Deduplicate by keeping only the primary tumor sample (-01 suffix) before merging.",
             }
 
         result_data: Dict[str, Any] = {
             "study_id": study_id,
+            # BUG-51A-011: disclose auto-selected study so users know which of multiple
+            # available studies was used. "OV" auto-resolves to ov_tcga (Firehose Legacy),
+            # but ov_tcga_pan_can_atlas_2018 or hgsoc_tcga_gdc may be preferable.
+            "study_note": "Auto-selected study_id='{}'. Use CancerPrognosis_search_studies "
+            "to find alternative cohorts for this cancer type.".format(study_id),
             "gene": gene,
             "entrez_gene_id": entrez_id,
             "profile_id": profile_id,

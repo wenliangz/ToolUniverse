@@ -364,8 +364,10 @@ class SYNERGxDBTool(BaseTool):
                     )
                     if probe.get("ok") and probe.get("data"):
                         probe_data = probe["data"]
+                        # BUG-51A-006: SYNERGxDB combo records use field "tissue" for
+                        # tissue type (e.g., "breast"), NOT "sample" (which is absent).
                         tissues = sorted(
-                            {x.get("sample", "") for x in probe_data if x.get("sample")}
+                            {x.get("tissue", "") for x in probe_data if x.get("tissue")}
                         )
                         sources = sorted(
                             {
@@ -382,7 +384,7 @@ class SYNERGxDBTool(BaseTool):
                         tissue_str = (
                             ", ".join(f"'{t}'" for t in tissues)
                             if tissues
-                            else "none found"
+                            else "none in first 20 records"
                         )
                         source_str = ", ".join(sources) if sources else "unknown"
                         msg = (
