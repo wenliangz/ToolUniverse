@@ -223,6 +223,21 @@ class CIViCTool(BaseTool):
                         v for v in nodes if q_lower in v.get("name", "").lower()
                     ]
                     gene_data.get("variants", {})["nodes"] = filtered
+                    # BUG-43A-04: when gene+query filter returns empty, add a helpful note.
+                    # CIViC stores fusions as molecular profiles (not gene variants).
+                    if not filtered:
+                        fusion_hint = ""
+                        if "fusion" in q_lower:
+                            fusion_hint = (
+                                f" CIViC stores fusion events as molecular profiles "
+                                f"rather than gene variants. Try civic_search_evidence_items "
+                                f"with molecular_profile='{gene_name}::PARTNER Fusion' "
+                                f"(e.g., '{gene_name}::BICC1 Fusion')."
+                            )
+                        result["note"] = (
+                            f"No variants found matching '{query_term}' in {gene_name}."
+                            + fusion_hint
+                        )
                 return result
 
         try:

@@ -384,7 +384,7 @@
         },
         "therapy": {
           "type": "string",
-          "description": "Filter by therapy/drug name (e.g., 'imatinib', 'pembrolizumab'). Alias: therapy_name."
+          "description": "Filter by therapy/drug name (e.g., 'imatinib', 'pembrolizumab'). Alias: therapy_name. Note: matches any evidence item where the therapy appears, including combination regimens — results may include multi-drug combinations."
         },
         "therapy_name": {
           "type": "string",
@@ -392,7 +392,7 @@
         },
         "disease": {
           "type": "string",
-          "description": "Filter by disease name (e.g., 'leukemia', 'melanoma', 'lung cancer'). Alias: disease_name."
+          "description": "Filter by disease name (e.g., 'leukemia', 'melanoma', 'lung cancer'). Alias: disease_name. Note: CIViC uses specific disease names (e.g., 'Lung Non-small Cell Carcinoma', not 'NSCLC'); try partial names or multiple searches if results are empty."
         },
         "disease_name": {
           "type": "string",
@@ -400,7 +400,7 @@
         },
         "molecular_profile": {
           "type": "string",
-          "description": "Filter by molecular profile name (e.g., 'BRAF V600E', 'EGFR T790M')."
+          "description": "Filter by molecular profile name (e.g., 'BRAF V600E', 'EGFR T790M', 'KRAS G12C'). For gene fusions, CIViC uses double-colon notation: 'GENE::PARTNER Fusion' (e.g., 'FGFR2::BICC1 Fusion', 'ALK::EML4 Fusion'). Use civic_search_molecular_profiles to discover exact profile names."
         }
       },
       "required": []

@@ -15,7 +15,7 @@ Reference: Seo et al., NAR 2020 (PMID: 32442307)
 """
 
 import requests
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from .base_tool import BaseTool
 from .tool_registry import register_tool
 
@@ -135,6 +135,24 @@ class SYNERGxDBTool(BaseTool):
         "CLOUD": 6,
     }
 
+    def _resolve_drug_id_by_name(self, name: str) -> Optional[int]:
+        """Resolve a drug name to SYNERGxDB integer drug ID via client-side name matching.
+
+        Returns the first matching drug ID, or None if not found.
+        """
+        result = self._make_request("drugs/")
+        if not result.get("ok"):
+            return None
+        drugs = result.get("data", [])
+        if not isinstance(drugs, list):
+            return None
+        name_lower = name.lower()
+        for drug in drugs:
+            drug_name = str(drug.get("drug_name", drug.get("name", ""))).lower()
+            if name_lower == drug_name or name_lower in drug_name:
+                return drug.get("idDrug") or drug.get("drug_id") or drug.get("id")
+        return None
+
     def _search_combos(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Search drug combination synergy scores."""
         drug_id_1 = arguments.get("drug_id_1")
@@ -143,6 +161,31 @@ class SYNERGxDBTool(BaseTool):
         dataset = arguments.get("dataset")
         page = arguments.get("page", 1)
         per_page = arguments.get("per_page", 20)
+
+        # BUG-43A-01/02: accept drug_name_1/drug_name_2 (and intuitive drug1/drug2 aliases)
+        # that auto-resolve to integer drug IDs via the /drugs/ endpoint.
+        for id_key, name_key in (
+            ("drug_id_1", "drug_name_1"),
+            ("drug_id_1", "drug1"),
+            ("drug_id_2", "drug_name_2"),
+            ("drug_id_2", "drug2"),
+        ):
+            name_val = arguments.get(name_key)
+            if name_val and not arguments.get(id_key):
+                resolved = self._resolve_drug_id_by_name(str(name_val))
+                if resolved is None:
+                    return {
+                        "status": "error",
+                        "error": f"Drug '{name_val}' not found in SYNERGxDB. "
+                        "SYNERGxDB covers primarily cytotoxic chemotherapy combinations; "
+                        "most targeted therapies (BRAF/MEK/KRAS inhibitors, biologics) "
+                        "approved after 2018 are not included. "
+                        "Use SYNERGxDB_list_drugs with a query to search available drugs.",
+                    }
+                if id_key == "drug_id_1":
+                    drug_id_1 = resolved
+                else:
+                    drug_id_2 = resolved
 
         # BUG-37A-05: accept dataset as string name and convert to integer ID
         if dataset is not None and isinstance(dataset, str) and not dataset.isdigit():
@@ -160,10 +203,10 @@ class SYNERGxDBTool(BaseTool):
         if not drug_id_1 and not drug_id_2 and not dataset:
             return {
                 "status": "error",
-                "error": "At least one of drug_id_1, drug_id_2, or dataset is required. "
+                "error": "At least one of drug_id_1, drug_id_2, drug_name_1, drug_name_2, or dataset is required. "
+                "Use drug_name_1/drug_name_2 for automatic ID lookup (e.g., 'imatinib', 'gemcitabine'). "
                 "To find drug IDs, use SYNERGxDB_list_drugs (filter by name with 'query' param). "
-                "To find dataset IDs/names, use SYNERGxDB_list_datasets. "
-                "The sample/tissue filter can only be used alongside these parameters.",
+                "To find dataset names, use SYNERGxDB_list_datasets. ",
             }
 
         params = {"page": page, "perPage": per_page}
@@ -243,11 +286,23 @@ class SYNERGxDBTool(BaseTool):
                 or name_lower in str(d.get("name", "")).lower()
             ]
 
-        return {
+        result_count = len(data)
+        out: Dict[str, Any] = {
             "status": "success",
             "data": data,
-            "count": len(data),
+            "count": result_count,
         }
+        # BUG-43A-06: when drug name search returns empty, add a helpful note about
+        # database coverage so users understand why their targeted therapy is missing.
+        if result_count == 0 and name_filter:
+            out["note"] = (
+                f"No drug matching '{name_filter}' found in SYNERGxDB. "
+                "SYNERGxDB covers primarily cytotoxic chemotherapy combinations from studies "
+                "completed before 2018. Modern targeted therapies (KRAS inhibitors, BRAF/MEK "
+                "inhibitors, immune checkpoint antibodies, HER2-targeted agents) are generally "
+                "not included."
+            )
+        return out
 
     def _get_drug(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Get drug details by ID."""

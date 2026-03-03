@@ -18,14 +18,28 @@
             "integer",
             "null"
           ],
-          "description": "SYNERGxDB drug ID for drug A. Use SYNERGxDB_list_drugs to find IDs. Examples: 11 (Bortezomib), 48 (Imatinib), 52 (Lapatinib)"
+          "description": "SYNERGxDB drug ID for drug A. Use SYNERGxDB_list_drugs to find IDs. Examples: 11 (Bortezomib), 48 (Imatinib), 52 (Lapatinib). Alternatively, use drug_name_1 for automatic ID lookup."
+        },
+        "drug_name_1": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Drug name for drug A — triggers automatic SYNERGxDB ID lookup (e.g., 'gemcitabine', 'imatinib', 'paclitaxel'). Aliases: drug1. Use instead of drug_id_1 when you don't know the integer ID."
         },
         "drug_id_2": {
           "type": [
             "integer",
             "null"
           ],
-          "description": "SYNERGxDB drug ID for drug B. Examples: 97 (Topotecan), 34 (Erlotinib), 24 (Dasatinib)"
+          "description": "SYNERGxDB drug ID for drug B. Examples: 97 (Topotecan), 34 (Erlotinib), 24 (Dasatinib). Alternatively, use drug_name_2 for automatic ID lookup."
+        },
+        "drug_name_2": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Drug name for drug B — triggers automatic SYNERGxDB ID lookup (e.g., 'erlotinib', 'topotecan', 'oxaliplatin'). Aliases: drug2. Use instead of drug_id_2 when you don't know the integer ID."
         },
         "sample": {
           "type": [
