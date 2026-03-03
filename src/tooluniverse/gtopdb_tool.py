@@ -22,6 +22,45 @@ def _strip_html(text: Any) -> Any:
     return html.unescape(stripped)
 
 
+# BUG-53A-005: HGNC gene symbols → GtoPdb pharmacological receptor/enzyme names.
+# GtoPdb indexes nuclear receptors and GPCRs by pharmacological names (ERα, D2 receptor)
+# not HGNC gene symbols (ESR1, DRD2). When gene_symbol lookup returns 404, fall back to
+# searching by the pharmacological name from this mapping.
+_HGNC_TO_GTOPDB_NAME: dict = {
+    "ESR1": "ERα",
+    "ESR2": "ERβ",
+    "AR": "androgen receptor",
+    "PPARG": "PPARγ",
+    "PPARA": "PPARα",
+    "PPARD": "PPARδ",
+    "NR3C1": "glucocorticoid receptor",
+    "NR3C2": "mineralocorticoid receptor",
+    "NR1I2": "pregnane X receptor",
+    "VDR": "vitamin D receptor",
+    "RXRA": "RXRα",
+    "DRD1": "D1 receptor",
+    "DRD2": "D2 receptor",
+    "DRD3": "D3 receptor",
+    "DRD4": "D4 receptor",
+    "DRD5": "D5 receptor",
+    "HTR1A": "5-HT1A receptor",
+    "HTR2A": "5-HT2A receptor",
+    "ADRB1": "β1-adrenoceptor",
+    "ADRB2": "β2-adrenoceptor",
+    "ADRA1A": "α1A-adrenoceptor",
+    "CHRM1": "M1 receptor",
+    "CHRM2": "M2 receptor",
+    "CHRM3": "M3 receptor",
+    "OPRD1": "δ receptor",
+    "OPRM1": "μ receptor",
+    "OPRK1": "κ receptor",
+    "PTGER2": "EP2 receptor",
+    "PTGER4": "EP4 receptor",
+    "HDAC1": "HDAC1",
+    "PARP1": "PARP1",
+}
+
+
 @register_tool("GtoPdbRESTTool")
 class GtoPdbRESTTool(BaseTool):
     def __init__(self, tool_config: Dict):
@@ -47,6 +86,14 @@ class GtoPdbRESTTool(BaseTool):
             ligand_id = args.get("ligandId") or args.get("ligand_id")
             if target_id is not None:
                 url = f"{self.base_url}/targets/{target_id}/interactions"
+                # BUG-53A-002: when BOTH targetId AND ligandId are provided, the original code
+                # only used targetId (correct for URL construction) but also silently removed
+                # ligandId from args without setting _pending_ligand_id_filter. This meant the
+                # client-side ligandId filter (set up in the elif branch) never ran, so the
+                # ligandId parameter was completely ignored. Fix: preserve ligandId for
+                # client-side filtering when both are provided.
+                if ligand_id is not None:
+                    self._pending_ligand_id_filter = ligand_id
                 args = {
                     k: v
                     for k, v in args.items()
@@ -180,23 +227,53 @@ class GtoPdbRESTTool(BaseTool):
                 if resp.status_code == 404 or (
                     resp.status_code == 200 and not isinstance(resp.json(), list)
                 ):
-                    return {
-                        "status": "success",
-                        "data": [],
-                        "count": 0,
-                        "message": (
-                            f"No GtoPdb target found for gene_symbol='{gene_symbol}'. "
-                            "GtoPdb targets are indexed by pharmacological receptor/enzyme "
-                            "names and may not recognize all HGNC gene symbols. "
-                            f"Try GtoPdb_search_targets with a descriptive name "
-                            f"(e.g., query='MEK1' or 'MAP2K1' or 'MEK' for MAP2K1). "
-                            "Note: many kinases and signaling enzymes (MAP2K1/MEK1, "
-                            "MAP2K2/MEK2, MAPK1/ERK2, MAPK3/ERK1, etc.) have limited "
-                            "or no interaction data in GtoPdb — use "
-                            "ChEMBL_get_drug_mechanisms or ChEMBL_search_compounds "
-                            "for approved inhibitors of MAP kinase pathway proteins."
-                        ),
-                    }
+                    # BUG-53A-005: some HGNC gene symbols map to GtoPdb pharmacological
+                    # receptor names (e.g., ESR1 → "ERα", DRD2 → "D2 receptor").
+                    # Try a fallback lookup using the known pharmacological name.
+                    fallback_resolved = False
+                    gtopdb_name = _HGNC_TO_GTOPDB_NAME.get(gene_symbol.upper())
+                    if gtopdb_name:
+                        try:
+                            from urllib.parse import urlencode as _urlencode
+
+                            fb_url = f"{self.base_url}/targets?{_urlencode({'name': gtopdb_name})}"
+                            fb_resp = request_with_retry(
+                                self.session,
+                                "GET",
+                                fb_url,
+                                timeout=self.timeout,
+                                max_attempts=2,
+                            )
+                            if fb_resp.status_code == 200:
+                                fb_targets = fb_resp.json()
+                                if isinstance(fb_targets, list) and fb_targets:
+                                    target_id = fb_targets[0]["targetId"]
+                                    arguments = dict(arguments)
+                                    arguments["targetId"] = target_id
+                                    arguments.pop("gene_symbol", None)
+                                    fallback_resolved = True
+                        except Exception:
+                            pass
+                    if not fallback_resolved:
+                        return {
+                            "status": "success",
+                            "data": [],
+                            "count": 0,
+                            "message": (
+                                f"No GtoPdb target found for gene_symbol='{gene_symbol}'. "
+                                "GtoPdb targets are indexed by pharmacological receptor/enzyme "
+                                "names and may not recognize all HGNC gene symbols. "
+                                f"Try GtoPdb_search_targets with a descriptive name "
+                                f"(e.g., query='MEK1' or 'MAP2K1' or 'MEK' for MAP2K1). "
+                                "Nuclear receptors use Greek-letter names (ESR1→'ERα', "
+                                "AR→'androgen receptor', PPARG→'PPARγ'). "
+                                "Note: many kinases and signaling enzymes (MAP2K1/MEK1, "
+                                "MAP2K2/MEK2, MAPK1/ERK2, MAPK3/ERK1, etc.) have limited "
+                                "or no interaction data in GtoPdb — use "
+                                "ChEMBL_get_drug_mechanisms or ChEMBL_search_compounds "
+                                "for approved inhibitors of MAP kinase pathway proteins."
+                            ),
+                        }
                 if resp.status_code == 200:
                     targets = resp.json()
                     if isinstance(targets, list) and targets:

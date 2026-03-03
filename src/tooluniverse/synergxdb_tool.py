@@ -496,13 +496,30 @@ class SYNERGxDBTool(BaseTool):
         name_filter = (
             arguments.get("query") or arguments.get("name") or arguments.get("search")
         )
+        synonym_used = None
         if name_filter and isinstance(data, list):
             name_lower = name_filter.lower()
+            # BUG-53B-007: apply synonym expansion in list_drugs — _DRUG_SYNONYMS maps
+            # common names to SYNERGxDB stored names (e.g., "cisplatin" →
+            # "diamminedichloroplatinum"). Without this, list_drugs(query="cisplatin")
+            # returned empty because the client-side filter ran against
+            # "diamminedichloroplatinum" only. The synonym map was previously only used
+            # in _resolve_drug_id_by_name (search_combos) but not in _list_drugs.
+            effective_name = self._DRUG_SYNONYMS.get(name_lower, name_lower)
+            if effective_name != name_lower:
+                synonym_used = effective_name
             data = [
                 d
                 for d in data
                 if name_lower in str(d.get("drug_name", "")).lower()
                 or name_lower in str(d.get("name", "")).lower()
+                or (
+                    effective_name != name_lower
+                    and (
+                        effective_name in str(d.get("drug_name", "")).lower()
+                        or effective_name in str(d.get("name", "")).lower()
+                    )
+                )
             ]
 
         result_count = len(data)
@@ -511,6 +528,10 @@ class SYNERGxDBTool(BaseTool):
             "data": data,
             "count": result_count,
         }
+        if synonym_used:
+            out["synonym_expanded"] = (
+                f"Searched for '{synonym_used}' (SYNERGxDB stored name for '{name_filter}')."
+            )
         # BUG-43A-06: when drug name search returns empty, add a helpful note about
         # database coverage so users understand why their targeted therapy is missing.
         if result_count == 0 and name_filter:

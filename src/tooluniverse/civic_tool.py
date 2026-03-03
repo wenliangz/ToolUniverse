@@ -276,7 +276,14 @@ class CIViCTool(BaseTool):
                 or arguments.get("gene_name")
                 or arguments.get("gene_symbol")  # BUG-47A-01
             )
-            query_term = arguments.get("query")
+            # BUG-53B-004: variant_name parameter was silently ignored — only "query" was
+            # checked. Users naturally pass variant_name='S249C' expecting it to filter
+            # variants client-side, just like query='S249C' does.
+            query_term = (
+                arguments.get("query")
+                or arguments.get("variant_name")
+                or arguments.get("variant")
+            )
             if gene_name:
                 gene_id = self._lookup_gene_id(gene_name)
                 if gene_id is None:
@@ -361,6 +368,16 @@ class CIViCTool(BaseTool):
                             + available_str
                         )
                 return result
+
+        # BUG-53B-002: CIViC therapy names are case-sensitive (stored as Title Case, e.g.,
+        # "Erdafitinib" not "erdafitinib"). Auto-normalize to Title Case when the input is
+        # entirely lowercase or uppercase, to avoid silent empty results from case mismatches.
+        if tool_name == "civic_search_evidence_items":
+            therapy = arguments.get("therapy")
+            if therapy and isinstance(therapy, str):
+                if therapy == therapy.lower() or therapy == therapy.upper():
+                    arguments = dict(arguments)
+                    arguments["therapy"] = therapy.title()
 
         try:
             # Build GraphQL query
@@ -467,6 +484,27 @@ class CIViCTool(BaseTool):
                             "'Chronic Myelogenous Leukemia, BCR-ABL1+' not 'CML', "
                             "'Pancreatic Ductal Carcinoma' not 'Pancreatic Adenocarcinoma')."
                             + disease_hint
+                        )
+
+                # BUG-53B-002: warn when molecular_profile+therapy returns 0 results.
+                # CIViC therapy names are case-sensitive AND exact-match. Even with
+                # auto-normalization to Title Case, the therapy name may not match
+                # (e.g., "Neratinib" vs "neratinib+capecitabine" combo entry).
+                therapy = arguments.get("therapy")
+                if mol_profile and therapy and not disease:
+                    evidence_nodes = (
+                        result.get("data", {}).get("evidenceItems", {}).get("nodes", [])
+                    )
+                    if len(evidence_nodes) == 0:
+                        result["therapy_warning"] = (
+                            f"No evidence items found for molecular_profile='{mol_profile}' "
+                            f"AND therapy='{therapy}'. CIViC therapy names are exact-match "
+                            "and case-sensitive (stored as Title Case, e.g., 'Erdafitinib', "
+                            "'Trastuzumab', 'Lapatinib'). The therapy name was auto-normalized "
+                            "to Title Case, but may still not match CIViC's exact entry. "
+                            f"Try removing the therapy filter and searching only by "
+                            f"molecular_profile='{mol_profile}' to see all available evidence, "
+                            "then identify the exact therapy name from the results."
                         )
 
             return result

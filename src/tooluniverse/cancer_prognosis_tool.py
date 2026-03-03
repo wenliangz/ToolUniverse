@@ -58,6 +58,68 @@ TCGA_STUDY_MAP = {
     "UVM": "uvm_tcga",
 }
 
+# BUG-53A-014: common cancer name aliases → TCGA abbreviation.
+# Users often pass natural-language names like 'breast', 'colon', 'lung' instead of
+# TCGA codes like 'BRCA', 'COAD', 'LUAD'. Map these to the most common TCGA study.
+_CANCER_NAME_ALIASES: Dict[str, str] = {
+    "BREAST": "BRCA",
+    "BREAST CANCER": "BRCA",
+    "COLON": "COAD",
+    "COLORECTAL": "COADREAD",
+    "COLON CANCER": "COAD",
+    "COLORECTAL CANCER": "COADREAD",
+    "RECTAL": "READ",
+    "LUNG": "LUAD",
+    "LUNG CANCER": "LUAD",
+    "LUNG ADENOCARCINOMA": "LUAD",
+    "LUAD": "LUAD",
+    "NSCLC": "LUAD",
+    "LUNG SQUAMOUS": "LUSC",
+    "LUNG SQUAMOUS CELL": "LUSC",
+    "LUSC": "LUSC",
+    "GLIOBLASTOMA": "GBM",
+    "GBM": "GBM",
+    "OVARIAN": "OV",
+    "OVARY": "OV",
+    "OVARIAN CANCER": "OV",
+    "PROSTATE": "PRAD",
+    "PROSTATE CANCER": "PRAD",
+    "PANCREATIC": "PAAD",
+    "PANCREAS": "PAAD",
+    "PANCREATIC CANCER": "PAAD",
+    "PANCREATIC DUCTAL ADENOCARCINOMA": "PAAD",
+    "PDAC": "PAAD",
+    "BLADDER": "BLCA",
+    "BLADDER CANCER": "BLCA",
+    "UROTHELIAL": "BLCA",
+    "MELANOMA": "SKCM",
+    "SKIN MELANOMA": "SKCM",
+    "KIDNEY": "KIRC",
+    "RENAL CELL CARCINOMA": "KIRC",
+    "RCC": "KIRC",
+    "LIVER": "LIHC",
+    "HEPATOCELLULAR": "LIHC",
+    "HCC": "LIHC",
+    "STOMACH": "STAD",
+    "GASTRIC": "STAD",
+    "GASTRIC CANCER": "STAD",
+    "ENDOMETRIAL": "UCEC",
+    "UTERINE": "UCEC",
+    "ENDOMETRIAL CANCER": "UCEC",
+    "THYROID": "THCA",
+    "THYROID CANCER": "THCA",
+    "CERVICAL": "CESC",
+    "CERVICAL CANCER": "CESC",
+    "HEAD AND NECK": "HNSC",
+    "HNSC": "HNSC",
+    "GLIOMA": "LGG",
+    "LOW GRADE GLIOMA": "LGG",
+    "ACUTE MYELOID LEUKEMIA": "LAML",
+    "AML": "LAML",
+    "SARCOMA": "SARC",
+    "TESTICULAR": "TGCT",
+}
+
 
 @register_tool("CancerPrognosisTool")
 class CancerPrognosisTool(BaseTool):
@@ -132,7 +194,11 @@ class CancerPrognosisTool(BaseTool):
         upper = cancer_or_study.upper()
         if upper in TCGA_STUDY_MAP:
             return TCGA_STUDY_MAP[upper]
-        # Already a study ID
+        # BUG-53A-014: try common cancer name aliases (e.g., 'breast' → 'BRCA' → 'brca_tcga')
+        tcga_code = _CANCER_NAME_ALIASES.get(upper)
+        if tcga_code and tcga_code in TCGA_STUDY_MAP:
+            return TCGA_STUDY_MAP[tcga_code]
+        # Already a full cBioPortal study ID (e.g., 'brca_mapk_hp_msk_2021')
         return cancer_or_study
 
     def _api_get(self, path, params=None, timeout=30):
@@ -367,11 +433,23 @@ class CancerPrognosisTool(BaseTool):
     def _get_gene_expression(self, arguments):
         # type: (Dict[str, Any]) -> Dict[str, Any]
         """Fetch gene expression values across samples in a study."""
-        cancer = (
-            arguments.get("cancer")
-            or arguments.get("cancer_type")
-            or arguments.get("study_id")  # BUG-40A-05
-        )
+        # BUG-53A-013: give explicit study_id priority when it looks like a full cBioPortal
+        # study ID (contains underscores and is not a TCGA abbreviation). Previously,
+        # 'cancer' or 'cancer_type' could silently override study_id because they appear
+        # first in the or-chain — e.g., cancer='brca' + study_id='brca_mapk_hp_msk_2021'
+        # would resolve to 'brca_tcga' instead of the specified study.
+        study_id_arg = arguments.get("study_id")
+        cancer_arg = arguments.get("cancer") or arguments.get("cancer_type")
+        if (
+            study_id_arg
+            and "_" in str(study_id_arg)
+            and str(study_id_arg).upper() not in TCGA_STUDY_MAP
+            and str(study_id_arg).upper() not in _CANCER_NAME_ALIASES
+        ):
+            # Explicit full cBioPortal study ID (e.g., 'brca_mapk_hp_msk_2021') — use directly
+            cancer = study_id_arg
+        else:
+            cancer = cancer_arg or study_id_arg  # BUG-40A-05
         gene = (
             arguments.get("gene")
             or arguments.get("gene_symbol")  # BUG-47A-03
@@ -517,6 +595,19 @@ class CancerPrognosisTool(BaseTool):
                 "Deduplicate by keeping only the primary tumor sample (-01 suffix) before merging.",
             }
 
+        # BUG-53A-015: warn explicitly when returned sample count is less than total samples
+        # with expression data. Previously both n_samples_with_expression_data and
+        # n_samples_returned were returned as metadata fields but no warning was emitted,
+        # so users didn't realize they were getting a truncated dataset.
+        truncation_warning = ""
+        if len(values) > max_samples:
+            truncation_warning = (
+                " TRUNCATED: Returning {returned} of {total} samples with expression data. "
+                "Set max_samples={total} (up to 2000) to retrieve the full dataset.".format(
+                    returned=max_samples, total=len(values)
+                )
+            )
+
         result_data: Dict[str, Any] = {
             "study_id": study_id,
             # BUG-51A-011: disclose auto-selected study so users know which of multiple
@@ -537,8 +628,8 @@ class CancerPrognosisTool(BaseTool):
                 "max": round(sorted_vals[-1], 4),
             },
             "samples": values[:max_samples],
-            "note": "Values are from {} profile ({}). Use with Survival tools for expression-survival analysis.{}".format(
-                profile_id, expression_units, multi_sample_note
+            "note": "Values are from {} profile ({}). Use with Survival tools for expression-survival analysis.{}{}".format(
+                profile_id, expression_units, truncation_warning, multi_sample_note
             ),
         }
         if duplicate_aliquot_warning is not None:
