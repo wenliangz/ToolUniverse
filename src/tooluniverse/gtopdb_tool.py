@@ -132,6 +132,46 @@ class GtoPdbRESTTool(BaseTool):
     def run(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         url = None
         self._pending_ligand_id_filter = None  # BUG-38B-02: reset per call
+
+        # BUG-46A-04: gene_symbol convenience parameter for GtoPdb_get_interactions.
+        # Auto-resolve gene symbol → targetId so users don't need a separate
+        # GtoPdb_search_targets call before querying interactions.
+        gene_symbol = arguments.get("gene_symbol")
+        if (
+            gene_symbol
+            and not arguments.get("targetId")
+            and not arguments.get("target_id")
+        ):
+            from urllib.parse import urlencode
+
+            lookup_url = f"{self.base_url}/targets?{urlencode({'name': gene_symbol})}"
+            try:
+                resp = request_with_retry(
+                    self.session,
+                    "GET",
+                    lookup_url,
+                    timeout=self.timeout,
+                    max_attempts=2,
+                )
+                if resp.status_code == 200:
+                    targets = resp.json()
+                    if targets:
+                        # Prefer exact abbreviation match (e.g., "KRAS" → KRAS entry)
+                        gene_upper = gene_symbol.upper()
+                        target_id = None
+                        for t in targets:
+                            if (t.get("abbreviation") or "").upper() == gene_upper:
+                                target_id = t["targetId"]
+                                break
+                        if target_id is None:
+                            target_id = targets[0]["targetId"]
+                        arguments = dict(arguments)
+                        arguments["targetId"] = target_id
+                        # BUG-47A-05: remove gene_symbol so it doesn't leak into the API URL
+                        arguments.pop("gene_symbol", None)
+            except Exception:
+                pass
+
         try:
             url = self._build_url(arguments)
             response = request_with_retry(
@@ -178,7 +218,9 @@ class GtoPdbRESTTool(BaseTool):
                 data = [x for x in data if x.get("ligandId") == ligand_id_filter]
 
             # Apply limit if specified (max_results is an alias for limit)
-            limit = arguments.get("limit", arguments.get("max_results", 20))
+            # BUG-47A-04: increased default from 20 to 50 — interaction-rich targets
+            # like EGFR (90 interactions) would only show 22% of data at limit=20.
+            limit = arguments.get("limit", arguments.get("max_results", 50))
             if isinstance(data, list) and len(data) > limit:
                 data = data[:limit]
 

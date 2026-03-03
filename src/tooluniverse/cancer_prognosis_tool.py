@@ -222,6 +222,10 @@ class CancerPrognosisTool(BaseTool):
         study_id = self._resolve_study(cancer)
         limit = arguments.get("limit", 10000)
 
+        # BUG-47B-01: cBioPortal clinical-data endpoint does not paginate automatically.
+        # Large studies (e.g., BRCA with 50,926 clinical records) may have OS data for only a
+        # fraction of the pageSize=10000 chunk. We set pageSize conservatively; callers
+        # should be aware that n_patients_with_os_data may undercount the full cohort.
         data = self._api_get(
             "/studies/{}/clinical-data".format(study_id),
             params={
@@ -307,6 +311,16 @@ class CancerPrognosisTool(BaseTool):
             }
             dfs_records.append(rec)
 
+        # BUG-47B-01: detect possible truncation — clinical data API returns a single page.
+        # If we retrieved exactly 10,000 records total, there may be more data in the study.
+        truncation_warning = (
+            " WARNING: This study may have more clinical data than retrieved. "
+            "The cBioPortal API returns a single page of up to 10,000 clinical records; "
+            "for large cohorts (e.g., BRCA), this may cover fewer than 50% of patients. "
+            "OS patient count may undercount the full cohort."
+            if len(data) >= 10000
+            else ""
+        )
         result = {
             "status": "success",
             "data": {
@@ -327,7 +341,8 @@ class CancerPrognosisTool(BaseTool):
                     "n_events": sum(1 for r in dfs_records if r["event"] == 1),
                     "patients": dfs_records,
                 },
-                "note": "Use Survival_kaplan_meier or Survival_log_rank_test tools for analysis of this data",
+                "note": "Use Survival_kaplan_meier or Survival_log_rank_test tools for analysis of this data."
+                + truncation_warning,
             },
         }
 
@@ -341,7 +356,11 @@ class CancerPrognosisTool(BaseTool):
             or arguments.get("cancer_type")
             or arguments.get("study_id")  # BUG-40A-05
         )
-        gene = arguments.get("gene")
+        gene = (
+            arguments.get("gene")
+            or arguments.get("gene_symbol")  # BUG-47A-03
+            or arguments.get("gene_name")
+        )
 
         if not cancer:
             return {
@@ -446,7 +465,8 @@ class CancerPrognosisTool(BaseTool):
                 "gene": gene,
                 "entrez_gene_id": entrez_id,
                 "profile_id": profile_id,
-                "n_samples": len(values),
+                "n_samples_with_expression_data": len(values),
+                "n_samples_returned": len(values[:max_samples]),
                 "expression_summary": {
                     "mean": round(mean_val, 4),
                     "median": round(median_val, 4),

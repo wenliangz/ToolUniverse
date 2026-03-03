@@ -2,7 +2,7 @@
   {
     "name": "SYNERGxDB_search_combos",
     "type": "SYNERGxDBTool",
-    "description": "Search drug combination synergy scores in SYNERGxDB. Returns synergy metrics (Bliss, Loewe, HSA, ZIP) for drug pairs across cancer cell lines. Filter by drug IDs, cell line/tissue, and dataset. The database integrates 22,507 unique drug combinations from 9 major studies (NCI-ALMANAC, MERCK, AstraZeneca). Positive ZIP scores indicate synergy. Use list_drugs first to find drug IDs. NOTE: SYNERGxDB focuses on cytotoxic chemotherapy combinations; most targeted therapies and biologics (e.g., BRAF/MEK/EGFR inhibitors, immune checkpoint inhibitors, HER2 antibodies) approved after 2018 are not included.",
+    "description": "Search drug combination synergy scores in SYNERGxDB. Returns synergy metrics (Bliss, Loewe, HSA, ZIP) for drug pairs across cancer cell lines. Filter by drug IDs, cell line/tissue, and dataset. The database integrates 22,507 unique drug combinations from 9 major studies (NCI-ALMANAC, MERCK, AstraZeneca). Positive ZIP scores indicate synergy. Use list_drugs first to find drug IDs. NOTE: SYNERGxDB covers pairwise in vitro cytotoxicity screening; standard-of-care clinical regimens (FOLFOX, FOLFIRI, CAPOX, R-CHOP) and most targeted therapies/biologics (BRAF/MEK/KRAS inhibitors, immune checkpoint inhibitors, monoclonal antibodies) are not represented.",
     "parameter": {
       "type": "object",
       "properties": {
@@ -46,7 +46,7 @@
             "string",
             "null"
           ],
-          "description": "Cell line ID (integer as string) or tissue name (e.g., 'blood', 'breast', 'lung'). Use SYNERGxDB_list_cell_lines to find valid values. Aliases: tissue_name, tissue."
+          "description": "Cell line ID (integer as string) or tissue name. Valid tissue names: 'colorectal' (NOT 'colon'), 'blood', 'breast', 'lung', 'ovary', 'skin', 'CNS', 'prostate', 'kidney', 'pancreas', 'gastric', 'melanoma'. Use SYNERGxDB_list_cell_lines to find valid values. Aliases: tissue_name, tissue. Common alias 'colon' is auto-mapped to 'colorectal'."
         },
         "dataset": {
           "type": [

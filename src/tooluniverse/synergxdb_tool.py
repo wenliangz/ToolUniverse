@@ -135,6 +135,23 @@ class SYNERGxDBTool(BaseTool):
         "CLOUD": 6,
     }
 
+    # BUG-46B-05: Map common tissue aliases to SYNERGxDB tissue column values.
+    # Valid SYNERGxDB tissue names: "colorectal", "blood", "breast", "lung", "ovary",
+    # "skin", "CNS", "prostate", "kidney", "pancreas", "gastric", "melanoma".
+    # "colon" silently returns 0 results — must be "colorectal".
+    _TISSUE_ALIASES: Dict[str, str] = {
+        "colon": "colorectal",
+        "rectal": "colorectal",
+        "crc": "colorectal",
+        "colorectal cancer": "colorectal",
+        "colon cancer": "colorectal",
+        "leukemia": "blood",
+        "lymphoma": "blood",
+        "nsclc": "lung",
+        "luad": "lung",
+        "brca": "breast",
+    }
+
     # BUG-45A-03: SYNERGxDB stores some drugs under IUPAC/chemical names instead of
     # common drug names. Map common synonyms to SYNERGxDB stored names.
     _DRUG_SYNONYMS: Dict[str, str] = {
@@ -168,15 +185,26 @@ class SYNERGxDBTool(BaseTool):
         name_lower = name.lower().strip()
         # BUG-45A-03: check synonym mapping first (e.g., "cisplatin" → "diamminedichloroplatinum")
         effective_name = self._DRUG_SYNONYMS.get(name_lower, name_lower)
+        # BUG-47A-02: prefer exact match over substring match to avoid "Desmethyl Erlotinib"
+        # matching before "Erlotinib" when drug_name_1="erlotinib" is requested.
+        # Two-pass: pass 1 = exact, pass 2 = substring fallback.
         for drug in drugs:
             drug_name = str(drug.get("drug_name", drug.get("name", ""))).lower()
-            if effective_name == drug_name or effective_name in drug_name:
+            if effective_name == drug_name:
                 return drug.get("idDrug") or drug.get("drug_id") or drug.get("id")
-        # If synonym lookup failed, try original name
+        for drug in drugs:
+            drug_name = str(drug.get("drug_name", drug.get("name", ""))).lower()
+            if effective_name in drug_name:
+                return drug.get("idDrug") or drug.get("drug_id") or drug.get("id")
+        # If synonym lookup failed, try original name (exact then substring)
         if effective_name != name_lower:
             for drug in drugs:
                 drug_name = str(drug.get("drug_name", drug.get("name", ""))).lower()
-                if name_lower == drug_name or name_lower in drug_name:
+                if name_lower == drug_name:
+                    return drug.get("idDrug") or drug.get("drug_id") or drug.get("id")
+            for drug in drugs:
+                drug_name = str(drug.get("drug_name", drug.get("name", ""))).lower()
+                if name_lower in drug_name:
                     return drug.get("idDrug") or drug.get("drug_id") or drug.get("id")
         return None
 
@@ -190,6 +218,9 @@ class SYNERGxDBTool(BaseTool):
             or arguments.get("tissue_name")
             or arguments.get("tissue")
         )
+        # BUG-46B-05: normalize common tissue aliases to SYNERGxDB column values
+        if sample:
+            sample = self._TISSUE_ALIASES.get(sample.lower(), sample)
         dataset = arguments.get("dataset")
         page = arguments.get("page", 1)
         per_page = arguments.get("per_page", 20)
@@ -209,9 +240,9 @@ class SYNERGxDBTool(BaseTool):
                     return {
                         "status": "error",
                         "error": f"Drug '{name_val}' not found in SYNERGxDB. "
-                        "SYNERGxDB covers primarily cytotoxic chemotherapy combinations; "
-                        "most targeted therapies (BRAF/MEK/KRAS inhibitors, biologics) "
-                        "approved after 2018 are not included. "
+                        "SYNERGxDB covers cytotoxic chemotherapy combinations from 9 published "
+                        "screening studies; most targeted therapies (BRAF/MEK/KRAS inhibitors) "
+                        "and biologics (monoclonal antibodies) are not included. "
                         "Use SYNERGxDB_list_drugs with a query to search available drugs.",
                     }
                 if id_key == "drug_id_1":
@@ -259,12 +290,48 @@ class SYNERGxDBTool(BaseTool):
         if result.get("no_data") or not data:
             # BUG-44A-03: distinguish "drug not in DB" vs "combo not tested" in the message
             if drug_id_1 and drug_id_2:
+                # BUG-46B-04: note standard-of-care regimens that are absent from SYNERGxDB
+                folfox_hint = ""
+                # Oxaliplatin ID=80, Fluorouracil ID=41, Irinotecan ID=54 (approximate)
+                # Rather than hardcoding IDs, check the drug names that were resolved
+                drug_name_1_lower = str(
+                    arguments.get("drug_name_1") or arguments.get("drug1") or ""
+                ).lower()
+                drug_name_2_lower = str(
+                    arguments.get("drug_name_2") or arguments.get("drug2") or ""
+                ).lower()
+                _folfox_drugs = {
+                    "oxaliplatin",
+                    "fluorouracil",
+                    "5-fu",
+                    "5fu",
+                    "leucovorin",
+                }
+                _folfiri_drugs = {
+                    "irinotecan",
+                    "fluorouracil",
+                    "5-fu",
+                    "5fu",
+                    "leucovorin",
+                }
+                if (
+                    drug_name_1_lower in _folfox_drugs
+                    and drug_name_2_lower in _folfox_drugs
+                ) or (
+                    drug_name_1_lower in _folfiri_drugs
+                    and drug_name_2_lower in _folfiri_drugs
+                ):
+                    folfox_hint = (
+                        " Note: standard-of-care CRC regimens (FOLFOX, FOLFIRI, CAPOX) are not "
+                        "represented in SYNERGxDB's 9 screening studies, which focus on pairwise "
+                        "in vitro cytotoxicity rather than clinically-validated regimens."
+                    )
                 msg = (
                     f"No combination data found: drug IDs {drug_id_1} and {drug_id_2} were both "
                     "found in SYNERGxDB but this specific combination was not tested together in "
                     "any of the 9 integrated datasets (NCI-ALMANAC, MERCK, AstraZeneca, etc.). "
                     "Try SYNERGxDB_search_combos with only one drug_id to see what combinations "
-                    "each drug has been tested in."
+                    "each drug has been tested in." + folfox_hint
                 )
             elif drug_id_1 or drug_id_2:
                 found_id = drug_id_1 or drug_id_2
@@ -351,10 +418,9 @@ class SYNERGxDBTool(BaseTool):
         if result_count == 0 and name_filter:
             out["note"] = (
                 f"No drug matching '{name_filter}' found in SYNERGxDB. "
-                "SYNERGxDB covers primarily cytotoxic chemotherapy combinations from studies "
-                "completed before 2018. Modern targeted therapies (KRAS inhibitors, BRAF/MEK "
-                "inhibitors, immune checkpoint antibodies, HER2-targeted agents) are generally "
-                "not included."
+                "SYNERGxDB covers cytotoxic chemotherapy combinations from 9 published screening "
+                "studies. Targeted therapies (KRAS inhibitors, BRAF/MEK inhibitors), immune "
+                "checkpoint antibodies, and most biologics (monoclonal antibodies) are not included."
             )
         return out
 

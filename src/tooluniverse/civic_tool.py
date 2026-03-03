@@ -176,6 +176,20 @@ class CIViCTool(BaseTool):
                 cursor = page_info.get("endCursor")
                 if not cursor:
                     break
+            # BUG-46B-01: deduplicate by variant ID (prevents pagination overlap artifacts)
+            seen_ids: set = set()
+            deduped: list = []
+            name_count: Dict[str, int] = {}
+            for node in all_nodes:
+                node_id = node.get("id")
+                if node_id not in seen_ids:
+                    seen_ids.add(node_id)
+                    deduped.append(node)
+                    name = node.get("name", "")
+                    name_count[name] = name_count.get(name, 0) + 1
+            all_nodes = deduped
+            # Flag variant names that appear multiple times (distinct CIViC records)
+            duplicate_names = [n for n, c in name_count.items() if c > 1]
             # Reassemble in the original single-request structure
             data = {
                 "gene": {
@@ -183,9 +197,17 @@ class CIViCTool(BaseTool):
                     "variants": {"nodes": all_nodes[:limit]},
                 }
             }
+            metadata: Dict[str, Any] = {"source": "CIViC", "format": "GraphQL"}
+            if duplicate_names:
+                metadata["note"] = (
+                    f"Multiple distinct CIViC variant records share the same name(s): "
+                    f"{', '.join(duplicate_names[:5])}. These are separate entries with different "
+                    f"IDs (e.g., from different molecular profiles or evidence contexts) — "
+                    f"use the variant ID to distinguish them."
+                )
             return {
                 "data": data,
-                "metadata": {"source": "CIViC", "format": "GraphQL"},
+                "metadata": metadata,
             }
         except Exception as e:
             return {"error": f"CIViC API request failed: {str(e)}"}
@@ -200,6 +222,7 @@ class CIViCTool(BaseTool):
                 gene_name = (
                     arguments.get("gene_name")
                     or arguments.get("gene")
+                    or arguments.get("gene_symbol")  # BUG-47A-01
                     or arguments.get("query")
                 )
                 if not gene_name:
@@ -247,7 +270,11 @@ class CIViCTool(BaseTool):
         # civic_search_variants: if gene/gene_name provided, look up gene_id then get variants.
         # BUG-41A-01: also handle combined gene+query — get gene variants, filter client-side.
         if tool_name == "civic_search_variants":
-            gene_name = arguments.get("gene") or arguments.get("gene_name")
+            gene_name = (
+                arguments.get("gene")
+                or arguments.get("gene_name")
+                or arguments.get("gene_symbol")  # BUG-47A-01
+            )
             query_term = arguments.get("query")
             if gene_name:
                 gene_id = self._lookup_gene_id(gene_name)

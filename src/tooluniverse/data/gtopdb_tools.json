@@ -231,10 +231,17 @@
   },
   {
     "name": "GtoPdb_get_interactions",
-    "description": "Get pharmacological interactions between targets and ligands from the Guide to Pharmacology database. Provide targetId (from GtoPdb_search_targets) or ligandId (from GtoPdb_search_ligands) to filter interactions. Returns binding affinity (Ki, Kd, IC50, EC50), action type (agonist, antagonist, inhibitor, etc.), species, and assay information. NOTE: GtoPdb coverage focuses on GPCRs, ion channels, nuclear receptors, and enzymes; kinase inhibitors (EGFR, BRAF, ALK, VEGFR inhibitors) have limited interaction data — use ChEMBL_get_drug_mechanisms for those instead. No authentication required.",
+    "description": "Get pharmacological interactions between targets and ligands from the Guide to Pharmacology database. Provide gene_symbol (convenience, auto-resolves to targetId), targetId (from GtoPdb_search_targets), or ligandId (from GtoPdb_search_ligands) to filter interactions. Returns binding affinity (Ki, Kd, IC50, EC50), action type (agonist, antagonist, inhibitor, etc.), species, and assay information. NOTE: GtoPdb coverage focuses on GPCRs, ion channels, nuclear receptors, and enzymes; kinase inhibitors (EGFR, BRAF, ALK, VEGFR inhibitors) have limited interaction data — use ChEMBL_get_drug_mechanisms for those instead. No authentication required.",
     "parameter": {
       "type": "object",
       "properties": {
+        "gene_symbol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Gene symbol convenience parameter — automatically resolves to GtoPdb targetId. Works for gene-symbol-named targets (e.g., 'KRAS', 'EGFR', 'BRAF', 'ALK'). Traditional receptor names like 'DRD2' may not resolve; use GtoPdb_search_targets first to confirm. Prefer exact gene symbols over partial names."
+        },
         "targetId": {
           "type": [
             "integer",
@@ -272,6 +279,10 @@
     },
     "type": "GtoPdbRESTTool",
     "test_examples": [
+      {
+        "gene_symbol": "KRAS",
+        "species": "Human"
+      },
       {
         "targetId": 20
       },
