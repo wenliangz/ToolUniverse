@@ -1372,7 +1372,8 @@ def main() -> None:
         "--limit",
         type=_non_neg_int,
         default=None,
-        help="Max tools to return (in by_category mode: max tools per category)",
+        help="Max tools to return (0 = count-probe: returns total without fetching results; "
+        "in by_category mode: max tools per category)",
     )
     p.add_argument(
         "--offset",
@@ -1418,7 +1419,10 @@ def main() -> None:
         help="text = case-insensitive substring; regex = regular expression (default: text)",
     )
     p.add_argument(
-        "--limit", type=_non_neg_int, default=100, help="Max results (default: 100)"
+        "--limit",
+        type=_non_neg_int,
+        default=100,
+        help="Max results (default: 100; use 0 as a count-probe to get total without fetching results)",
     )
     p.add_argument(
         "--offset", type=_non_neg_int, default=0, help="Skip first N results"
@@ -1471,7 +1475,10 @@ def main() -> None:
     )
     p.add_argument("query", help="Natural-language search query")
     p.add_argument(
-        "--limit", type=_non_neg_int, default=10, help="Max results (default: 10)"
+        "--limit",
+        type=_non_neg_int,
+        default=10,
+        help="Max results (default: 10; use 0 as a count-probe to get total without fetching results)",
     )
     p.add_argument(
         "--offset",
