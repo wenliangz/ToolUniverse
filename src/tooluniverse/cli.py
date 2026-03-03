@@ -477,9 +477,9 @@ def _render_run(d: dict) -> str:
             lines.append(f"  Did you mean: {', '.join(suggestions[:3])}?")
         lines.append("Tips:")
         lines.append("  • Check tool name spelling (names are case-sensitive)")
-        # BUG-27B-09: use tu find (always available) instead of tu grep (needs meta-tools)
+        # BUG-27B-09: tu find is always available; list it first
         lines.append("  • Run `tu find '<description>'` for natural-language search")
-        lines.append("  • Run `tu grep <name>` to search by pattern (if available)")
+        lines.append("  • Run `tu grep <name>` to search by pattern")
     else:
         next_steps = details.get("next_steps") or []
         # BUG-25B-07: filter out Python SDK-specific tips not relevant to CLI users
@@ -643,9 +643,14 @@ def _resolve_categories(tu, names: list) -> tuple:
 def _infer_type(s: str):
     """Coerce a key=value string to an appropriate Python type.
 
-    Conversions: 'true'→True, 'false'→False, digits→int/float,
+    Conversions: 'true'→True, 'false'→False,
     '[...]'→list, '{...}'→dict (JSON arrays/objects only).
     'null' is left as the string 'null'; to pass a JSON null use JSON format.
+
+    BUG-27A-02: Numeric-looking strings (e.g. species_id=9606, orpha_code=558)
+    are NOT coerced to int/float. Many tool schemas declare these as 'type: string'
+    and auto-coercion caused schema validation failures. ToolUniverse's validation
+    layer accepts string values for integer schema fields, so this is safe.
     """
     if s.lower() == "true":
         return True
@@ -659,14 +664,6 @@ def _infer_type(s: str):
             return json.loads(s)
         except json.JSONDecodeError:
             pass
-    try:
-        return int(s)
-    except ValueError:
-        pass
-    try:
-        return float(s)
-    except ValueError:
-        pass
     return s
 
 

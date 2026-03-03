@@ -2,21 +2,21 @@
   {
     "type": "ClinVarSearchVariants",
     "name": "clinvar_search_variants",
-    "description": "Search for variants in ClinVar database by gene name, condition, or variant ID. Returns variant identifiers and basic information.",
+    "description": "Search for variants in ClinVar database by gene name, condition, or variant ID. Returns variant identifiers and basic information. At least one of gene, condition, or variant_id must be provided.",
     "parameter": {
       "type": "object",
       "properties": {
         "gene": {
           "type": "string",
-          "description": "Gene name or symbol (e.g., 'BRCA1', 'BRCA2')"
+          "description": "Gene name or symbol (e.g., 'BRCA1', 'BRCA2') At least one of gene, condition, or variant_id must be provided."
         },
         "condition": {
           "type": "string",
-          "description": "Disease or condition name (e.g., 'breast cancer', 'diabetes')"
+          "description": "Disease or condition name (e.g., 'breast cancer', 'diabetes') At least one of gene, condition, or variant_id must be provided."
         },
         "variant_id": {
           "type": "string",
-          "description": "ClinVar variant ID (e.g., '12345')"
+          "description": "ClinVar variant ID (e.g., '12345') At least one of gene, condition, or variant_id must be provided."
         },
         "max_results": {
           "type": "integer",
@@ -70,9 +70,15 @@
           "type": "object",
           "description": "Search parameters used",
           "properties": {
-            "gene": {"type": "string"},
-            "condition": {"type": "string"},
-            "variant_id": {"type": "string"}
+            "gene": {
+              "type": "string"
+            },
+            "condition": {
+              "type": "string"
+            },
+            "variant_id": {
+              "type": "string"
+            }
           }
         },
         "url": {
@@ -97,7 +103,11 @@
       "Search"
     ],
     "metadata": {
-      "tags": ["variants", "clinical", "disease"],
+      "tags": [
+        "variants",
+        "clinical",
+        "disease"
+      ],
       "difficulty_level": "easy",
       "estimated_execution_time": "< 3 seconds"
     }
@@ -114,7 +124,9 @@
           "description": "ClinVar variant ID (e.g., '12345', '123456')"
         }
       },
-      "required": ["variant_id"]
+      "required": [
+        "variant_id"
+      ]
     },
     "fields": {
       "endpoint": "/efetch.fcgi",
@@ -162,7 +174,11 @@
       "Details"
     ],
     "metadata": {
-      "tags": ["variant", "details", "clinical"],
+      "tags": [
+        "variant",
+        "details",
+        "clinical"
+      ],
       "difficulty_level": "easy",
       "estimated_execution_time": "< 3 seconds"
     }
@@ -179,7 +195,9 @@
           "description": "ClinVar variant ID (e.g., '12345', '123456')"
         }
       },
-      "required": ["variant_id"]
+      "required": [
+        "variant_id"
+      ]
     },
     "fields": {
       "endpoint": "/esummary.fcgi",
@@ -227,7 +245,11 @@
       "Significance"
     ],
     "metadata": {
-      "tags": ["clinical", "pathogenicity", "significance"],
+      "tags": [
+        "clinical",
+        "pathogenicity",
+        "significance"
+      ],
       "difficulty_level": "easy",
       "estimated_execution_time": "< 3 seconds"
     }
