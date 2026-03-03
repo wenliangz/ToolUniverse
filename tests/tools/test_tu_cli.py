@@ -4065,3 +4065,55 @@ class TestRound19Fixes:
         # Footer should show range [6-10] and next offset
         assert "[6–10]" in out or "[6-10]" in out
         assert "--offset 10" in out
+
+
+class TestRound20Fixes:
+    """Tests for bugs found in R20A and R20B simulation rounds."""
+
+    # R20B: next_offset=None when limit=0 (count probe, not a real cursor)
+    @pytest.mark.unit
+    def test_grep_limit_zero_next_offset_is_none(self, monkeypatch, tu, capsys):
+        """R20B: grep --limit 0 returns next_offset: null (count probe, not a cursor)."""
+        from tooluniverse.cli import cmd_grep
+        out, _ = _run(monkeypatch, cmd_grep,
+                      _args(pattern="protein", limit=0, json=True), tu, capsys)
+        d = _j(out)
+        assert d["has_more"] is True
+        assert d.get("next_offset") is None, "limit=0 probe should have next_offset=None"
+
+    @pytest.mark.unit
+    def test_list_limit_zero_next_offset_is_none(self, monkeypatch, tu, capsys):
+        """R20B: list --limit 0 returns next_offset: null (count probe)."""
+        from tooluniverse.cli import cmd_list
+        out, _ = _run(monkeypatch, cmd_list,
+                      _args(mode="names", limit=0, json=True), tu, capsys)
+        d = _j(out)
+        assert d["has_more"] is True
+        assert d.get("next_offset") is None, "limit=0 probe should have next_offset=None"
+
+    @pytest.mark.unit
+    def test_grep_pagination_next_offset_usable(self, monkeypatch, tu, capsys):
+        """R20B: next_offset is offset+count when has_more=True and limit>0."""
+        from tooluniverse.cli import cmd_grep
+        out, _ = _run(monkeypatch, cmd_grep,
+                      _args(pattern="protein", limit=5, json=True), tu, capsys)
+        d = _j(out)
+        if d.get("has_more"):
+            expected = d["offset"] + len(d["tools"])
+            assert d.get("next_offset") == expected
+
+    # R20B: exit-2 on argparse errors emits JSON when --json flag present
+    @pytest.mark.unit
+    def test_argparse_error_emits_json_on_json_flag(self, capsys):
+        """R20B: --limit -1 with --json flag should emit JSON error on stdout (exit 2)."""
+        import sys as _sys
+        from tooluniverse.cli import main
+        _sys.argv = ["tu", "grep", "protein", "--json", "--limit", "-1"]
+        with pytest.raises(SystemExit) as exc_info:
+            main()
+        assert exc_info.value.code == 2
+        out = capsys.readouterr().out
+        # stdout should have JSON error, not empty
+        assert out.strip(), "exit-2 with --json should emit JSON to stdout"
+        d = json.loads(out)
+        assert "error" in d

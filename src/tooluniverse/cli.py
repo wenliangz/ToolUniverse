@@ -1572,7 +1572,21 @@ def main() -> None:
     )
     p.set_defaults(func=cmd_serve)
 
-    args = parser.parse_args()
+    # BUG-R20B: argparse exits with code 2 and empty stdout on bad args (e.g. --limit -1).
+    # Callers that do json.loads(stdout) crash on empty string.
+    # Override: if --json or --raw is in argv, emit a JSON error before exiting.
+    _json_mode = "--json" in sys.argv or "--raw" in sys.argv
+    try:
+        args = parser.parse_args()
+    except SystemExit as _exc:
+        if _exc.code == 2 and _json_mode:
+            # argparse already printed its error message to stderr; add JSON to stdout.
+            print(
+                json.dumps(
+                    {"error": "invalid arguments — check --help for usage"}, indent=2
+                )
+            )
+        raise
     # BUG-R12A-12: --json and --raw are mutually exclusive; --raw is a strict subset
     if getattr(args, "json", False) and getattr(args, "raw", False):
         parser.error("--json and --raw are mutually exclusive; use one or the other")
