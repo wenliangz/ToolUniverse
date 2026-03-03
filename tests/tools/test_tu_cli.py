@@ -5143,3 +5143,45 @@ class TestRound24Fixes:
         # Human mode: error message to stderr, NOT JSON on stdout
         assert cap.out.strip() == "" or not cap.out.startswith("{")
         assert "Error" in cap.err or "error" in cap.err.lower()
+
+
+class TestRound25Fixes:
+    """Tests for BUG-25A-03 (Round 25 fixes)."""
+
+    @pytest.fixture
+    def tu(self):
+        from tooluniverse import ToolUniverse
+
+        tu = ToolUniverse()
+        tu.load_tools()
+        return tu
+
+    @pytest.mark.unit
+    def test_validate_case_variant_shows_did_you_mean(self, tu):
+        """BUG-25A-03: when a required param is missing but a case-variant was given,
+        the validation error includes a 'did you mean?' hint."""
+        # Find a tool with a mixed-case required parameter using tool configs
+        tool_name = None
+        param_name = None
+        for name, cfg in tu.all_tool_dict.items():
+            schema = cfg.get("parameter", {})
+            req = schema.get("required", [])
+            mixed = [p for p in req if p.lower() != p]
+            if mixed:
+                tool_name = name
+                param_name = mixed[0]
+                break
+
+        if tool_name is None:
+            pytest.skip("No tool with mixed-case required parameter found")
+
+        # Get the actual tool instance
+        tool = tu._get_tool_instance(tool_name)
+        # Pass a lowercase version of the parameter (the typo case)
+        wrong_args = {param_name.lower(): "dummy_value"}
+        err = tool.validate_parameters(wrong_args)
+        assert err is not None, "Expected a validation error for wrong-case param"
+        err_str = str(err)
+        assert "did you mean" in err_str.lower()
+        assert param_name in err_str
+        assert param_name.lower() in err_str
