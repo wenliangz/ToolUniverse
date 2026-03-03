@@ -4356,3 +4356,217 @@ class TestRound21BFixes:
         }
         result = _render_find(d)
         assert "0.987" in result, "Should display relevance_score value"
+
+
+class TestRound22Fixes:
+    """Tests for bugs found and fixed in Round 22 role-play simulation."""
+
+    # R22B-03: list --limit N note about implicit mode switch
+    @pytest.mark.unit
+    def test_list_limit_prints_mode_switch_note(self, tu, capsys):
+        """R22B-03: tu list --limit N prints a note about switching to names mode."""
+        import argparse
+        from tooluniverse.cli import cmd_list
+        import unittest.mock as mock
+
+        args = argparse.Namespace(
+            mode=None,
+            categories=None,
+            fields=None,
+            limit=5,
+            offset=0,
+            group_by_category=False,
+            raw=False,
+            json=False,
+        )
+        with mock.patch("tooluniverse.cli._get_tu", return_value=tu):
+            cmd_list(args)
+        out, err = capsys.readouterr()
+        assert "names mode" in err.lower() or "names mode" in err
+        assert "--limit 5" in err
+
+    @pytest.mark.unit
+    def test_list_offset_prints_mode_switch_note(self, tu, capsys):
+        """R22B-03: tu list --offset N also prints the implicit mode-switch note."""
+        import argparse
+        from tooluniverse.cli import cmd_list
+        import unittest.mock as mock
+
+        args = argparse.Namespace(
+            mode=None,
+            categories=None,
+            fields=None,
+            limit=None,
+            offset=10,
+            group_by_category=False,
+            raw=False,
+            json=False,
+        )
+        with mock.patch("tooluniverse.cli._get_tu", return_value=tu):
+            cmd_list(args)
+        out, err = capsys.readouterr()
+        assert "names mode" in err.lower() or "names mode" in err
+        assert "--offset 10" in err
+
+    @pytest.mark.unit
+    def test_list_explicit_mode_no_switch_note(self, tu, capsys):
+        """R22B-03: explicit --mode names skips the implicit mode-switch note."""
+        import argparse
+        from tooluniverse.cli import cmd_list
+        import unittest.mock as mock
+
+        args = argparse.Namespace(
+            mode="names",
+            categories=None,
+            fields=None,
+            limit=5,
+            offset=0,
+            group_by_category=False,
+            raw=False,
+            json=False,
+        )
+        with mock.patch("tooluniverse.cli._get_tu", return_value=tu):
+            cmd_list(args)
+        out, err = capsys.readouterr()
+        # Explicit mode → no implicit-switch note (limit warning may still appear
+        # if mode were categories, but here mode=names so no limit warning either)
+        assert "Note: using names mode" not in err
+
+    # R22B-04: info "did you mean" suggestions
+    @pytest.mark.unit
+    def test_render_info_shows_did_you_mean(self):
+        """R22B-04: _render_info shows suggestions when they are in the error dict."""
+        from tooluniverse.cli import _render_info
+        d = {
+            "error": "tool not found",
+            "name": "UniProt_search_typo",
+            "suggestions": ["UniProt_search", "UniProt_get_entry_by_accession"],
+        }
+        result = _render_info(d)
+        assert "Did you mean" in result
+        assert "UniProt_search" in result
+
+    @pytest.mark.unit
+    def test_render_info_no_suggestions_shows_grep_hint(self):
+        """R22B-04: no suggestions → show grep hint for user to search."""
+        from tooluniverse.cli import _render_info
+        d = {
+            "error": "tool not found",
+            "name": "CompletelyMadeUpToolXYZ",
+            "suggestions": [],
+        }
+        result = _render_info(d)
+        assert "tu grep" in result
+        assert "Did you mean" not in result
+
+    # R22B-07: list --mode help text documents all auto-switch triggers
+    @pytest.mark.unit
+    def test_list_mode_help_documents_auto_switch(self):
+        """R22B-07: --mode help argument contains auto-switch documentation."""
+        import argparse
+        # Build the parser directly to inspect help text without subprocess truncation
+        import sys
+        sys.argv = ["tu"]  # prevent argparse from reading pytest args
+        import importlib
+        import tooluniverse.cli as cli_module
+        # Access the parser by creating it
+        parser = argparse.ArgumentParser()
+        # Find the --mode action in the list subcommand by scanning the help string
+        # we added to the parser definition
+        import inspect
+        src = inspect.getsource(cli_module)
+        # Confirm the help text we wrote is present in source
+        assert "auto-switches to names mode" in src
+        assert "--limit" in src and "--offset" in src and "--raw" in src
+
+    # R22B-11: grep footer shows searched field
+    @pytest.mark.unit
+    def test_render_grep_footer_shows_searched_field_name(self):
+        """R22B-11: grep output footer shows 'searched: name' on first page."""
+        from tooluniverse.cli import _render_grep
+        d = {
+            "tools": [{"name": "UniProt_search", "description": "desc"}],
+            "total_matches": 1,
+            "field": "name",
+            "pattern": "uniprot",
+            "limit": 100,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_grep(d)
+        assert "searched: name" in result
+
+    @pytest.mark.unit
+    def test_render_grep_footer_no_field_hint_for_description_field(self):
+        """R22B-11: no 'searched: name' hint when already using --field description."""
+        from tooluniverse.cli import _render_grep
+        d = {
+            "tools": [{"name": "UniProt_search", "description": "desc"}],
+            "total_matches": 1,
+            "field": "description",
+            "pattern": "protein",
+            "limit": 100,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_grep(d)
+        assert "searched: name" not in result
+        assert "searched: description" not in result
+
+    @pytest.mark.unit
+    def test_render_grep_footer_no_field_hint_on_subsequent_pages(self):
+        """R22B-11: field hint omitted on subsequent pages (offset > 0) to keep line short."""
+        from tooluniverse.cli import _render_grep
+        d = {
+            "tools": [{"name": "UniProt_search", "description": "desc"}],
+            "total_matches": 50,
+            "field": "name",
+            "pattern": "uniprot",
+            "limit": 1,
+            "offset": 10,
+            "has_more": True,
+        }
+        result = _render_grep(d)
+        assert "searched: name" not in result
+
+    # R22A-06: grep 0-match tip wording — "use" not "add"
+    @pytest.mark.unit
+    def test_render_grep_0match_tip_says_use_not_add(self):
+        """R22A-06: 0-match tip for name field says 'use --field description' (not 'add')."""
+        from tooluniverse.cli import _render_grep
+        d = {
+            "tools": [],
+            "total_matches": 0,
+            "field": "name",
+            "pattern": "xyznonexistent",
+            "limit": 100,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_grep(d)
+        assert "use --field description" in result
+        assert "add --field description" not in result
+
+    # R22A-08: regex \| escape warning
+    @pytest.mark.unit
+    def test_grep_regex_escaped_pipe_warns(self, tu, capsys):
+        """R22A-08: grep --mode regex with \\| in pattern warns about literal pipe."""
+        import argparse
+        from tooluniverse.cli import cmd_grep
+        import unittest.mock as mock
+
+        args = argparse.Namespace(
+            pattern=r"p-value\|FDR",
+            field="description",
+            search_mode="regex",
+            limit=None,
+            offset=0,
+            categories=None,
+            raw=False,
+            json=False,
+        )
+        with mock.patch("tooluniverse.cli._get_tu", return_value=tu):
+            cmd_grep(args)
+        out, err = capsys.readouterr()
+        assert "\\|" in err or r"\|" in err
+        assert "alternation" in err.lower() or "literal" in err.lower()

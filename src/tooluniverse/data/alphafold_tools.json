@@ -235,7 +235,9 @@
               "type": "object"
             }
           },
-          "required": ["data"]
+          "required": [
+            "data"
+          ]
         },
         {
           "type": "object",
@@ -253,7 +255,9 @@
               "type": "object"
             }
           },
-          "required": ["error"]
+          "required": [
+            "error"
+          ]
         }
       ]
     },
@@ -421,7 +425,7 @@
     },
     "test_examples": [
       {
-        "qualifier": "F1"
+        "qualifier": "P04637"
       }
     ]
   },

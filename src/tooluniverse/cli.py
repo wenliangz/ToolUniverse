@@ -17,6 +17,7 @@ Subcommands:
 """
 
 import contextlib
+import difflib
 import json
 import os
 import sys
@@ -258,7 +259,7 @@ def _render_grep(d: dict) -> str:
                     f"'{underscore_hint}', or use --field description)"
                 )
             return (
-                "0 matches  (tip: add --field description to search tool descriptions)"
+                "0 matches  (tip: use --field description to search tool descriptions)"
             )
         return "0 matches"
     col1 = max((len(t.get("name", "")) for t in tools), default=8)
@@ -281,7 +282,15 @@ def _render_grep(d: dict) -> str:
         more_hint = "  (end of results)"
     else:
         more_hint = ""
-    lines.append(f"\n{len(tools)} of {total} matches{range_str}{more_hint}")
+    # R22B-11: show which field was searched on the first page so users discover
+    # --field description.  Skip on subsequent pages to keep the line short.
+    field = d.get("field", "name")
+    field_hint = (
+        "  (searched: name — use --field description to search descriptions)"
+        if field == "name" and offset == 0
+        else ""
+    )
+    lines.append(f"\n{len(tools)} of {total} matches{range_str}{more_hint}{field_hint}")
     return "\n".join(lines)
 
 
@@ -345,7 +354,16 @@ def _render_info(d: dict) -> str:
     """Render get_tool_info result as human-readable tool card."""
     if "error" in d:
         name = d.get("name", "")
-        return f"Error: Tool '{name}' not found" if name else f"Error: {d['error']}"
+        suggestions = d.get("suggestions", [])
+        # R22B-04: append "Did you mean?" hint when suggestions are available.
+        if name:
+            hint = ""
+            if suggestions:
+                hint = f"\n  Did you mean: {', '.join(suggestions)}?"
+            else:
+                hint = "\n  Run `tu grep " + name[:6] + "` to search for similar tools."
+            return f"Error: Tool '{name}' not found.{hint}"
+        return f"Error: {d['error']}"
     # batch result
     if "tools" in d:
         parts = []
@@ -660,7 +678,18 @@ def cmd_list(args: argparse.Namespace) -> None:
         elif args.limit is not None or args.offset:
             # user specified pagination flags → they want a browsable list, not a
             # category overview (which ignores limit/offset)
+            # R22B-03: tell the user about the implicit mode switch so it's not silent.
             mode = "names"
+            _pagination_flags = []
+            if args.limit is not None:
+                _pagination_flags.append(f"--limit {args.limit}")
+            if args.offset:
+                _pagination_flags.append(f"--offset {args.offset}")
+            print(
+                f"Note: using names mode ({', '.join(_pagination_flags)} specified; "
+                "use --mode categories for the category overview).",
+                file=sys.stderr,
+            )
         else:
             mode = "categories"
 
@@ -725,6 +754,15 @@ def cmd_grep(args: argparse.Namespace) -> None:
         else:
             print("Error: pattern cannot be empty", file=sys.stderr)
         sys.exit(1)
+    # BUG-22A-08: warn when a regex pattern contains \| — in Python re, \| is a literal
+    # pipe character, not alternation.  Users familiar with grep -E syntax often expect
+    # \| to mean OR, but in Python re the unescaped | is the alternation operator.
+    if getattr(args, "search_mode", None) == "regex" and r"\|" in args.pattern:
+        print(
+            "Note: in Python regex, \\| matches a literal '|' character, not alternation. "
+            "Use | (unescaped) for OR — e.g., 'A|B' not 'A\\|B'.",
+            file=sys.stderr,
+        )
     with _status_to_stderr():
         tu = _get_tu()
         _cat_unknown = False
@@ -758,7 +796,7 @@ def cmd_grep(args: argparse.Namespace) -> None:
             and result.get("total_matches", 0) == 0
             and field == "name"
         ):
-            result["hint"] = "add --field description to search tool descriptions"
+            result["hint"] = "use --field description to search tool descriptions"
         elif (
             not result.get("tools")
             and result.get("total_matches", 0) == 0
@@ -808,6 +846,17 @@ def cmd_info(args: argparse.Namespace) -> None:
                 },
             }
         )
+    # R22B-04: inject "did you mean" suggestions into each not-found error entry so
+    # _render_info can display them without needing direct access to `tu`.
+    if isinstance(result, dict) and "tools" in result:
+        all_names = list(tu.all_tool_dict.keys())
+        for tool in result["tools"]:
+            if isinstance(tool, dict) and "error" in tool:
+                name = tool.get("name", "")
+                if name:
+                    tool["suggestions"] = difflib.get_close_matches(
+                        name, all_names, n=3, cutoff=0.5
+                    )
     # BUG-R14A-01/R14B-04: normalize "parameter" (singular, raw tool config format) to
     # "parameters" (plural, consistent with find output) in each tool entry.
     # Human-readable mode uses _render_info which reads "parameter" directly; only rename
@@ -1383,7 +1432,11 @@ def main() -> None:
         "--mode",
         default=None,
         choices=["names", "categories", "basic", "by_category", "summary", "custom"],
-        help="Output mode (default: categories overview, or names when --categories given)",
+        help=(
+            "Output mode (default: categories overview; auto-switches to names mode "
+            "when --categories, --limit, --offset, --raw, or --json are given without "
+            "an explicit --mode)"
+        ),
     )
     p.add_argument(
         "--categories", nargs="+", metavar="CAT", help="Filter by category names"
