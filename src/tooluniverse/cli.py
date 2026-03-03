@@ -885,6 +885,15 @@ def cmd_grep(args: argparse.Namespace) -> None:
         ):
             # R15A-06: adapt hint when already searching description
             result["hint"] = "try a different search term or fewer words"
+        elif (
+            not result.get("tools")
+            and result.get("total_matches", 0) == 0
+            and field == "category"
+        ):
+            # BUG-24A-06: add hint for --field category 0 matches (consistency with other fields)
+            result["hint"] = (
+                "try `tu list --mode categories` to browse available categories"
+            )
         else:
             result["hint"] = None
     _print_result(result, args, _render_grep)

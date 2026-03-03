@@ -4961,3 +4961,111 @@ class TestRound23BRemainingFixes:
         # No quoting hint for single word
         assert "multi-word" not in err
         assert "quotes" not in err.lower()
+
+
+class TestRound24Fixes:
+    """Tests for BUG-24B-05, BUG-24A-06, BUG-23A-06 (Round 24 initial fixes)."""
+
+    @pytest.fixture
+    def tu(self):
+        from tooluniverse import ToolUniverse
+
+        tu = ToolUniverse()
+        tu.load_tools()
+        return tu
+
+    @pytest.mark.unit
+    def test_info_not_found_uses_full_name_in_grep_suggestion(
+        self, monkeypatch, tu, capsys
+    ):
+        """BUG-24B-05: tu info error shows full tool name in grep suggestion, not truncated."""
+        import unittest.mock as mock
+        from tooluniverse.cli import cmd_info
+
+        args = argparse.Namespace(
+            tool_names=["AlphaFoldNonexistentTool"],
+            detail_level=None,
+            detail=None,
+            raw=False,
+            json=False,
+        )
+        with mock.patch("tooluniverse.cli._get_tu", return_value=tu):
+            with pytest.raises(SystemExit):
+                cmd_info(args)
+        out, err = capsys.readouterr()
+        combined = out + err
+        # Should suggest 'tu grep AlphaFoldNonexistentTool', not 'tu grep AlphaFo'
+        assert "AlphaFoldNonexistentTool" in combined
+        # Ensure the name isn't truncated (no name[:6] style truncation)
+        assert "AlphaFo\n" not in combined
+
+    @pytest.mark.unit
+    def test_list_json_has_categories_filtered_key(self, monkeypatch, tu, capsys):
+        """BUG-23A-06: tu list --json includes categories_filtered field."""
+        import unittest.mock as mock
+        from tooluniverse.cli import cmd_list
+
+        args = _args(mode="names", limit=3, offset=0, categories=None, json=True)
+        with mock.patch("tooluniverse.cli._get_tu", return_value=tu):
+            cmd_list(args)
+        out, _ = capsys.readouterr()
+        d = _j(out)
+        assert "categories_filtered" in d
+
+    @pytest.mark.unit
+    def test_list_json_categories_filtered_reflects_filter(self, monkeypatch, tu, capsys):
+        """BUG-23A-06: categories_filtered is non-null when a category filter is applied."""
+        import unittest.mock as mock
+        from tooluniverse.cli import cmd_list
+
+        args = _args(mode="names", limit=3, offset=0, categories=["kegg"], json=True)
+        with mock.patch("tooluniverse.cli._get_tu", return_value=tu):
+            cmd_list(args)
+        out, _ = capsys.readouterr()
+        d = _j(out)
+        # categories_filtered should be non-null when a filter was applied
+        assert d.get("categories_filtered") is not None
+        # The resolved category should include "kegg"
+        assert any("kegg" in cat for cat in d["categories_filtered"])
+
+    @pytest.mark.unit
+    def test_grep_category_field_zero_matches_shows_hint(self, monkeypatch, tu, capsys):
+        """BUG-24A-06: tu grep --field category with 0 matches shows a helpful hint."""
+        import unittest.mock as mock
+        from tooluniverse.cli import cmd_grep
+
+        args = argparse.Namespace(
+            pattern=["xyznonexistentcategory999"],
+            field="category",
+            search_mode="text",
+            limit=10,
+            offset=0,
+            categories=None,
+            raw=False,
+            json=False,
+        )
+        with mock.patch("tooluniverse.cli._get_tu", return_value=tu):
+            cmd_grep(args)
+        out, _ = capsys.readouterr()
+        # Should show a hint pointing to list --mode categories
+        assert "categories" in out.lower()
+        assert "0 matches" in out
+
+    @pytest.mark.unit
+    def test_run_parse_error_human_mode_friendly_message(self, monkeypatch, tu, capsys):
+        """BUG-24B-07: tu run with invalid JSON in human mode shows friendly error to stderr."""
+        from tooluniverse.cli import cmd_run
+
+        with pytest.raises(SystemExit) as exc_info:
+            _run(
+                monkeypatch,
+                cmd_run,
+                _args(tool_name="list_tools", arguments=["{not json}"]),
+                tu,
+                capsys,
+            )
+        assert exc_info.value.code == 1
+        cap = capsys.readouterr()
+        # Human mode: error message to stderr, NOT JSON on stdout
+        assert cap.out.strip() == "" or not cap.out.startswith("{")
+        assert "Error" in cap.err or "error" in cap.err.lower()
