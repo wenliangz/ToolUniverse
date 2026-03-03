@@ -1827,6 +1827,15 @@ def main() -> None:
     # We check argv directly because argparse hasn't run yet.
     if "--quiet" in sys.argv or "-q" in sys.argv:
         os.environ["TOOLUNIVERSE_QUIET"] = "1"
+        # BUG-26A-03: logger singleton may already exist; raise its level to WARNING
+        # so that ℹ️ info lines (e.g. "Number of tools", "Auto-loaded workspace
+        # profile.yaml") are suppressed.
+        try:
+            from tooluniverse.logging_config import reconfigure_for_quiet
+
+            reconfigure_for_quiet()
+        except Exception:
+            pass
 
     # BUG-R20B: argparse exits with code 2 and empty stdout on bad args (e.g. --limit -1).
     # Callers that do json.loads(stdout) crash on empty string.

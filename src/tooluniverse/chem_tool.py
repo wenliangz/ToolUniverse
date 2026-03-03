@@ -87,7 +87,23 @@ class ChEMBLRESTTool(BaseTool):
         if "format" in args:
             params["format"] = args["format"]
         else:
-            params["format"] = "json"
+            # BUG-26B-07: for image endpoints, apply default "svg" from the JSON
+            # schema rather than "json" (image endpoints don't accept format=json).
+            tool_name = self.tool_config.get("name", "")
+            endpoint = self.tool_config.get("fields", {}).get("endpoint", "")
+            is_image = (
+                "get_molecule_image" in tool_name.lower() or "/image/" in endpoint
+            )
+            if is_image:
+                # Apply the JSON schema default for image format
+                schema_props = (
+                    self.tool_config.get("parameter", {})
+                    .get("properties", {})
+                    .get("format", {})
+                )
+                params["format"] = schema_props.get("default", "svg")
+            else:
+                params["format"] = "json"
         # Optional field projection to reduce payload size on heavy endpoints.
         # ChEMBL supports projection via the `only` query parameter.
         # We accept ToolUniverse argument name `fields` and map it to `only`.
@@ -103,8 +119,13 @@ class ChEMBLRESTTool(BaseTool):
         if "ordering" in args:
             params["ordering"] = args["ordering"]
 
+        # BUG-26B-03/13: Map `q` to `pref_name__icontains` so that intuitive
+        # text searches work (ChEMBL uses field__lookup syntax, not q=).
+        if "q" in args and args["q"] is not None:
+            params["pref_name__icontains"] = args["q"]
+
         # Add any filter parameters (ChEMBL uses field__filter syntax)
-        # e.g., molecule_chembl_id__exact, pref_name__contains
+        # e.g., molecule_chembl_id__exact, pref_name__icontains
         for key, value in args.items():
             if (
                 key
@@ -115,6 +136,7 @@ class ChEMBLRESTTool(BaseTool):
                     "fields",
                     "only",
                     "ordering",
+                    "q",  # handled above: mapped to pref_name__icontains
                     "chembl_id",
                     "target_chembl_id",
                     "assay_chembl_id",

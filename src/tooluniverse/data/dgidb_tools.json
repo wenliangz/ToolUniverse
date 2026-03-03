@@ -7,49 +7,27 @@
             "properties": {
                 "genes": {
                     "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "List of gene symbols (e.g., ['EGFR', 'BRAF', 'KRAS'])."
+                    "items": {"type": "string"},
+                    "description": "List of gene symbols (e.g., ['EGFR', 'BRAF', 'KRAS']).",
                 },
                 "interaction_sources": {
                     "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "Optional filter by data sources (e.g., ['DrugBank', 'ChEMBL'])."
+                    "items": {"type": "string"},
+                    "description": "Optional filter by data sources (e.g., ['DrugBank', 'ChEMBL']).",
                 },
                 "interaction_types": {
                     "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "Optional filter by interaction types (e.g., ['inhibitor', 'antagonist'])."
-                }
+                    "items": {"type": "string"},
+                    "description": "Optional filter by interaction types (e.g., ['inhibitor', 'antagonist']).",
+                },
             },
-            "required": [
-                "genes"
-            ]
+            "required": ["genes"],
         },
-        "fields": {
-            "operation": "interactions"
-        },
+        "fields": {"operation": "interactions"},
         "type": "DGIdbTool",
         "test_examples": [
-            {
-                "genes": [
-                    "EGFR"
-                ]
-            },
-            {
-                "genes": [
-                    "BRAF",
-                    "KRAS"
-                ],
-                "interaction_types": [
-                    "inhibitor"
-                ]
-            }
+            {"genes": ["EGFR"]},
+            {"genes": ["BRAF", "KRAS"], "interaction_types": ["inhibitor"]},
         ],
         "return_schema": {
             "type": "object",
@@ -65,38 +43,30 @@
                                     "items": {
                                         "type": "object",
                                         "properties": {
-                                            "name": {
-                                                "type": "string"
-                                            },
-                                            "longName": {
-                                                "type": "string"
-                                            },
+                                            "name": {"type": "string"},
+                                            "longName": {"type": "string"},
                                             "interactions": {
                                                 "type": "array",
                                                 "items": {
                                                     "type": "object",
                                                     "properties": {
-                                                        "drug": {
-                                                            "type": "object"
-                                                        },
+                                                        "drug": {"type": "object"},
                                                         "interactionTypes": {
                                                             "type": "array"
                                                         },
-                                                        "sources": {
-                                                            "type": "array"
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                                        "sources": {"type": "array"},
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
                                 }
-                            }
+                            },
                         }
-                    }
+                    },
                 }
-            }
-        }
+            },
+        },
     },
     {
         "name": "DGIdb_get_gene_druggability",
@@ -106,29 +76,15 @@
             "properties": {
                 "genes": {
                     "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "List of gene symbols to check druggability."
+                    "items": {"type": "string"},
+                    "description": "List of gene symbols to check druggability.",
                 }
             },
-            "required": [
-                "genes"
-            ]
+            "required": ["genes"],
         },
-        "fields": {
-            "operation": "categories"
-        },
+        "fields": {"operation": "categories"},
         "type": "DGIdbTool",
-        "test_examples": [
-            {
-                "genes": [
-                    "EGFR",
-                    "TP53",
-                    "BRCA1"
-                ]
-            }
-        ],
+        "test_examples": [{"genes": ["EGFR", "TP53", "BRCA1"]}],
         "return_schema": {
             "type": "object",
             "properties": {
@@ -143,21 +99,17 @@
                                     "items": {
                                         "type": "object",
                                         "properties": {
-                                            "name": {
-                                                "type": "string"
-                                            },
-                                            "geneCategories": {
-                                                "type": "array"
-                                            }
-                                        }
-                                    }
+                                            "name": {"type": "string"},
+                                            "geneCategories": {"type": "array"},
+                                        },
+                                    },
                                 }
-                            }
+                            },
                         }
-                    }
+                    },
                 }
-            }
-        }
+            },
+        },
     },
     {
         "name": "DGIdb_get_gene_info",
@@ -167,33 +119,15 @@
             "properties": {
                 "genes": {
                     "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "List of gene symbols."
+                    "items": {"type": "string"},
+                    "description": "List of gene symbols.",
                 }
             },
-            "required": [
-                "genes"
-            ]
+            "required": ["genes"],
         },
-        "fields": {
-            "operation": "genes"
-        },
+        "fields": {"operation": "genes"},
         "type": "DGIdbTool",
-        "test_examples": [
-            {
-                "genes": [
-                    "EGFR"
-                ]
-            },
-            {
-                "genes": [
-                    "BRAF",
-                    "ERBB2"
-                ]
-            }
-        ],
+        "test_examples": [{"genes": ["EGFR"]}, {"genes": ["BRAF", "ERBB2"]}],
         "return_schema": {
             "type": "object",
             "properties": {
@@ -208,24 +142,18 @@
                                     "items": {
                                         "type": "object",
                                         "properties": {
-                                            "name": {
-                                                "type": "string"
-                                            },
-                                            "longName": {
-                                                "type": "string"
-                                            },
-                                            "geneCategories": {
-                                                "type": "array"
-                                            }
-                                        }
-                                    }
+                                            "name": {"type": "string"},
+                                            "longName": {"type": "string"},
+                                            "geneCategories": {"type": "array"},
+                                        },
+                                    },
                                 }
-                            }
+                            },
                         }
-                    }
+                    },
                 }
-            }
-        }
+            },
+        },
     },
     {
         "name": "DGIdb_get_drug_info",
@@ -234,33 +162,27 @@
             "type": "object",
             "properties": {
                 "drugs": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "description": "List of drug names (e.g., ['imatinib', 'erlotinib'])."
+                    "oneOf": [
+                        {
+                            "type": "string",
+                            "description": 'Single drug name (e.g., "imatinib").',
+                        },
+                        {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": 'List of drug names (e.g., ["imatinib", "erlotinib"]).',
+                        },
+                    ],
+                    "description": "Drug name(s) to look up. Accepts a single name or a list.",
                 }
             },
-            "required": [
-                "drugs"
-            ]
+            "required": ["drugs"],
         },
-        "fields": {
-            "operation": "drugs"
-        },
+        "fields": {"operation": "drugs"},
         "type": "DGIdbTool",
         "test_examples": [
-            {
-                "drugs": [
-                    "imatinib"
-                ]
-            },
-            {
-                "drugs": [
-                    "erlotinib",
-                    "gefitinib"
-                ]
-            }
+            {"drugs": ["imatinib"]},
+            {"drugs": ["erlotinib", "gefitinib"]},
         ],
         "return_schema": {
             "type": "object",
@@ -276,23 +198,17 @@
                                     "items": {
                                         "type": "object",
                                         "properties": {
-                                            "name": {
-                                                "type": "string"
-                                            },
-                                            "conceptId": {
-                                                "type": "string"
-                                            },
-                                            "approved": {
-                                                "type": "boolean"
-                                            }
-                                        }
-                                    }
+                                            "name": {"type": "string"},
+                                            "conceptId": {"type": "string"},
+                                            "approved": {"type": "boolean"},
+                                        },
+                                    },
                                 }
-                            }
+                            },
                         }
-                    }
+                    },
                 }
-            }
-        }
-    }
+            },
+        },
+    },
 ]

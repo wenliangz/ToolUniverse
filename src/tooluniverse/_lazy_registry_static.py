@@ -220,7 +220,6 @@ STATIC_LAZY_REGISTRY = {
     "GetSPLBySetIDTool": "dailymed_tool",
     "GetToolInfo": "tool_discovery_tools",
     "GetToolInfoTool": "tool_discovery_tools",
-    "UsageTipsTool": "usage_tips_tool",
     "GlyGenTool": "glygen_tool",
     "GraphQLTool": "graphql_tool",
     "GrepTools": "tool_discovery_tools",
@@ -472,6 +471,7 @@ STATIC_LAZY_REGISTRY = {
     "UniProtTaxonomyTool": "uniprot_taxonomy_tool",
     "UniRefTool": "uniref_tool",
     "UnpaywallTool": "unpaywall_tool",
+    "UsageTipsTool": "usage_tips_tool",
     "VDJDBTool": "vdjdb_tool",
     "VisualizationTool": "visualization_tool",
     "WFGYPromptBundleTool": "wfgy_promptbundle_tool",
@@ -505,5 +505,5 @@ STATIC_LAZY_REGISTRY = {
     "gnomADGraphQLQueryTool": "gnomad_tool",
     "gnomADGraphQLTool": "gnomad_tool",
     "miRNAGetTool": "mirna_tool",
-    "miRNASearchTool": "mirna_tool"
+    "miRNASearchTool": "mirna_tool",
 }
