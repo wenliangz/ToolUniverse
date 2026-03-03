@@ -3042,8 +3042,8 @@ class TestRound9Fixes:
 
     # BUG-R9B-04: limit=0 has_more is False
     @pytest.mark.unit
-    def test_list_limit_zero_has_more_false(self, monkeypatch, tu, capsys):
-        """BUG-R14B-05: tu list --limit 0 is a count probe; has_more should be false."""
+    def test_list_limit_zero_has_more_true(self, monkeypatch, tu, capsys):
+        """BUG-R19B-05: tu list --limit 0 has_more=True when tools exist (count-probe)."""
         from tooluniverse.cli import cmd_list
         out, _ = _run(
             monkeypatch, cmd_list,
@@ -3051,10 +3051,10 @@ class TestRound9Fixes:
             tu, capsys,
         )
         d = _j(out)
-        # R14B-05 fix: limit=0 → has_more=False so callers don't loop
-        assert d.get("has_more") is False
-        # But total_tools still reflects the real count
+        # R19B-05 fix: limit=0 → has_more=True when total_tools > 0
+        # (consistent with grep and find behavior)
         assert d.get("total_tools", 0) > 0
+        assert d.get("has_more") is True
 
     @pytest.mark.unit
     def test_grep_limit_zero_exits_0_has_more_true(self, monkeypatch, tu, capsys):
@@ -3675,16 +3675,17 @@ class TestRound14Fixes:
         assert "parameters" in tool, "Expected 'parameters' key in info JSON"
         assert "parameter" not in tool, "Should not have old 'parameter' key in JSON mode"
 
-    # R14B-05: list/grep --limit 0 returns has_more: false
+    # R14B-05 → R19B-05: list --limit 0 now returns has_more: true (consistent with grep/find)
     @pytest.mark.unit
-    def test_list_limit_zero_has_more_false(self, monkeypatch, tu, capsys):
-        """R14B-05: list --limit 0 should have has_more: false (count-only probe)."""
+    def test_list_limit_zero_has_more_true(self, monkeypatch, tu, capsys):
+        """R19B-05: list --limit 0 has_more=True when tools exist (count-probe)."""
         from tooluniverse.cli import cmd_list
         out, _ = _run(monkeypatch, cmd_list,
                       _args(mode="names", limit=0, json=True), tu, capsys)
         d = _j(out)
-        assert d["has_more"] is False
+        # R19B-05: has_more now True when total_tools > 0, consistent with grep/find
         assert d["total_tools"] > 0
+        assert d["has_more"] is True
 
     @pytest.mark.unit
     def test_grep_limit_zero_has_more_true(self, monkeypatch, tu, capsys):
@@ -4006,3 +4007,61 @@ class TestRound18Fixes:
         result = _render_find(d)
         assert "[1–" not in result  # no bracket range on first page
         assert "next: --offset 1" in result  # but next-offset hint is there
+
+
+class TestRound19Fixes:
+    """Tests for bugs found in R19A and R19B simulation rounds."""
+
+    # R19B-05: list --limit 0 now has_more=True (count-probe consistency)
+    @pytest.mark.unit
+    def test_list_names_limit_zero_has_more_true(self, monkeypatch, tu, capsys):
+        """R19B-05: tu list --mode names --limit 0 has_more=True when tools exist."""
+        from tooluniverse.cli import cmd_list
+        out, _ = _run(monkeypatch, cmd_list,
+                      _args(mode="names", limit=0, json=True), tu, capsys)
+        d = _j(out)
+        assert d["total_tools"] > 0
+        assert d["has_more"] is True, "list names --limit 0 should signal data exists"
+
+    # R19B: count key contracts documented — verify expected keys exist per command
+    @pytest.mark.unit
+    def test_list_json_has_total_tools_key(self, monkeypatch, tu, capsys):
+        """R19B schema contract: list uses 'total_tools' as the count key."""
+        from tooluniverse.cli import cmd_list
+        out, _ = _run(monkeypatch, cmd_list,
+                      _args(mode="names", limit=1, json=True), tu, capsys)
+        d = _j(out)
+        assert "total_tools" in d
+        assert d["total_tools"] > 0
+
+    @pytest.mark.unit
+    def test_grep_json_has_total_matches_key(self, monkeypatch, tu, capsys):
+        """R19B schema contract: grep uses 'total_matches' as the count key."""
+        from tooluniverse.cli import cmd_grep
+        out, _ = _run(monkeypatch, cmd_grep,
+                      _args(pattern="protein", limit=1, json=True), tu, capsys)
+        d = _j(out)
+        assert "total_matches" in d
+        assert d["total_matches"] > 0
+
+    @pytest.mark.unit
+    def test_info_json_has_total_found_key(self, monkeypatch, tu, capsys):
+        """R19B schema contract: info uses 'total_found' and 'total_requested' keys."""
+        from tooluniverse.cli import cmd_info
+        out, _ = _run(monkeypatch, cmd_info,
+                      _args(tool_names=["UniProt_get_entry_by_accession"], json=True),
+                      tu, capsys)
+        d = _j(out)
+        assert "total_found" in d
+        assert "total_requested" in d
+
+    # R19B: pagination range and next-offset hint in human-readable grep output
+    @pytest.mark.unit
+    def test_grep_paginated_output_shows_range(self, monkeypatch, tu, capsys):
+        """R19B: grep with offset shows range and next offset in text output."""
+        from tooluniverse.cli import cmd_grep
+        out, _ = _run(monkeypatch, cmd_grep,
+                      _args(pattern="protein", limit=5, offset=5), tu, capsys)
+        # Footer should show range [6-10] and next offset
+        assert "[6–10]" in out or "[6-10]" in out
+        assert "--offset 10" in out

@@ -811,6 +811,9 @@ class ToolFinderKeyword(BaseTool):
                     "limit": limit,
                     "offset": offset,
                     "has_more": has_more,
+                    # BUG-R19A-02: include next_offset so pipelines don't recompute
+                    # offset + len(tools). None when no more pages exist.
+                    "next_offset": (offset + len(matching_tools)) if has_more else None,
                     "categories_filtered": categories,
                     "processing_info": {
                         "query_tokens": len(query_tokens),

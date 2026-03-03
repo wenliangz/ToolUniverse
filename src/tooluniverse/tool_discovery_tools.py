@@ -172,6 +172,11 @@ class GrepToolsTool(BaseTool):
                 else matching_tools[offset:]
             )
 
+        has_more = (
+            total_matches > 0
+            if limit == 0
+            else (limit is not None and (offset + len(matching_tools)) < total_matches)
+        )
         return {
             "total_matches": total_matches,
             "limit": limit,
@@ -179,13 +184,10 @@ class GrepToolsTool(BaseTool):
             # BUG-R18A-10: limit=0 is a count-probe; has_more should reflect whether
             # there ARE more results (consistent with find_tools behavior).
             # has_more: true at limit=0 correctly signals "there is data if you raise limit".
-            "has_more": (
-                total_matches > 0
-                if limit == 0
-                else (
-                    limit is not None and (offset + len(matching_tools)) < total_matches
-                )
-            ),
+            "has_more": has_more,
+            # BUG-R19A-02: include next_offset so pipelines don't have to recompute
+            # offset+len(tools) — None when no more pages.
+            "next_offset": (offset + len(matching_tools)) if has_more else None,
             "pattern": pattern,
             "field": field,
             "search_mode": search_mode,
@@ -327,20 +329,25 @@ class ListToolsTool(BaseTool):
                         )
 
                     # Simple list of names
+                    _has_more_names = (
+                        total_count > offset
+                        if limit == 0
+                        else (
+                            limit is not None
+                            and (offset + len(tool_names)) < total_count
+                        )
+                    )
                     return {
                         "total_tools": total_count,
                         "limit": limit,
                         "offset": offset,
-                        # BUG-R14B-05: limit=0 is a count-only probe; has_more=False so
-                        # callers don't enter an infinite pagination loop.
-                        "has_more": (
-                            False
-                            if limit == 0
-                            else (
-                                limit is not None
-                                and (offset + len(tool_names)) < total_count
-                            )
-                        ),
+                        # BUG-R19B-05: limit=0 is a count-probe; has_more should reflect
+                        # whether data exists (consistent with grep/find behavior).
+                        "has_more": _has_more_names,
+                        # BUG-R19A-02: include next_offset for pipeline convenience.
+                        "next_offset": (offset + len(tool_names))
+                        if _has_more_names
+                        else None,
                         "tools": tool_names,
                     }
 
