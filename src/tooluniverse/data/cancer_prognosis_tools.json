@@ -15,7 +15,11 @@
         },
         "cancer": {
           "type": "string",
-          "description": "TCGA cancer type abbreviation (e.g., 'BRCA', 'LUAD', 'COAD', 'GBM') or cBioPortal study ID (e.g., 'brca_tcga', 'luad_tcga_pan_can_atlas_2018')"
+          "description": "TCGA cancer type abbreviation (e.g., 'BRCA', 'LUAD', 'COAD', 'GBM', 'COADREAD') or cBioPortal study ID (e.g., 'brca_tcga'). Use cancer_type as alias."
+        },
+        "cancer_type": {
+          "type": "string",
+          "description": "Alias for cancer. TCGA cancer type abbreviation (e.g., 'BRCA', 'LUAD', 'COAD', 'GBM', 'COADREAD') or cBioPortal study ID."
         },
         "max_patients": {
           "type": [
@@ -25,9 +29,7 @@
           "description": "Maximum number of patient records to return (default 500, max 2000)"
         }
       },
-      "required": [
-        "cancer"
-      ]
+      "required": []
     },
     "return_schema": {
       "oneOf": [
@@ -132,7 +134,11 @@
         },
         "cancer": {
           "type": "string",
-          "description": "TCGA cancer type abbreviation (e.g., 'BRCA', 'LUAD') or cBioPortal study ID"
+          "description": "TCGA cancer type abbreviation (e.g., 'BRCA', 'LUAD', 'COADREAD') or cBioPortal study ID. Use cancer_type as alias."
+        },
+        "cancer_type": {
+          "type": "string",
+          "description": "Alias for cancer. TCGA cancer type (e.g., 'BRCA', 'LUAD', 'COADREAD') or cBioPortal study ID."
         },
         "gene": {
           "type": "string",
@@ -147,7 +153,6 @@
         }
       },
       "required": [
-        "cancer",
         "gene"
       ]
     },
@@ -351,12 +356,14 @@
         },
         "cancer": {
           "type": "string",
-          "description": "TCGA cancer type abbreviation (e.g., 'BRCA', 'LUAD') or cBioPortal study ID"
+          "description": "TCGA cancer type abbreviation (e.g., 'BRCA', 'LUAD', 'COADREAD') or cBioPortal study ID. Use cancer_type as alias."
+        },
+        "cancer_type": {
+          "type": "string",
+          "description": "Alias for cancer. TCGA cancer type abbreviation (e.g., 'BRCA', 'LUAD', 'COADREAD')."
         }
       },
-      "required": [
-        "cancer"
-      ]
+      "required": []
     },
     "return_schema": {
       "oneOf": [

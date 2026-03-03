@@ -37,9 +37,10 @@
         "dataset": {
           "type": [
             "integer",
+            "string",
             "null"
           ],
-          "description": "Dataset source ID. Key datasets: 2 (NCI-ALMANAC), 1 (MERCK), 10 (STANFORD), 7 (MIT-MELANOMA). Use SYNERGxDB_list_datasets to see all."
+          "description": "Dataset source ID (integer) or name (string). Examples: 2 or 'NCI-ALMANAC', 1 or 'MERCK', 10 or 'VISAGE', 7 or 'MIT-MELANOMA'. Use SYNERGxDB_list_datasets to see all available datasets and their IDs."
         },
         "page": {
           "type": "integer",

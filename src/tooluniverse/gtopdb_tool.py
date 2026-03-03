@@ -36,7 +36,11 @@ class GtoPdbRESTTool(BaseTool):
                     if k not in ("targetId", "target_id", "ligandId", "ligand_id")
                 }
             elif ligand_id is not None:
-                url = f"{self.base_url}/ligands/{ligand_id}/interactions"
+                # BUG-38B-02: /ligands/{id}/interactions always returns [] per GtoPdb REST API.
+                # GtoPdb interactions are indexed by TARGET. Store ligand_id on self for use in run().
+                self._pending_ligand_id_filter = ligand_id
+                # Fall back to main interactions endpoint; run() will filter client-side
+                url = f"{self.base_url}/interactions"
                 args = {
                     k: v
                     for k, v in args.items()
@@ -94,6 +98,7 @@ class GtoPdbRESTTool(BaseTool):
 
     def run(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         url = None
+        self._pending_ligand_id_filter = None  # BUG-38B-02: reset per call
         try:
             url = self._build_url(arguments)
             response = request_with_retry(
@@ -133,6 +138,12 @@ class GtoPdbRESTTool(BaseTool):
                 }
             data = response.json()
 
+            # BUG-38B-02: client-side filter by ligandId when requested
+            # (/ligands/{id}/interactions always returns [], so we fetch all and filter)
+            ligand_id_filter = getattr(self, "_pending_ligand_id_filter", None)
+            if ligand_id_filter is not None and isinstance(data, list):
+                data = [x for x in data if x.get("ligandId") == ligand_id_filter]
+
             # Apply limit if specified (max_results is an alias for limit)
             limit = arguments.get("limit", arguments.get("max_results", 20))
             if isinstance(data, list) and len(data) > limit:
@@ -144,6 +155,17 @@ class GtoPdbRESTTool(BaseTool):
                 "url": url,
                 "count": len(data) if isinstance(data, list) else 1,
             }
+
+            # BUG-38B-02: if ligandId filter returned nothing, add informative hint
+            ligand_id_filter = getattr(self, "_pending_ligand_id_filter", None)
+            if ligand_id_filter is not None and result["count"] == 0:
+                result["message"] = (
+                    f"No interactions found for ligandId={ligand_id_filter} in the GtoPdb "
+                    "interactions database. Note: GtoPdb's /interactions endpoint covers "
+                    "receptor pharmacology (GPCR, ion channel, enzyme, transporter) data. "
+                    "Kinase inhibitors and other mechanism-based drugs may not appear here. "
+                    "To find targets, search GtoPdb using the ligand name on guidetopharmacology.org."
+                )
 
             # BUG-35A-02: add top-level queried_target summary for interactions endpoint
             # so users can immediately verify they're getting the right target's data

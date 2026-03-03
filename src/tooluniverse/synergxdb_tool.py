@@ -161,8 +161,9 @@ class SYNERGxDBTool(BaseTool):
             return {
                 "status": "error",
                 "error": "At least one of drug_id_1, drug_id_2, or dataset is required. "
-                "The sample/tissue filter can be used as an additional filter alongside these, "
-                "but cannot be used as the sole filter parameter.",
+                "To find drug IDs, use SYNERGxDB_list_drugs (filter by name with 'query' param). "
+                "To find dataset IDs/names, use SYNERGxDB_list_datasets. "
+                "The sample/tissue filter can only be used alongside these parameters.",
             }
 
         params = {"page": page, "perPage": per_page}
@@ -229,8 +230,10 @@ class SYNERGxDBTool(BaseTool):
 
         data = result["data"]
 
-        # BUG-35A-08: client-side name filtering if query/name is provided
-        name_filter = arguments.get("query") or arguments.get("name")
+        # BUG-35A-08: client-side name filtering if query/name/search is provided
+        name_filter = (
+            arguments.get("query") or arguments.get("name") or arguments.get("search")
+        )
         if name_filter and isinstance(data, list):
             name_lower = name_filter.lower()
             data = [

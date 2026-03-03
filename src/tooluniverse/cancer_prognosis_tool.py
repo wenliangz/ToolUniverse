@@ -28,6 +28,7 @@ TCGA_STUDY_MAP = {
     "CESC": "cesc_tcga",
     "CHOL": "chol_tcga",
     "COAD": "coadread_tcga",
+    "COADREAD": "coadread_tcga",  # BUG-38B-04: combined colon+rectal TCGA cohort alias
     "DLBC": "dlbc_tcga",
     "ESCA": "esca_tcga",
     "GBM": "gbm_tcga",
