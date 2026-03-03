@@ -292,6 +292,20 @@ class SYNERGxDBTool(BaseTool):
             return {"status": "error", "error": result["error"]}
 
         data = result["data"]
+
+        # BUG-50A-003: filter self-combination entries (drugA==drugB) when only one
+        # drug is specified. These occur when the same drug appears as both partners.
+        if (drug_id_1 or drug_id_2) and not (drug_id_1 and drug_id_2):
+            if isinstance(data, list):
+                data = [
+                    x
+                    for x in data
+                    if not (
+                        x.get("idDrug1") is not None
+                        and x.get("idDrug1") == x.get("idDrug2")
+                    )
+                ]
+
         if result.get("no_data") or not data:
             # BUG-44A-03: distinguish "drug not in DB" vs "combo not tested" in the message
             if drug_id_1 and drug_id_2:

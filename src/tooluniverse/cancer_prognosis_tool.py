@@ -489,6 +489,8 @@ class CancerPrognosisTool(BaseTool):
             p for p, c in patient_sample_counts.items() if c > 1
         )
         multi_sample_note = ""
+        # BUG-50B-001: structured duplicate_aliquot_warning field (in addition to note)
+        duplicate_aliquot_warning = None
         if multi_sample_patients:
             multi_sample_note = (
                 " WARNING: {} patient(s) have multiple samples (e.g., primary + recurrence). "
@@ -499,29 +501,37 @@ class CancerPrognosisTool(BaseTool):
                     + (" ..." if len(multi_sample_patients) > 5 else ""),
                 )
             )
+            duplicate_aliquot_warning = {
+                "n_affected_patients": len(multi_sample_patients),
+                "affected_patient_ids": multi_sample_patients[:10],
+                "message": "These patients have multiple samples (e.g., primary + recurrence aliquots). "
+                "Joining on patient_id will double-count them in survival analysis. "
+                "Deduplicate by keeping only the primary tumor sample (-01 suffix) before merging.",
+            }
 
-        return {
-            "status": "success",
-            "data": {
-                "study_id": study_id,
-                "gene": gene,
-                "entrez_gene_id": entrez_id,
-                "profile_id": profile_id,
-                "expression_units": expression_units,
-                "n_samples_with_expression_data": len(values),
-                "n_samples_returned": len(values[:max_samples]),
-                "expression_summary": {
-                    "mean": round(mean_val, 4),
-                    "median": round(median_val, 4),
-                    "min": round(sorted_vals[0], 4),
-                    "max": round(sorted_vals[-1], 4),
-                },
-                "samples": values[:max_samples],
-                "note": "Values are from {} profile ({}). Use with Survival tools for expression-survival analysis.{}".format(
-                    profile_id, expression_units, multi_sample_note
-                ),
+        result_data: Dict[str, Any] = {
+            "study_id": study_id,
+            "gene": gene,
+            "entrez_gene_id": entrez_id,
+            "profile_id": profile_id,
+            "expression_units": expression_units,
+            "n_samples_with_expression_data": len(values),
+            "n_samples_returned": len(values[:max_samples]),
+            "expression_summary": {
+                "mean": round(mean_val, 4),
+                "median": round(median_val, 4),
+                "min": round(sorted_vals[0], 4),
+                "max": round(sorted_vals[-1], 4),
             },
+            "samples": values[:max_samples],
+            "note": "Values are from {} profile ({}). Use with Survival tools for expression-survival analysis.{}".format(
+                profile_id, expression_units, multi_sample_note
+            ),
         }
+        if duplicate_aliquot_warning is not None:
+            result_data["duplicate_aliquot_warning"] = duplicate_aliquot_warning
+
+        return {"status": "success", "data": result_data}
 
     def _search_studies(self, arguments):
         # type: (Dict[str, Any]) -> Dict[str, Any]

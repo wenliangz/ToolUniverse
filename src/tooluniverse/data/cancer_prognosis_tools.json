@@ -190,8 +190,17 @@
                 "profile_id": {
                   "type": "string"
                 },
-                "n_samples": {
-                  "type": "integer"
+                "expression_units": {
+                  "type": "string",
+                  "description": "Description of the expression value type (e.g., 'RSEM (RNA Seq V2 normalized expected read counts)')"
+                },
+                "n_samples_with_expression_data": {
+                  "type": "integer",
+                  "description": "Number of samples with non-null expression values for this gene"
+                },
+                "n_samples_returned": {
+                  "type": "integer",
+                  "description": "Number of sample records in the 'samples' array (may be less than n_samples_with_expression_data if max_samples was applied)"
                 },
                 "expression_summary": {
                   "type": "object",
@@ -226,11 +235,28 @@
                       }
                     }
                   }
+                },
+                "note": {
+                  "type": "string",
+                  "description": "Description of profile and any warnings (e.g., duplicate aliquot warning)"
+                },
+                "duplicate_aliquot_warning": {
+                  "type": "object",
+                  "description": "Present when patients have multiple samples (e.g., primary + recurrence). Joining on patient_id will double-count affected patients.",
+                  "properties": {
+                    "n_affected_patients": {
+                      "type": "integer"
+                    },
+                    "affected_patient_ids": {
+                      "type": "array",
+                      "items": {"type": "string"}
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
-            },
-            "metadata": {
-              "type": "object"
             }
           }
         },

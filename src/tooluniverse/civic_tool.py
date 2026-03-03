@@ -389,7 +389,7 @@ class CIViCTool(BaseTool):
                     "query": arguments,
                 }
 
-            return {
+            result = {
                 "status": "success",
                 "data": data.get("data", {}),
                 "metadata": {
@@ -398,6 +398,34 @@ class CIViCTool(BaseTool):
                     "endpoint": CIVIC_GRAPHQL_URL,
                 },
             }
+
+            # BUG-50A-001: warn when civic_search_evidence_items combined
+            # molecular_profile+disease filter returns 0 results.
+            # CIViC GraphQL applies AND across all filter params, but disease names
+            # must match CIViC's exact taxonomy (e.g., "Chronic Myelogenous Leukemia,
+            # BCR-ABL1+" not "CML"). A combined filter easily returns nothing silently.
+            if tool_name == "civic_search_evidence_items":
+                mol_profile = arguments.get("molecular_profile")
+                disease = arguments.get("disease") or arguments.get("disease_name")
+                if mol_profile and disease:
+                    evidence_nodes = (
+                        result.get("data", {}).get("evidenceItems", {}).get("nodes", [])
+                    )
+                    if len(evidence_nodes) == 0:
+                        result["warning"] = (
+                            f"No evidence items found for molecular_profile='{mol_profile}' "
+                            f"AND disease='{disease}'. CIViC applies AND logic across all "
+                            "filters, and disease names must match CIViC's exact taxonomy "
+                            "(e.g., 'Pancreatic Ductal Carcinoma' not 'Pancreatic Adenocarcinoma', "
+                            "'Non-small Cell Lung Carcinoma' not 'NSCLC', "
+                            "'Chronic Myelogenous Leukemia, BCR-ABL1+' not 'CML'). "
+                            f"Try retrying with only molecular_profile='{mol_profile}' "
+                            "(remove the disease filter) to see all evidence, then filter "
+                            "manually. Use civic_search_molecular_profiles to confirm the "
+                            "exact molecular profile name."
+                        )
+
+            return result
 
         except requests.RequestException as e:
             return {
