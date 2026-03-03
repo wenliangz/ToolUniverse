@@ -477,8 +477,9 @@ def _render_run(d: dict) -> str:
             lines.append(f"  Did you mean: {', '.join(suggestions[:3])}?")
         lines.append("Tips:")
         lines.append("  • Check tool name spelling (names are case-sensitive)")
-        lines.append("  • Run `tu grep <name>` to search for similar tools")
+        # BUG-27B-09: use tu find (always available) instead of tu grep (needs meta-tools)
         lines.append("  • Run `tu find '<description>'` for natural-language search")
+        lines.append("  • Run `tu grep <name>` to search by pattern (if available)")
     else:
         next_steps = details.get("next_steps") or []
         # BUG-25B-07: filter out Python SDK-specific tips not relevant to CLI users

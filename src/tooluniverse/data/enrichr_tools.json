@@ -30,8 +30,7 @@
         }
       },
       "required": [
-        "gene_list",
-        "libs"
+        "gene_list"
       ]
     },
     "test_examples": [
