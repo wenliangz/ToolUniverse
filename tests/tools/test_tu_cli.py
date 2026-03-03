@@ -4256,3 +4256,103 @@ class TestRound21Fixes:
         assert d["tools"] == []
         assert d["has_more"] is False
         assert d["total_tools"] > 0  # total count still accurate
+
+
+class TestRound21BFixes:
+    """Tests for R21B bugs fixed: list footer, grep smart hint, find score key."""
+
+    # R21B-06: list names mode should show range and next-offset in pagination footer
+    @pytest.mark.unit
+    def test_render_list_names_mode_shows_range_and_next_offset(self):
+        """R21B-06: _render_list names mode shows [N-M] and next: --offset hint."""
+        from tooluniverse.cli import _render_list
+        d = {
+            "tools": [f"Tool{i}" for i in range(5)],
+            "total_tools": 50,
+            "limit": 5,
+            "offset": 10,
+            "has_more": True,
+        }
+        result = _render_list(d)
+        assert "[11–15]" in result, "Should show range [11-15]"
+        assert "next: --offset 15" in result
+
+    @pytest.mark.unit
+    def test_render_list_names_mode_shows_end_of_results(self):
+        """R21B-07: _render_list names mode shows '(end of results)' on last page."""
+        from tooluniverse.cli import _render_list
+        d = {
+            "tools": [f"Tool{i}" for i in range(3)],
+            "total_tools": 53,
+            "limit": 5,
+            "offset": 50,
+            "has_more": False,
+        }
+        result = _render_list(d)
+        assert "end of results" in result
+        assert "[51–53]" in result
+
+    @pytest.mark.unit
+    def test_render_list_basic_mode_shows_range_and_next_offset(self):
+        """R21B-06: _render_list basic mode also shows range and next-offset hint."""
+        from tooluniverse.cli import _render_list
+        d = {
+            "tools": [{"name": f"T{i}", "description": f"d{i}"} for i in range(5)],
+            "total_tools": 50,
+            "limit": 5,
+            "offset": 0,
+            "has_more": True,
+        }
+        result = _render_list(d)
+        assert "[1–5]" in result
+        assert "next: --offset 5" in result
+
+    # R21B-03/14: smart hint for multi-word grep in name field
+    @pytest.mark.unit
+    def test_render_grep_multiword_name_search_suggests_underscore(self):
+        """R21B-03: grep with space in pattern suggests underscore variant."""
+        from tooluniverse.cli import _render_grep
+        d = {
+            "tools": [],
+            "total_matches": 0,
+            "field": "name",
+            "pattern": "protein structure",
+            "limit": 100,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_grep(d)
+        assert "protein_structure" in result, "Should suggest underscore variant"
+        assert "underscores" in result.lower() or "underscore" in result.lower()
+
+    @pytest.mark.unit
+    def test_render_grep_single_word_name_search_suggests_description_field(self):
+        """R21B-03: single-word grep 0 matches still shows --field description tip."""
+        from tooluniverse.cli import _render_grep
+        d = {
+            "tools": [],
+            "total_matches": 0,
+            "field": "name",
+            "pattern": "xyznonexistent",
+            "limit": 100,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_grep(d)
+        assert "--field description" in result
+        assert "underscore" not in result  # no underscore hint for single word
+
+    # R21B-08: find JSON uses relevance_score as canonical key
+    @pytest.mark.unit
+    def test_render_find_reads_relevance_score_key(self):
+        """R21B-08: _render_find uses relevance_score (canonical JSON key) first."""
+        from tooluniverse.cli import _render_find
+        d = {
+            "tools": [{"name": "T1", "description": "d1", "relevance_score": 0.987}],
+            "total_matches": 1,
+            "limit": 10,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_find(d)
+        assert "0.987" in result, "Should display relevance_score value"

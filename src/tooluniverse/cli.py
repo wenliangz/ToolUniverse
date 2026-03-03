@@ -164,13 +164,28 @@ def _render_list(d: dict) -> str:
         if offset and total:
             return f"0 of {total} tools (offset past end — use --offset < {total})"
         return f"(no tools)  total={total}"
+
+    # R21B-06/07: build pagination footer consistent with grep/find.
+    def _list_footer(count, total, offset, has_more):
+        first = offset + 1
+        last = offset + count
+        range_str = f"  [{first}–{last}]" if (offset or has_more) else ""
+        if has_more:
+            next_off = offset + count
+            more_hint = f"  (more — next: --offset {next_off})"
+        elif offset and count:
+            more_hint = "  (end of results)"
+        else:
+            more_hint = ""
+        return f"\n{count} of {total} tools{range_str}{more_hint}"
+
     if isinstance(tools[0], str):
         for name in tools:
             lines.append(name)
         total = d.get("total_tools", len(tools))
         has_more = d.get("has_more", False)
-        more_hint = "  (use --offset to page)" if has_more else ""
-        lines.append(f"\n{len(tools)} of {total} tools{more_hint}")
+        offset = d.get("offset", 0)
+        lines.append(_list_footer(len(tools), total, offset, has_more))
         return "\n".join(lines)
 
     # basic/summary/custom mode: name + optional description
@@ -215,7 +230,9 @@ def _render_list(d: dict) -> str:
             for t in tools:
                 lines.append(str(t))
     total = d.get("total_tools", len(tools))
-    lines.append(f"\n{len(tools)} of {total} tools")
+    has_more = d.get("has_more", False)
+    offset = d.get("offset", 0)
+    lines.append(_list_footer(len(tools), total, offset, has_more))
     return "\n".join(lines)
 
 
@@ -230,10 +247,18 @@ def _render_grep(d: dict) -> str:
             if d.get("limit") == 0:
                 return f"0 of {total} matches (limit=0, no results shown)"
             return f"0 of {total} matches (offset past end — use --offset < {total})"
-        # BUG-R13A-01: when searching by name yields 0 results, hint about --field description.
+        # BUG-R13A-01 / R21B-03: context-sensitive hints for 0 name-field matches.
         if d.get("field") == "name":
+            pattern = d.get("pattern", "")
+            if " " in pattern:
+                # R21B-03: multi-word name search always fails — names use underscores.
+                underscore_hint = pattern.replace(" ", "_")
+                return (
+                    f"0 matches  (tip: tool names use underscores — try "
+                    f"'{underscore_hint}', or use --field description)"
+                )
             return (
-                f"0 matches  (tip: add --field description to search tool descriptions)"
+                "0 matches  (tip: add --field description to search tool descriptions)"
             )
         return "0 matches"
     col1 = max((len(t.get("name", "")) for t in tools), default=8)
@@ -282,12 +307,13 @@ def _render_find(d: dict) -> str:
         return "0 results"
     col1 = max((len(t.get("name", "")) for t in tools), default=8)
     col1 = max(col1, 8)
+    # R21B-08: use "relevance_score" key (canonical in find_tools JSON output).
     lines = [
         f"{'score':>7}  {'name':<{col1}}  description",
         "─" * (7 + 2 + col1 + 2 + _TRUNC),
     ]
     for t in tools:
-        score = t.get("score", t.get("relevance_score", ""))
+        score = t.get("relevance_score", t.get("score", ""))
         if isinstance(score, float):
             score_str = f"{score:.3f}"
         else:
