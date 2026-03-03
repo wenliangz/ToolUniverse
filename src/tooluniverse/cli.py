@@ -258,9 +258,20 @@ def _render_grep(d: dict) -> str:
                     f"0 matches  (tip: tool names use underscores — try "
                     f"'{underscore_hint}', or use --field description)"
                 )
+            if "-" in pattern:
+                # BUG-23B-01: tool names don't contain hyphens — suggest removing them
+                nohyphen = pattern.replace("-", "")
+                return (
+                    f"0 matches  (tip: tool names don't use hyphens — try "
+                    f"'{nohyphen}', or use --field description)"
+                )
             return (
                 "0 matches  (tip: use --field description to search tool descriptions)"
             )
+        # BUG-23B-05: show the stored hint for non-name-field 0-match results too
+        hint = d.get("hint")
+        if hint:
+            return f"0 matches  (tip: {hint})"
         return "0 matches"
     col1 = max((len(t.get("name", "")) for t in tools), default=8)
     col1 = max(col1, 8)
@@ -664,6 +675,14 @@ def cmd_list(args: argparse.Namespace) -> None:
     # so the output always has a "tools" key and is pipeable.
     # For interactive use without any flags, default to "categories" overview.
     mode = args.mode
+    # BUG-23B-03: bare --categories (no args) → show the categories overview as-is
+    if args.categories is not None and len(args.categories) == 0:
+        print(
+            "Note: --categories requires category names to filter "
+            "(e.g., --categories uniprot). Showing all categories instead.",
+            file=sys.stderr,
+        )
+        args.categories = None
     if mode is None:
         if args.group_by_category:
             # --group-by-category without explicit mode → by_category output
@@ -870,8 +889,11 @@ def cmd_info(args: argparse.Namespace) -> None:
             if isinstance(tool, dict) and "error" in tool:
                 name = tool.get("name", "")
                 if name:
+                    # BUG-23B-04: raised cutoff from 0.5 → 0.62 to avoid spurious
+                    # suggestions when difflib matches by coincidence (e.g.
+                    # "NonExistentTool123" → "list_tools" both contain "tool").
                     tool["suggestions"] = difflib.get_close_matches(
-                        name, all_names, n=3, cutoff=0.5
+                        name, all_names, n=3, cutoff=0.62
                     )
     # BUG-R14A-01/R14B-04: normalize "parameter" (singular, raw tool config format) to
     # "parameters" (plural, consistent with find output) in each tool entry.
@@ -1455,7 +1477,12 @@ def main() -> None:
         ),
     )
     p.add_argument(
-        "--categories", nargs="+", metavar="CAT", help="Filter by category names"
+        # BUG-23B-03: nargs="*" so bare --categories (no args) is parseable;
+        # cmd_list treats the empty-list case as a redirect to the categories overview.
+        "--categories",
+        nargs="*",
+        metavar="CAT",
+        help="Filter by category names (omit names to see the full category overview)",
     )
     p.add_argument(
         "--fields",

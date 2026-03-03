@@ -4675,3 +4675,132 @@ class TestBug22A09CustomModeUnknownField:
         _out, err = capsys.readouterr()
         # Warning should NOT appear in stderr when --json is set
         assert "totally_missing_field" not in err or "not found" not in err.lower()
+
+
+class TestRound23BFixes:
+    """Fixes for bugs found by Round 23B agent (Sam, first-time user)."""
+
+    # BUG-23B-01: tu grep chip-seq returns 0 matches with no hint about removing hyphen
+
+    @pytest.mark.unit
+    def test_render_grep_hyphen_pattern_suggests_nohyphen(self):
+        """BUG-23B-01: name-field 0-match with hyphen hints to remove the hyphen."""
+        from tooluniverse.cli import _render_grep
+
+        d = {
+            "tools": [],
+            "total_matches": 0,
+            "field": "name",
+            "pattern": "chip-seq",
+            "limit": 100,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_grep(d)
+        assert "chipseq" in result  # nohyphen variant suggested
+        assert "hyphen" in result.lower()
+
+    @pytest.mark.unit
+    def test_render_grep_space_takes_priority_over_hyphen(self):
+        """BUG-23B-01: space check takes priority if pattern has both space and hyphen."""
+        from tooluniverse.cli import _render_grep
+
+        d = {
+            "tools": [],
+            "total_matches": 0,
+            "field": "name",
+            "pattern": "chip -seq",  # space AND hyphen
+            "limit": 100,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_grep(d)
+        # space check runs first → underscore hint
+        assert "underscore" in result.lower() or "_" in result
+
+    # BUG-23B-05: tu grep X --field description (0 matches) doesn't show hint
+
+    @pytest.mark.unit
+    def test_render_grep_description_field_0match_shows_stored_hint(self):
+        """BUG-23B-05: description-field 0-match displays the 'hint' from the JSON payload."""
+        from tooluniverse.cli import _render_grep
+
+        d = {
+            "tools": [],
+            "total_matches": 0,
+            "field": "description",
+            "pattern": "epigenetics",
+            "hint": "try a different search term or fewer words",
+            "limit": 100,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_grep(d)
+        assert "try a different search term" in result
+
+    @pytest.mark.unit
+    def test_render_grep_description_field_0match_no_hint_in_payload(self):
+        """BUG-23B-05: when no hint is in the JSON payload, output just says '0 matches'."""
+        from tooluniverse.cli import _render_grep
+
+        d = {
+            "tools": [],
+            "total_matches": 0,
+            "field": "description",
+            "pattern": "xyz",
+            "hint": None,
+            "limit": 100,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_grep(d)
+        assert result == "0 matches"
+
+    # BUG-23B-04: difflib suggests list_tools for nonsense names (cutoff raised 0.5→0.62)
+
+    @pytest.mark.unit
+    def test_info_no_spurious_suggestion_for_garbage_name(self, tu, capsys):
+        """BUG-23B-04: 'NonExistentTool123' should NOT suggest 'list_tools'."""
+        import argparse
+        from tooluniverse.cli import cmd_info
+        import unittest.mock as mock
+
+        args = argparse.Namespace(
+            tool_names=["NonExistentTool123"],
+            detail=None,
+            raw=False,
+            json=False,
+        )
+        with mock.patch("tooluniverse.cli._get_tu", return_value=tu):
+            with pytest.raises(SystemExit):
+                cmd_info(args)
+        out, err = capsys.readouterr()
+        combined = out + err
+        # list_tools must not be suggested for a completely unrelated garbage name
+        assert "list_tools" not in combined
+
+    # BUG-23B-03: tu list --categories (no args) gives raw argparse error
+
+    @pytest.mark.unit
+    def test_cmd_list_bare_categories_shows_note_and_falls_back(self, tu, capsys):
+        """BUG-23B-03: --categories with no args prints a note and falls back to all-categories."""
+        import argparse
+        from tooluniverse.cli import cmd_list
+        import unittest.mock as mock
+
+        args = argparse.Namespace(
+            mode=None,
+            fields=None,
+            categories=[],  # empty list = bare --categories
+            limit=None,
+            offset=0,
+            raw=False,
+            json=False,
+            group_by_category=False,
+        )
+        with mock.patch("tooluniverse.cli._get_tu", return_value=tu):
+            cmd_list(args)
+        _out, err = capsys.readouterr()
+        # Should explain --categories requires names and fall back
+        assert "--categories" in err
+        assert "category" in err.lower()
