@@ -246,7 +246,8 @@ def _render_grep(d: dict) -> str:
     # BUG-R18B-08/R17B-08: show range (e.g. "11–20 of 59") when paginating.
     first = offset + 1
     last = offset + len(tools)
-    range_str = f"  [{first}–{last}]" if offset else ""
+    # BUG-20A-07: show range on page 1 too when results span multiple pages.
+    range_str = f"  [{first}–{last}]" if (offset or has_more) else ""
     if has_more:
         next_offset = offset + len(tools)
         more_hint = f"  (more — next: --offset {next_offset})"
@@ -300,7 +301,8 @@ def _render_find(d: dict) -> str:
     # BUG-R18B-08/R17B-08: show range (e.g. "11–20 of 285") when paginating.
     first = offset + 1
     last = offset + len(tools)
-    range_str = f"  [{first}–{last}]" if offset else ""
+    # BUG-20A-07: show range on page 1 too when results span multiple pages.
+    range_str = f"  [{first}–{last}]" if (offset or has_more) else ""
     if has_more:
         next_offset = offset + len(tools)
         more_hint = f"  (more — next: --offset {next_offset})"
@@ -462,7 +464,10 @@ def _resolve_categories(tu, names: list) -> tuple:
         if cat and cat not in actual:
             raw_cats.setdefault(cat, []).append(tool_name)
     # Merge raw_cats into the searchable universe (don't mutate actual category_dicts).
-    full_actual = actual | set(raw_cats.keys())
+    # BUG-20A-08: "unknown" is an internal sentinel returned by _get_tool_category for
+    # tools without any category assignment.  It is never stored in category_dicts or
+    # raw_cats, so add it explicitly so `--categories unknown` resolves silently.
+    full_actual = actual | set(raw_cats.keys()) | {"unknown"}
 
     # Build a mapping from lowercased key → original key for exact lookup.
     lower_map = {k.lower(): k for k in full_actual}

@@ -1897,7 +1897,10 @@ class TestResolveCategories:
 
     @pytest.mark.unit
     def test_multiple_names_mixed(self):
-        """Multiple names resolved independently — mix of hits and misses."""
+        """Multiple names resolved independently — mix of hits and misses.
+        BUG-20A-08: 'Unknown'/'unknown' now resolves silently to the 'unknown'
+        sentinel so no warning or had_unknown is raised for that entry.
+        """
         from tooluniverse.cli import _resolve_categories
         from unittest.mock import MagicMock
 
@@ -1905,8 +1908,9 @@ class TestResolveCategories:
         tu.tool_category_dicts = {"Genomics": [], "Proteomics": []}
         tu.all_tool_dict = {}
         resolved, had_unknown = _resolve_categories(tu, ["genomics", "PROTEOMICS", "Unknown"])
-        assert resolved == ["Genomics", "Proteomics", "Unknown"]
-        assert had_unknown is True  # "Unknown" was not found
+        # "Unknown" resolves silently to the "unknown" sentinel (BUG-20A-08).
+        assert resolved == ["Genomics", "Proteomics", "unknown"]
+        assert had_unknown is False  # all three resolved cleanly
 
     @pytest.mark.unit
     def test_empty_names_list(self):
@@ -3992,8 +3996,8 @@ class TestRound18Fixes:
         assert "next: --offset 9" in result
 
     @pytest.mark.unit
-    def test_render_find_no_range_on_first_page(self):
-        """R18B-08: no range shown on first page (offset=0)."""
+    def test_render_find_range_on_first_page_when_paginating(self):
+        """BUG-20A-07: range IS shown on first page (offset=0) when has_more=True."""
         from tooluniverse.cli import _render_find
         d = {
             "tools": [
@@ -4005,8 +4009,8 @@ class TestRound18Fixes:
             "has_more": True,
         }
         result = _render_find(d)
-        assert "[1–" not in result  # no bracket range on first page
-        assert "next: --offset 1" in result  # but next-offset hint is there
+        assert "[1–1]" in result  # range shown on page 1 when paginating
+        assert "next: --offset 1" in result  # next-offset hint is still there
 
 
 class TestRound19Fixes:
@@ -4117,3 +4121,80 @@ class TestRound20Fixes:
         assert out.strip(), "exit-2 with --json should emit JSON to stdout"
         d = json.loads(out)
         assert "error" in d
+
+
+class TestRound21PreFixes:
+    """Tests for BUG-20A-07 and BUG-20A-08 fixed before Round 21 agents launched."""
+
+    # BUG-20A-08: category "unknown" caused spurious warning and exit 1
+    @pytest.mark.unit
+    def test_unknown_category_resolves_silently(self):
+        """BUG-20A-08: 'unknown' is a valid internal sentinel — no warning, no had_unknown."""
+        from tooluniverse.cli import _resolve_categories
+        from unittest.mock import MagicMock
+
+        tu = MagicMock()
+        tu.tool_category_dicts = {"Genomics": []}
+        tu.all_tool_dict = {}
+        resolved, had_unknown = _resolve_categories(tu, ["unknown"])
+        assert resolved == ["unknown"]
+        assert had_unknown is False, "'unknown' sentinel should resolve without warning"
+
+    @pytest.mark.unit
+    def test_unknown_category_case_insensitive(self):
+        """BUG-20A-08: 'Unknown', 'UNKNOWN', 'unknown' all resolve to sentinel silently."""
+        from tooluniverse.cli import _resolve_categories
+        from unittest.mock import MagicMock
+
+        tu = MagicMock()
+        tu.tool_category_dicts = {}
+        tu.all_tool_dict = {}
+        for variant in ("unknown", "Unknown", "UNKNOWN"):
+            resolved, had_unknown = _resolve_categories(tu, [variant])
+            assert resolved == ["unknown"], f"{variant!r} should resolve to 'unknown'"
+            assert had_unknown is False, f"{variant!r} should not set had_unknown"
+
+    # BUG-20A-07: range [1–N] missing on first page when paginating
+    @pytest.mark.unit
+    def test_render_grep_shows_range_on_first_page(self):
+        """BUG-20A-07: _render_grep shows [1–N] on page 1 (offset=0) when has_more=True."""
+        from tooluniverse.cli import _render_grep
+        d = {
+            "tools": [{"name": f"T{i}", "description": f"d{i}"} for i in range(5)],
+            "total_matches": 50,
+            "limit": 5,
+            "offset": 0,
+            "has_more": True,
+        }
+        result = _render_grep(d)
+        assert "[1–5]" in result, "First page should show [1-5] range"
+        assert "next: --offset 5" in result
+
+    @pytest.mark.unit
+    def test_render_grep_no_range_single_page(self):
+        """BUG-20A-07: _render_grep does NOT show range when all results fit (no pagination)."""
+        from tooluniverse.cli import _render_grep
+        d = {
+            "tools": [{"name": "T1", "description": "d1"}],
+            "total_matches": 1,
+            "limit": 10,
+            "offset": 0,
+            "has_more": False,
+        }
+        result = _render_grep(d)
+        assert "[1–" not in result, "Single page should not show range"
+
+    @pytest.mark.unit
+    def test_render_find_shows_range_on_first_page(self):
+        """BUG-20A-07: _render_find shows [1–N] on page 1 when has_more=True."""
+        from tooluniverse.cli import _render_find
+        d = {
+            "tools": [{"name": f"T{i}", "description": f"d{i}", "relevance_score": 0.9} for i in range(3)],
+            "total_matches": 30,
+            "limit": 3,
+            "offset": 0,
+            "has_more": True,
+        }
+        result = _render_find(d)
+        assert "[1–3]" in result, "First page should show [1-3] range"
+        assert "next: --offset 3" in result
