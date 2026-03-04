@@ -114,7 +114,8 @@ class ClinVarSearchVariants(ClinVarRESTTool):
         params = {
             "db": "clinvar",
             "retmode": "json",
-            "retmax": arguments.get("max_results", 20),
+            # BUG-68A-009: accept 'limit' as alias for 'max_results'
+            "retmax": arguments.get("max_results") or arguments.get("limit", 20),
         }
 
         # Build search query
@@ -124,12 +125,15 @@ class ClinVarSearchVariants(ClinVarRESTTool):
             query_parts.append(f"{arguments['gene']}[gene]")
 
         if "condition" in arguments:
-            # ClinVar eSearch uses [disease/phenotype] field; quote multi-word terms
+            # BUG-70B-005: [disease/phenotype] is not a valid ClinVar eSearch field.
+            # Use bare condition text; ClinVar matches against all fields by default.
             condition = arguments["condition"]
-            query_parts.append(f'"{condition}"[disease/phenotype]')
+            query_parts.append(condition)
 
         if "variant_id" in arguments:
-            query_parts.append(f"{arguments['variant_id']}[variant_id]")
+            # BUG-70B-004: [variant_id] is not recognized by ClinVar eSearch.
+            # Use [uid] to look up by numeric variation ID.
+            query_parts.append(f"{arguments['variant_id']}[uid]")
 
         if not query_parts:
             return {
@@ -192,6 +196,14 @@ class ClinVarGetVariantDetails(ClinVarRESTTool):
             if "result" in data and variant_id in data["result"]:
                 variant_data = data["result"][variant_id]
 
+                # Check for NCBI inline error (HTTP 200 but variant not found)
+                if variant_data.get("error"):
+                    return {
+                        "status": "error",
+                        "error": f"Variant {variant_id} not found in ClinVar: {variant_data['error']}",
+                        "url": result.get("url"),
+                    }
+
                 # Extract key information
                 formatted_data = {
                     "variant_id": variant_id,
@@ -248,6 +260,14 @@ class ClinVarGetClinicalSignificance(ClinVarRESTTool):
             data = result.get("data", {})
             if "result" in data and variant_id in data["result"]:
                 variant_data = data["result"][variant_id]
+
+                # Check for NCBI inline error (HTTP 200 but variant not found)
+                if variant_data.get("error"):
+                    return {
+                        "status": "error",
+                        "error": f"Variant {variant_id} not found in ClinVar: {variant_data['error']}",
+                        "url": result.get("url"),
+                    }
 
                 # Extract clinical significance information
                 germline_class = variant_data.get("germline_classification", {})

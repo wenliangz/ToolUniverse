@@ -8,7 +8,7 @@
       "properties": {
         "disease_trait": {
           "type": "string",
-          "description": "Disease or trait name for text-based search (e.g., 'diabetes', 'coronary artery disease', 'breast cancer')"
+          "description": "Disease or trait name for text-based search (e.g., 'diabetes', 'coronary artery disease', 'breast cancer'). WARNING: free-text search is broad and may return many unrelated associations. Prefer efo_id for precise filtering."
         },
         "efo_uri": {
           "type": "string",

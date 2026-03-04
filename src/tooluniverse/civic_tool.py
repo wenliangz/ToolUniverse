@@ -800,6 +800,29 @@ class CIViCTool(BaseTool):
                             + therapy_hint
                         )
 
+            # BUG-67B-002: detect "GENE VARIANT" combined input in variant_name returning
+            # empty — CIViC stores variants without gene prefix (e.g., "L858R" not "EGFR L858R").
+            if tool_name == "civic_search_variants":
+                _variant_nodes = (
+                    result.get("data", {}).get("variants", {}).get("nodes", [])
+                )
+                if len(_variant_nodes) == 0:
+                    import re as _re_vn
+
+                    _raw_vn = (
+                        arguments.get("variant_name")
+                        or arguments.get("variant")
+                        or arguments.get("query")
+                        or ""
+                    )
+                    if _raw_vn and _re_vn.match(r"^[A-Z][A-Z0-9]+\s+\S", str(_raw_vn)):
+                        _vn_parts = str(_raw_vn).split(None, 1)
+                        result["hint"] = (
+                            f"No variants found for '{_raw_vn}'. CIViC stores variants "
+                            f"without the gene prefix — try gene_name='{_vn_parts[0]}' "
+                            f"with variant_name='{_vn_parts[1]}'."
+                        )
+
             # BUG-60A-001: when evidence items ARE returned under ACCEPTED-only filter,
             # disclose the filter so users know SUBMITTED items may also exist.
             if tool_name == "civic_search_evidence_items":

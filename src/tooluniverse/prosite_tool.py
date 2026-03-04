@@ -285,7 +285,6 @@ class PROSITETool(BaseTool):
             matches.append(
                 {
                     "signature_accession": m.get("signature_ac"),
-                    "signature_name": m.get("signature_id"),
                     "start": m.get("start"),
                     "end": m.get("stop"),
                     "score": m.get("score"),

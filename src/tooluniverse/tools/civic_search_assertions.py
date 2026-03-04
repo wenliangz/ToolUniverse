@@ -28,7 +28,7 @@ def civic_search_assertions(
     limit : int
         Maximum number of assertions to return (default: 20, recommended max: 100)
     therapy : str
-        Filter by therapy/drug name (e.g., 'imatinib', 'ponatinib'). Alias: therapy_name.
+        Filter by therapy/drug name (e.g., 'imatinib', 'ponatinib'). Alias: therapy_n...
     therapy_name : str
         Alias for therapy. Filter by therapy/drug name.
     disease : str
@@ -48,6 +48,8 @@ def civic_search_assertions(
     -------
     dict[str, Any]
     """
+    # Handle mutable defaults to avoid B006 linting error
+
     # Strip None values so optional parameters don't trigger schema validation errors
     _args = {
         k: v

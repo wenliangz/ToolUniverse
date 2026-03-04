@@ -6,44 +6,65 @@
     "parameter": {
       "type": "object",
       "properties": {
-        "rsid": {"type": "string", "description": "dbSNP rsID (e.g., rs123456)"}
+        "rsid": {"type": "string", "description": "dbSNP rsID (e.g., 'rs4994', 'rs429358')"}
       },
       "required": ["rsid"]
     },
     "fields": {
-      "endpoint": "https://regulomedb.org/regulome-search/?regions={rsid}&assembly=hg19",
+      "endpoint": "https://regulomedb.org/regulome-search/?regions={rsid}&genome=GRCh38",
       "return_format": "JSON"
     },
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "rsid": {"type": "string"},
-        "chromosome": {"type": "string"},
-        "position": {"type": "integer"},
-        "ref_allele": {"type": "string"},
-        "alt_allele": {"type": "string"},
-        "regulome_score": {"type": "string"},
-        "regulome_evidence": {"type": "array"},
-        "regulatory_features": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "feature_type": {"type": "string"},
-              "cell_type": {"type": "string"},
-              "evidence": {"type": "string"},
-              "score": {"type": "number"}
-            }
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "Successful regulatory annotation",
+          "properties": {
+            "total": {"type": "integer", "description": "Number of variants matched"},
+            "results": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "chrom": {"type": "string"},
+                  "start": {"type": "integer"},
+                  "end": {"type": "integer"},
+                  "rsids": {"type": "array", "items": {"type": "string"}},
+                  "regulome_score": {
+                    "type": "object",
+                    "properties": {
+                      "ranking": {"type": "integer"},
+                      "probability": {"type": "number"}
+                    }
+                  },
+                  "features": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {"type": "string"},
+                        "value": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "query_coordinates": {"type": "string"},
+            "genome": {"type": "string"}
           }
         },
-        "motif_break": {"type": "boolean"},
-        "motif_name": {"type": "string"},
-        "motif_score": {"type": "number"},
-        "motif_concordance": {"type": "string"}
-      }
+        {
+          "type": "object",
+          "description": "Error response",
+          "properties": {
+            "error": {"type": "string"}
+          }
+        }
+      ]
     },
     "test_examples": [
-      {"rsid": "rs123456"},
+      {"rsid": "rs4994"},
       {"rsid": "rs429358"}
     ]
   }

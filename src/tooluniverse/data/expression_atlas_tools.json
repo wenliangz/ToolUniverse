@@ -34,8 +34,9 @@
                     "properties": {
                         "gene": {"type": "string"},
                         "species": {"type": "string"},
-                        "experiments": {"type": "array"},
-                        "experiment_count": {"type": "integer"}
+                        "baseline_experiments": {"type": "array"},
+                        "total_baseline": {"type": "integer"},
+                        "gene_specific_count": {"type": "integer"}
                     }
                 },
                 "error": {"type": "string"}
@@ -150,13 +151,13 @@
     },
     {
         "name": "ExpressionAtlas_get_experiment",
-        "description": "Get detailed metadata for a specific Expression Atlas experiment by accession (e.g., E-MTAB-5214). Returns experiment design, species, technology, contrasts, PubMed references, and number of assays.",
+        "description": "Get detailed metadata for a specific Expression Atlas experiment by accession (e.g., E-MTAB-2836). Returns experiment design, species, technology, contrasts, PubMed references, and number of assays.",
         "parameter": {
             "type": "object",
             "properties": {
                 "accession": {
                     "type": "string",
-                    "description": "Expression Atlas experiment accession (e.g., 'E-MTAB-5214', 'E-GEOD-26284')"
+                    "description": "Expression Atlas experiment accession (e.g., 'E-MTAB-2836', 'E-GEOD-26284')"
                 }
             },
             "required": ["accession"]
@@ -166,7 +167,7 @@
         },
         "type": "ExpressionAtlasTool",
         "test_examples": [
-            {"accession": "E-MTAB-5214"}
+            {"accession": "E-MTAB-2836"}
         ],
         "return_schema": {
             "type": ["object", "null"],

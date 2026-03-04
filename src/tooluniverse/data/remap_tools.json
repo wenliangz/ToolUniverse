@@ -28,7 +28,7 @@
       ]
     },
     "fields": {
-      "endpoint": "https://www.encodeproject.org/search/?type=Experiment&assay_title=ChIP-seq&target.label={gene_name}&biosample_ontology.term_name={cell_type}&format=json&limit={limit}",
+      "endpoint": "https://www.encodeproject.org/search/?type=Experiment&assay_title=TF+ChIP-seq&target.label={gene_name}&biosample_ontology.term_name={cell_type}&format=json&limit={limit}",
       "return_format": "JSON"
     },
     "return_schema": {

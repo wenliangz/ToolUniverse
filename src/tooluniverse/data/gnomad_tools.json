@@ -315,7 +315,7 @@
     "fields": {
       "endpoint": "https://gnomad.broadinstitute.org/api",
       "return_format": "JSON",
-      "query_schema": "query($variantId: String!, $dataset: DatasetId!) { variant(variantId: $variantId, dataset: $dataset) { variant_id chrom pos ref alt rsid } }",
+      "query_schema": "query($variantId: String!, $dataset: DatasetId!) { variant(variantId: $variantId, dataset: $dataset) { variant_id chrom pos ref alt rsid genome { af an ac } exome { af an ac } } }",
       "variable_map": { "variant_id": "variantId" },
       "default_variables": { "dataset": "gnomad_r3" }
     },
@@ -336,7 +336,23 @@
                 "pos": { "type": ["integer", "null"] },
                 "ref": { "type": ["string", "null"] },
                 "alt": { "type": ["string", "null"] },
-                "rsid": { "type": ["string", "null"] }
+                "rsid": { "type": ["string", "null"] },
+                "genome": {
+                  "type": ["object", "null"],
+                  "properties": {
+                    "af": { "type": ["number", "null"] },
+                    "an": { "type": ["integer", "null"] },
+                    "ac": { "type": ["integer", "null"] }
+                  }
+                },
+                "exome": {
+                  "type": ["object", "null"],
+                  "properties": {
+                    "af": { "type": ["number", "null"] },
+                    "an": { "type": ["integer", "null"] },
+                    "ac": { "type": ["integer", "null"] }
+                  }
+                }
               },
               "additionalProperties": true
             }

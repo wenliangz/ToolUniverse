@@ -24,11 +24,11 @@ def clinvar_search_variants(
     Parameters
     ----------
     gene : str
-        Gene name or symbol (e.g., 'BRCA1', 'BRCA2')
+        Gene name or symbol (e.g., 'BRCA1', 'BRCA2') At least one of gene, condition,...
     condition : str
-        Disease or condition name (e.g., 'breast cancer', 'diabetes')
+        Disease or condition name (e.g., 'breast cancer', 'diabetes') At least one of...
     variant_id : str
-        ClinVar variant ID (e.g., '12345')
+        ClinVar variant ID (e.g., '12345') At least one of gene, condition, or varian...
     max_results : int
         Maximum number of results to return
     stream_callback : Callable, optional

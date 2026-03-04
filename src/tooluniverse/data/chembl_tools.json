@@ -613,7 +613,7 @@
   {
     "type": "ChEMBLRESTTool",
     "name": "ChEMBL_get_target_activities",
-    "description": "Get all activity data for a target by ChEMBL target ID. Returns bioactivity measurements (IC50, Ki, etc.) for molecules tested against this target. To find a target ID, use ChEMBL_search_targets with a target name or gene symbol.",
+    "description": "Get all activity data for a target by ChEMBL target ID. Returns bioactivity measurements (IC50, Ki, etc.) for molecules tested against this target. Note: activity values may be in different units (nM or uM) depending on the assay — check the 'standard_units' field in each result. To find a target ID, use ChEMBL_search_targets with a target name or gene symbol.",
     "fields": {
       "endpoint": "/activity.json"
     },

@@ -125,8 +125,7 @@ class KEGGGetPathwayInfo(KEGGRESTTool):
             pathway_info = {
                 "pathway_id": pathway_id,
                 "raw_data": result["data"],
-                # BUG-66A-007: renamed from "lines" (misleading int) to "line_count"
-                "line_count": len(lines),
+                "lines": len(lines),
             }
             result["data"] = pathway_info
 
@@ -142,14 +141,17 @@ class KEGGFindGenes(KEGGRESTTool):
         self.endpoint = "/find/genes"
 
     def run(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
-        """Find genes with keyword."""
+        """Find genes with keyword, optionally filtered by organism."""
         keyword = arguments.get("keyword", "")
         if not keyword:
             return {"status": "error", "error": "keyword is required"}
 
-        # KEGG API requires the search term in the URL path
-        # For gene search, we don't need organism prefix in the URL
-        endpoint = f"{self.endpoint}/{keyword}"
+        # Use organism-specific endpoint when provided (e.g., /find/hsa/ALDH)
+        organism = arguments.get("organism", "").strip()
+        if organism:
+            endpoint = f"/find/{organism}/{keyword}"
+        else:
+            endpoint = f"{self.endpoint}/{keyword}"
         result = self._make_request(endpoint)
 
         # Parse gene results
@@ -191,7 +193,7 @@ class KEGGGetGeneInfo(KEGGRESTTool):
             gene_info = {
                 "gene_id": gene_id,
                 "raw_data": result["data"],
-                "line_count": len(lines),
+                "lines": len(lines),
             }
             result["data"] = gene_info
 

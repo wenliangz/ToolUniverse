@@ -62,7 +62,7 @@
       "required": ["pdb_id"]
     },
     "fields": {
-      "endpoint": "https://www.ebi.ac.uk/pdbe/api/pdb/entry/quality/{pdb_id}",
+      "endpoint": "https://www.ebi.ac.uk/pdbe/api/validation/summary_quality_scores/entry/{pdb_id}",
       "return_format": "JSON"
     },
     "return_schema": {
@@ -90,7 +90,14 @@
         }
       }
     },
-    "test_examples": []
+    "test_examples": [
+      {
+        "pdb_id": "1cbs"
+      },
+      {
+        "pdb_id": "4hhb"
+      }
+    ]
   },
   {
     "type": "PDBeAPIRESTTool",

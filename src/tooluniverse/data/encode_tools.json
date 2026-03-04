@@ -8,15 +8,15 @@
       "properties": {
         "assay_title": {
           "type": "string",
-          "description": "Assay name filter (e.g., 'ChIP-seq', 'ATAC-seq', 'RNA-seq', 'Hi-C'). Leave empty to search all assays."
+          "description": "Assay name filter (e.g., 'TF ChIP-seq', 'Histone ChIP-seq', 'ATAC-seq', 'RNA-seq', 'Hi-C'). Leave empty to search all assays. Use 'TF ChIP-seq' for transcription factor binding experiments."
         },
         "target": {
           "type": "string",
-          "description": "Target protein/factor filter (e.g., 'CTCF', 'H3K4me3', 'POLR2A'). Use for ChIP-seq experiments."
+          "description": "Target protein/factor filter (e.g., 'CTCF', 'H3K4me3', 'POLR2A'). Use for TF ChIP-seq experiments."
         },
         "organism": {
           "type": "string",
-          "description": "Organism filter (e.g., 'Homo sapiens', 'Mus musculus', 'Drosophila melanogaster')."
+          "description": "Organism filter — maps to ENCODE's organism scientific name field (e.g., 'Homo sapiens', 'Mus musculus', 'Drosophila melanogaster')."
         },
         "status": {
           "type": "string",
@@ -64,7 +64,7 @@
       }
     },
     "test_examples": [
-      {"assay_title": "ChIP-seq", "limit": 1},
+      {"assay_title": "TF ChIP-seq", "limit": 1},
       {"assay_title": "ATAC-seq", "limit": 1}
     ],
     "label": ["ENCODE", "Experiment", "Search"],
@@ -185,7 +185,7 @@
       "properties": {
         "accession": {
           "type": "string",
-          "description": "ENCODE file accession identifier (format: ENCFF######, e.g., 'ENCFF001JXO', 'ENCFF000AAA'). Find accessions using ENCODE_list_files."
+          "description": "ENCODE file accession identifier (format: ENCFF######, e.g., 'ENCFF001JXO'). Find accessions using ENCODE_list_files."
         }
       },
       "required": ["accession"]
@@ -213,8 +213,7 @@
       }
     },
     "test_examples": [
-      {"accession": "ENCFF001JXO"},
-      {"accession": "ENCFF000AAA"}
+      {"accession": "ENCFF001JXO"}
     ]
   },
   {
@@ -230,7 +229,7 @@
         },
         "biosample_type": {
           "type": "string",
-          "description": "Biosample classification filter (e.g., 'cell line', 'tissue', 'primary cell', 'in vitro differentiated cells')."
+          "description": "Biosample classification filter — maps to ENCODE's biosample_ontology.classification field (e.g., 'cell line', 'tissue', 'primary cell', 'in vitro differentiated cells')."
         },
         "treatment": {
           "type": "string",

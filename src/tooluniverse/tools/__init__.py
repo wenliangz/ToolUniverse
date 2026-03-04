@@ -1,7 +1,7 @@
 """
 ToolUniverse Tools
 
-Type-safe Python interface to 2055 scientific tools.
+Type-safe Python interface to 2056 scientific tools.
 Each tool is in its own module for minimal import overhead.
 
 Usage:
@@ -1841,6 +1841,7 @@ from .ToolMetadataStandardizer import ToolMetadataStandardizer
 from .ToolOutputSummarizer import ToolOutputSummarizer
 from .ToolQualityEvaluator import ToolQualityEvaluator
 from .ToolRelationshipDetector import ToolRelationshipDetector
+from .ToolUniverse_get_usage_tips import ToolUniverse_get_usage_tips
 from .Tool_Finder import Tool_Finder
 from .Tool_Finder_Keyword import Tool_Finder_Keyword
 from .Tool_Finder_LLM import Tool_Finder_LLM
@@ -3990,6 +3991,7 @@ __all__ = [
     "ToolOutputSummarizer",
     "ToolQualityEvaluator",
     "ToolRelationshipDetector",
+    "ToolUniverse_get_usage_tips",
     "Tool_Finder",
     "Tool_Finder_Keyword",
     "Tool_Finder_LLM",

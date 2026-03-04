@@ -11,6 +11,7 @@ from ._shared_client import get_shared_client
 def GtoPdb_search_targets(
     name: Optional[str | Any] = None,
     type_: Optional[str | Any] = None,
+    query: Optional[str | Any] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
@@ -25,6 +26,8 @@ def GtoPdb_search_targets(
         Target name or gene symbol to search. Examples: 'dopamine', 'serotonin recept...
     type_ : str | Any
         Target type filter. Values: 'GPCR', 'Ion channel', 'Nuclear receptor', 'Enzym...
+    query : str | Any
+        Name/keyword to search for. Alias for the "name" parameter.
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False
@@ -39,7 +42,11 @@ def GtoPdb_search_targets(
     # Handle mutable defaults to avoid B006 linting error
 
     # Strip None values so optional parameters don't trigger schema validation errors
-    _args = {k: v for k, v in {"name": name, "type": type_}.items() if v is not None}
+    _args = {
+        k: v
+        for k, v in {"name": name, "type": type_, "query": query}.items()
+        if v is not None
+    }
     return get_shared_client().run_one_function(
         {
             "name": "GtoPdb_search_targets",

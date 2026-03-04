@@ -91,7 +91,7 @@
     "tool_url": "/entity/{url_key}",
     "test_examples": [
       {
-        "id": "1"
+        "id": "HP:0001250"
       }
     ],
     "return_schema": {
@@ -144,7 +144,7 @@
     "tool_url": "/search",
     "test_examples": [
       {
-        "query": "gene:TP53",
+        "query": "epilepsy",
         "limit": 5,
         "offset": 1
       }

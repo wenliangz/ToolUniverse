@@ -627,7 +627,18 @@ class ChEMBLTool(BaseTool):
                 }
             )
 
-        # If not a ChEMBL ID, use get_chembl_smiles_pref_name_id_by_name to get info
+        # If not a ChEMBL ID, check if it's a SMILES string (contains structural chars)
+        _smiles_chars = set("=()[]@#+\\/%")
+        if (
+            len(smiles_info_list) == 0
+            and isinstance(query, str)
+            and any(c in query for c in _smiles_chars)
+        ):
+            smiles_info_list.append(
+                {"chembl_id": None, "smiles": query, "pref_name": None}
+            )
+
+        # Otherwise use get_chembl_smiles_pref_name_id_by_name to get info
         if len(smiles_info_list) == 0 and isinstance(query, str):
             results = self.get_chembl_smiles_pref_name_id_by_name(query)
             if isinstance(results, dict) and "error" in results:

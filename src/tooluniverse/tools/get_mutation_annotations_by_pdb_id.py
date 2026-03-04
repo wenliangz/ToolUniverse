@@ -1,7 +1,7 @@
 """
 get_mutation_annotations_by_pdb_id
 
-Retrieve mutation annotations for a given PDB structure.
+Retrieve mutation annotations for a given PDB structure. Returns mutation count, the pdbx_mutatio...
 """
 
 from typing import Any, Optional, Callable
@@ -16,7 +16,7 @@ def get_mutation_annotations_by_pdb_id(
     validate: bool = True,
 ) -> dict[str, Any]:
     """
-    Retrieve mutation annotations for a given PDB structure.
+    Retrieve mutation annotations for a given PDB structure. Returns mutation count, the pdbx_mutatio...
 
     Parameters
     ----------

@@ -265,7 +265,7 @@
   },
   {
     "name": "civic_search_variants",
-    "description": "Search for variants in CIViC database. Returns a list of variants with their IDs and names. Use 'query' to search by variant name (e.g., 'V600E'), or 'gene'/'gene_name' to get all variants for a specific gene (e.g., 'EGFR').",
+    "description": "Search for variants in CIViC database. Returns a list of variants with their IDs and names. Use 'query' to search by variant name (e.g., 'V600E'), or 'gene'/'gene_name' to get all variants for a specific gene (e.g., 'EGFR'). To find a specific variant in a gene, combine gene_name + variant_name (e.g., gene_name='EGFR', variant_name='L858R'). Note: CIViC stores variants without gene prefix — do not combine gene and variant in a single string.",
     "type": "CIViCTool",
     "parameter": {
       "type": "object",
@@ -286,6 +286,10 @@
         "gene_name": {
           "type": "string",
           "description": "Alias for gene. Gene symbol (e.g., 'TP53', 'BRCA1')."
+        },
+        "variant_name": {
+          "type": "string",
+          "description": "Specific variant name to filter within a gene (e.g., 'L858R', 'V600E', 'T790M'). Use together with gene_name — CIViC stores variants without the gene prefix (use 'L858R' not 'EGFR L858R')."
         }
       },
       "required": []

@@ -243,7 +243,7 @@
     "test_examples": [
       {
         "operation": "get_single_tissue_eqtls",
-        "gencode_id": ["ENSG00000141510.18"],
+        "gencode_id": ["ENSG00000227232.5"],
         "tissue_site_detail_id": ["Whole_Blood"]
       }
     ]
@@ -629,7 +629,7 @@
     "test_examples": [
       {
         "operation": "get_multi_tissue_eqtls",
-        "gencode_id": "ENSG00000141510.18"
+        "gencode_id": "ENSG00000141510.16"
       }
     ]
   }

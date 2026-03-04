@@ -43,9 +43,8 @@
         "tool_url": "/studies",
         "test_examples": [
             {
-                "condition": "diabetes-mellitus",
-                "intervention": "aspirin",
-                "query_term": "gene:TP53",
+                "condition": "diabetes mellitus",
+                "intervention": "metformin",
                 "pageSize": 1
             }
         ],
@@ -613,13 +612,25 @@
         "test_examples": [
             {
                 "nct_ids": [
-                    "NCT01158625"
+                    "NCT04852770"
                 ],
-                "outcome_measure": "E11.9"
+                "outcome_measure": "primary"
             }
         ],
         "return_schema": {
-            "type": "string"
+            "oneOf": [
+                {
+                    "type": "string",
+                    "description": "Message when no outcome data found or trial has no results"
+                },
+                {
+                    "type": "array",
+                    "description": "List of outcome result objects",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            ]
         }
     },
     {

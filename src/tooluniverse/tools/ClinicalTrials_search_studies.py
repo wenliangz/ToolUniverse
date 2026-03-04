@@ -17,6 +17,10 @@ def ClinicalTrials_search_studies(
     filter_study_type: Optional[str | Any] = None,
     page_size: Optional[int] = 10,
     next_page_token: Optional[str | Any] = None,
+    query: Optional[str | Any] = None,
+    condition: Optional[str | Any] = None,
+    status: Optional[str | Any] = None,
+    max_results: Optional[int | Any] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
@@ -43,6 +47,14 @@ def ClinicalTrials_search_studies(
         Number of results per page (default 10, max 1000).
     next_page_token : str | Any
         Token for retrieving the next page of results (obtained from previous response).
+    query : str | Any
+        General keyword search across all fields. Alias for query_term. E.g., "FLT3 A...
+    condition : str | Any
+        Disease or condition to search for. Alias for query_cond. E.g., "acute myeloi...
+    status : str | Any
+        Recruitment status filter. Alias for filter_status. E.g., "RECRUITING", "COMP...
+    max_results : int | Any
+        Maximum number of results to return. Alias for page_size.
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False
@@ -68,6 +80,10 @@ def ClinicalTrials_search_studies(
             "filter_study_type": filter_study_type,
             "page_size": page_size,
             "next_page_token": next_page_token,
+            "query": query,
+            "condition": condition,
+            "status": status,
+            "max_results": max_results,
         }.items()
         if v is not None
     }

@@ -68,7 +68,7 @@ class EBIProteinsInteractionsTool(BaseTool):
         accession = arguments.get("accession", "")
         if not accession:
             return {"error": "accession is required (e.g., 'P04637')."}
-        limit = int(arguments.get("limit", 50))
+        limit = int(arguments.get("limit", 25))
 
         url = f"{EBI_PROTEINS_BASE_URL}/proteins/interaction/{accession}"
         response = requests.get(
@@ -180,11 +180,9 @@ class EBIProteinsInteractionsTool(BaseTool):
 
         # Extract diseases and locations from the query protein entry only
         for disease in first_entry.get("diseases", []):
-            disease_name = (
-                disease.get("diseaseId")
-                or disease.get("acronym")
-                or disease.get("type")
-            )
+            # BUG-67B-003A: disease.get("type") returns the UniProt type discriminator
+            # string "DISEASE" (not a disease name) — omit it from the fallback chain.
+            disease_name = disease.get("diseaseId") or disease.get("acronym")
             if disease_name:
                 diseases.add(str(disease_name))
 

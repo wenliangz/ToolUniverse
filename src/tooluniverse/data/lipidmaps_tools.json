@@ -92,13 +92,13 @@
   },
   {
     "name": "LipidMaps_search_by_name",
-    "description": "Search for lipids by common abbreviation or name in LIPID MAPS Structure Database. Returns matching lipid records with structures and classification. Example: 'DHA' returns docosahexaenoic acid.",
+    "description": "Search for lipids by exact abbreviation in LIPID MAPS Structure Database. IMPORTANT: Only exact lipidomics abbreviations work (e.g., 'DHA', 'EPA', 'PC 16:0/18:1', 'SM 34:1'). Class names like 'ceramide' or 'sphingomyelin' will NOT match — use LipidMaps_search_by_formula for class-level searches. Returns matching lipid records with structures and classification.",
     "parameter": {
       "type": "object",
       "properties": {
         "input_value": {
           "type": "string",
-          "description": "Lipid abbreviation or name (e.g., 'DHA', 'EPA', 'ceramide'). Supports common abbreviations used in lipidomics."
+          "description": "Exact lipid abbreviation used in lipidomics (e.g., 'DHA', 'EPA', 'PC 16:0/18:1', 'SM 34:1'). Class names like 'ceramide' will not match — use exact abbreviations only."
         },
         "output_item": {
           "type": "string",

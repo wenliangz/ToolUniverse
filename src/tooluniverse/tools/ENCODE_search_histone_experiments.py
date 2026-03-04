@@ -11,7 +11,7 @@ from ._shared_client import get_shared_client
 def ENCODE_search_histone_experiments(
     histone_mark: Optional[str | Any] = None,
     biosample_term_name: Optional[str | Any] = None,
-    organism: Optional[str] = 'Homo sapiens',
+    organism: Optional[str] = "Homo sapiens",
     limit: Optional[int] = 25,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
@@ -45,12 +45,16 @@ def ENCODE_search_histone_experiments(
     # Handle mutable defaults to avoid B006 linting error
 
     # Strip None values so optional parameters don't trigger schema validation errors
-    _args = {k: v for k, v in {
-        "histone_mark": histone_mark,
-                "biosample_term_name": biosample_term_name,
-                "organism": organism,
-                "limit": limit
-    }.items() if v is not None}
+    _args = {
+        k: v
+        for k, v in {
+            "histone_mark": histone_mark,
+            "biosample_term_name": biosample_term_name,
+            "organism": organism,
+            "limit": limit,
+        }.items()
+        if v is not None
+    }
     return get_shared_client().run_one_function(
         {
             "name": "ENCODE_search_histone_experiments",
@@ -58,7 +62,7 @@ def ENCODE_search_histone_experiments(
         },
         stream_callback=stream_callback,
         use_cache=use_cache,
-        validate=validate
+        validate=validate,
     )
 
 

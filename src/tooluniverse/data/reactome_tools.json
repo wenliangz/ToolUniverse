@@ -137,7 +137,7 @@
       "properties": {
         "species": {
           "type": "string",
-          "description": "Species name or taxonomy ID (e.g., 'Homo sapiens' or '9606'). To find available species and their taxonomy IDs, use Reactome_list_species."
+          "description": "Species name or taxonomy ID (e.g., 'Homo sapiens' or '9606'). IMPORTANT: Common names like 'human' or 'mouse' will return HTTP 404. Use exact scientific name (e.g., 'Homo sapiens', 'Mus musculus') or NCBI taxonomy ID. To find available species, use Reactome_list_species."
         }
       },
       "required": ["species"]
@@ -336,7 +336,7 @@
         },
         "species": {
           "type": "string",
-          "description": "Optional: Filter by species (e.g., 'Homo sapiens')"
+          "description": "Optional: Filter by species using exact scientific name (e.g., 'Homo sapiens') or taxonomy ID. Common names like 'human' are not supported."
         },
         "types": {
           "type": "array",
@@ -436,22 +436,22 @@
   {
     "name": "Reactome_map_uniprot_to_pathways",
     "description": "Map a UniProt protein identifier to Reactome pathways. Returns all pathways that contain this protein.",
-    "endpoint": "/data/mapping/UniProt/{id}/pathways",
+    "endpoint": "/data/mapping/UniProt/{uniprot_id}/pathways",
     "method": "GET",
     "parameter": {
       "type": "object",
       "properties": {
-        "id": {
+        "uniprot_id": {
           "type": "string",
-          "description": "UniProt protein identifier (e.g., 'P04637')"
+          "description": "UniProt protein accession (e.g., 'P04637' for TP53, 'P00533' for EGFR)"
         }
       },
-      "required": ["id"]
+      "required": ["uniprot_id"]
     },
     "type": "ReactomeRESTTool",
     "test_examples": [
       {
-        "id": "P04637"
+        "uniprot_id": "P04637"
       }
     ],
     "return_schema": {
@@ -482,22 +482,22 @@
   {
     "name": "Reactome_map_uniprot_to_reactions",
     "description": "Map a UniProt protein identifier to Reactome reactions. Returns all reactions that involve this protein.",
-    "endpoint": "/data/mapping/UniProt/{id}/reactions",
+    "endpoint": "/data/mapping/UniProt/{uniprot_id}/reactions",
     "method": "GET",
     "parameter": {
       "type": "object",
       "properties": {
-        "id": {
+        "uniprot_id": {
           "type": "string",
-          "description": "UniProt protein identifier (e.g., 'P04637')"
+          "description": "UniProt protein accession (e.g., 'P04637' for TP53, 'P00533' for EGFR)"
         }
       },
-      "required": ["id"]
+      "required": ["uniprot_id"]
     },
     "type": "ReactomeRESTTool",
     "test_examples": [
       {
-        "id": "P04637"
+        "uniprot_id": "P04637"
       }
     ],
     "return_schema": {

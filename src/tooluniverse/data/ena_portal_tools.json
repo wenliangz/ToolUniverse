@@ -7,7 +7,7 @@
       "properties": {
         "query": {
           "type": "string",
-          "description": "ENA search query. Examples: 'description=\"cancer\"', 'tax_tree(9606)' (human), 'description=\"transcriptomics\" AND tax_tree(10090)' (mouse transcriptomics)."
+          "description": "ENA search query. IMPORTANT: Plain text keywords (e.g., 'cancer') will cause HTTP 400. Always wrap text keywords with description=\"...\". Examples: 'description=\"cancer\"', 'tax_tree(9606)' (human), 'description=\"transcriptomics\" AND tax_tree(10090)' (mouse transcriptomics)."
         },
         "limit": {
           "type": [

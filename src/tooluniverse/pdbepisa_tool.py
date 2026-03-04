@@ -159,7 +159,11 @@ class PDBePISATool(BaseTool):
 
     def run(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Execute the PDBePISA API tool with given arguments."""
-        operation = arguments.get("operation")
+        # BUG-68B-006: operation is now an internal config value, not a user parameter.
+        # Fall back to arguments for backward compatibility.
+        operation = self.tool_config.get("fields", {}).get(
+            "operation", arguments.get("operation")
+        )
         if not operation:
             return {"status": "error", "error": "Missing required parameter: operation"}
 

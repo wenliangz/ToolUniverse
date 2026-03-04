@@ -27,7 +27,7 @@ def GTEx_calculate_eqtl(
     operation : str
         Operation type
     gencode_id : str
-        Required: Versioned GENCODE ID (e.g. ENSG00000141510.16)
+        Required: Versioned GENCODE ID (e.g. ENSG00000141510.18)
     variant_id : str
         Required: GTEx variant ID
     tissue_site_detail_id : str

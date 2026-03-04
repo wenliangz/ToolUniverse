@@ -1,13 +1,13 @@
 [
   {
     "name": "STRING_get_network",
-    "description": "Get the protein-protein interaction network for one or more proteins from STRING database. Returns all interactions (edges) between the query proteins and their neighbors, including confidence scores broken down by evidence type (experiments, co-expression, databases, text-mining, etc.). Different from STRING_get_functional_annotations (which returns GO/pathway annotations) and STRING_get_enrichment (which tests enrichment of a set). Use this to build or visualize PPI networks. Multiple proteins can be separated by newlines (%0d).",
+    "description": "Get the protein-protein interaction network for one or more proteins from STRING database. Returns all interactions (edges) between the query proteins and their neighbors, including confidence scores broken down by evidence type (experiments, co-expression, databases, text-mining, etc.). Different from STRING_get_functional_annotations (which returns GO/pathway annotations) and STRING_get_enrichment (which tests enrichment of a set). Use this to build or visualize PPI networks. Multiple proteins can be separated by carriage return characters (\\r).",
     "parameter": {
       "type": "object",
       "properties": {
         "identifiers": {
           "type": "string",
-          "description": "Protein identifier(s). For multiple proteins, separate with '%0d' (URL-encoded newline). Examples: 'TP53', 'BRCA1%0dBRCA2%0dTP53', '9606.ENSP00000269305'"
+          "description": "Protein identifier(s). For multiple proteins, separate with '\\r' (carriage return character). Examples: 'TP53', 'BRCA1\\rBRCA2\\rTP53', '9606.ENSP00000269305'"
         },
         "species": {
           "type": "integer",

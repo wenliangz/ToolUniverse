@@ -25,7 +25,7 @@ def civic_search_therapies(
     limit : int
         Maximum number of therapies to return (default: 20, recommended max: 100)
     name : str
-        Filter by therapy/drug name (e.g., 'imatinib', 'ponatinib', 'pembrolizumab'). Alias: query.
+        Filter by therapy/drug name (e.g., 'imatinib', 'ponatinib', 'pembrolizumab')....
     query : str
         Alias for name. Filter by therapy/drug name.
     stream_callback : Callable, optional
@@ -39,14 +39,12 @@ def civic_search_therapies(
     -------
     dict[str, Any]
     """
+    # Handle mutable defaults to avoid B006 linting error
+
     # Strip None values so optional parameters don't trigger schema validation errors
     _args = {
         k: v
-        for k, v in {
-            "limit": limit,
-            "name": name,
-            "query": query,
-        }.items()
+        for k, v in {"limit": limit, "name": name, "query": query}.items()
         if v is not None
     }
     return get_shared_client().run_one_function(

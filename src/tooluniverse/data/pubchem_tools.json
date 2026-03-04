@@ -337,13 +337,18 @@
   },
   {
     "name": "PubChem_search_compounds_by_substructure",
-    "description": "Search for all CIDs in PubChem that contain the given substructure (SMILES).",
+    "description": "Search for CIDs in PubChem that contain the given substructure (SMILES). Returns up to max_results CIDs (default 10).",
     "parameter": {
       "type": "object",
       "properties": {
         "smiles": {
           "type": "string",
           "description": "SMILES of substructure (e.g., \"c1ccccc1\" corresponds to benzene ring)."
+        },
+        "max_results": {
+          "type": "integer",
+          "description": "Maximum number of CIDs to return (default: 10, max: 10000).",
+          "default": 10
         }
       },
       "required": [
@@ -353,7 +358,7 @@
     "fields": {
       "endpoint": "/compound/fastsubstructure/smiles/{smiles}/cids/JSON",
       "use_pugview": false,
-      "input_description": "Input is SMILES of target substructure, PubChem will find all compounds containing this substructure, returns no more than 10 CIDs (MaxRecords=10)",
+      "input_description": "Input is SMILES of target substructure, PubChem will find all compounds containing this substructure. Returns up to max_results CIDs (default 10).",
       "output_description": "Returns a JSON object with structure example:\n{\n  \"IdentifierList\": {\n    \"CID\": [241, 1188, ...]\n  }\n}\n\nWhere: CID array contains all compound IDs in PubChem database that contain this substructure. LLM can use this to understand which molecules contain this group.",
       "property_list": []
     },
@@ -382,7 +387,7 @@
   },
   {
     "name": "PubChem_search_compounds_by_similarity",
-    "description": "Search by similarity (Tanimoto coefficient), returns CID list of compounds with similarity above threshold to given SMILES molecule, returns no more than 10 CIDs (MaxRecords=10)",
+    "description": "Search by similarity (Tanimoto coefficient), returns CID list of compounds with similarity above threshold to given SMILES molecule. Returns up to max_results CIDs (default 10).",
     "parameter": {
       "type": "object",
       "properties": {
@@ -394,6 +399,11 @@
           "type": "number",
           "description": "Similarity threshold (between 0 and 1), e.g., 0.9 means 90% similarity.",
           "default": 0.9
+        },
+        "max_results": {
+          "type": "integer",
+          "description": "Maximum number of CIDs to return (default: 10, max: 10000).",
+          "default": 10
         }
       },
       "required": [

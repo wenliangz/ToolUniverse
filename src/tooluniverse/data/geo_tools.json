@@ -126,13 +126,13 @@
               "type": "string",
               "description": "Dataset summary"
             },
-            "organism": {
+            "taxon": {
               "type": "string",
-              "description": "Organism"
+              "description": "Organism taxon (e.g., 'Homo sapiens')"
             },
-            "platform": {
+            "gpl": {
               "type": "string",
-              "description": "Platform used"
+              "description": "Platform accession (e.g., 'GPL570')"
             },
             "samples": {
               "type": "string",
@@ -191,26 +191,17 @@
               "type": "string",
               "description": "Dataset UID"
             },
-            "samples": {
-              "type": "array",
-              "description": "Array of sample information",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "sample_id": {
-                    "type": "string",
-                    "description": "Sample identifier"
-                  },
-                  "characteristics": {
-                    "type": "string",
-                    "description": "Sample characteristics"
-                  },
-                  "treatment": {
-                    "type": "string",
-                    "description": "Treatment conditions"
-                  }
-                }
-              }
+            "n_samples": {
+              "type": "string",
+              "description": "Number of samples in the dataset"
+            },
+            "title": {
+              "type": "string",
+              "description": "Dataset title"
+            },
+            "summary": {
+              "type": "string",
+              "description": "Dataset summary text"
             }
           }
         }

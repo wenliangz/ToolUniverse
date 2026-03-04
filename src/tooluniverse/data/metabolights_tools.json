@@ -42,7 +42,7 @@
   {
     "type": "MetaboLightsRESTTool",
     "name": "metabolights_search_studies",
-    "description": "Search MetaboLights studies by query string. Returns a list of matching study IDs. Use metabolights_get_study with a study ID to get detailed metadata including titles, descriptions, and organism information.",
+    "description": "List MetaboLights study IDs. NOTE: The MetaboLights API does not support keyword filtering — the query parameter is accepted but has no effect; all public study IDs are returned regardless of query. To find studies on a specific topic, use metabolights_get_study on individual IDs. Returns all public MetaboLights study accessions (MTBLS###).",
     "parameter": {
       "type": "object",
       "properties": {

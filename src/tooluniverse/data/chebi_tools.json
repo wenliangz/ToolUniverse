@@ -131,7 +131,7 @@
   },
   {
     "name": "ChEBI_search",
-    "description": "Search the ChEBI database for chemical entities by name, formula, or keyword. Uses Elasticsearch-powered full-text search across compound names, synonyms, definitions, and formulas. Returns matching compounds with IDs, names, formulas, masses, and structures. ChEBI contains 195,000+ chemical entities of biological interest. Example: searching 'glucose' returns D-glucose (CHEBI:17234), L-glucose, and related compounds.",
+    "description": "Search the ChEBI database for chemical entities by name, formula, or keyword. Uses Elasticsearch-powered full-text search across compound names, synonyms, definitions, and formulas. Returns matching compounds with IDs, names, formulas, and masses. Note: smiles and inchikey are not available from the search endpoint (use ChEBI_get_compound for structural data). Compound names are HTML-stripped. ChEBI contains 195,000+ chemical entities of biological interest.",
     "parameter": {
       "type": "object",
       "properties": {
@@ -205,18 +205,6 @@
                       "stars": {
                         "type": [
                           "integer",
-                          "null"
-                        ]
-                      },
-                      "smiles": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "inchikey": {
-                        "type": [
-                          "string",
                           "null"
                         ]
                       }

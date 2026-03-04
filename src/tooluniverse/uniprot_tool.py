@@ -276,7 +276,6 @@ class UniProtRESTTool(BaseTool):
             "Ensembl": "Ensembl",
             "Gene_Name": "Gene_Name",
             "RefSeq_Protein": "RefSeq_Protein_ID",
-            "PDB": "PDB_ID",
             "EMBL": "EMBL_ID",
             "UniProtKB": "UniProtKB",
             "UniProtKB_AC-ID": "UniProtKB_AC-ID",

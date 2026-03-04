@@ -10,7 +10,7 @@ from ._shared_client import get_shared_client
 
 def Tool_Finder(
     description: str,
-    limit: int,
+    limit: Optional[int] = None,
     picked_tool_names: Optional[list[str]] = None,
     return_call_result: Optional[bool] = None,
     categories: Optional[list[str]] = None,
@@ -27,7 +27,7 @@ def Tool_Finder(
     description : str
         The description of the tool capability required.
     limit : int
-        The number of tools to retrieve
+        The number of tools to retrieve (default: 10)
     picked_tool_names : list[str]
         Pre-selected tool names to process. If provided, tool selection will skip the...
     return_call_result : bool

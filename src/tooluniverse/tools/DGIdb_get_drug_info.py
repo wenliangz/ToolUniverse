@@ -9,7 +9,7 @@ from ._shared_client import get_shared_client
 
 
 def DGIdb_get_drug_info(
-    drugs: list[str],
+    drugs: str | list[str],
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
@@ -20,8 +20,8 @@ def DGIdb_get_drug_info(
 
     Parameters
     ----------
-    drugs : list[str]
-        List of drug names (e.g., ['imatinib', 'erlotinib']).
+    drugs : str | list[str]
+        Drug name(s) to look up. Accepts a single name or a list.
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False

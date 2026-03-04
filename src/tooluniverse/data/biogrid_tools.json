@@ -49,26 +49,37 @@
     },
     "required_api_keys": ["BIOGRID_ACCESS_KEY"],
     "return_schema": {
-      "type": "object",
-      "description": "BioGRID API response keyed by interaction ID. Each value is an interaction object.",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "BIOGRID_INTERACTION_ID": {"type": "integer"},
-          "ENTREZ_GENE_A": {"type": "string"},
-          "ENTREZ_GENE_B": {"type": "string"},
-          "OFFICIAL_SYMBOL_A": {"type": "string"},
-          "OFFICIAL_SYMBOL_B": {"type": "string"},
-          "SYNONYMS_A": {"type": "string"},
-          "SYNONYMS_B": {"type": "string"},
-          "EXPERIMENTAL_SYSTEM": {"type": "string"},
-          "EXPERIMENTAL_SYSTEM_TYPE": {"type": "string"},
-          "PUBMED_ID": {"type": "integer"},
-          "THROUGHPUT": {"type": "string"},
-          "ORGANISM_A_ID": {"type": "integer"},
-          "ORGANISM_B_ID": {"type": "integer"}
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "BioGRID API response keyed by interaction ID. Each value is an interaction object.",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "BIOGRID_INTERACTION_ID": {"type": "integer"},
+              "ENTREZ_GENE_A": {"type": "string"},
+              "ENTREZ_GENE_B": {"type": "string"},
+              "OFFICIAL_SYMBOL_A": {"type": "string"},
+              "OFFICIAL_SYMBOL_B": {"type": "string"},
+              "SYNONYMS_A": {"type": "string"},
+              "SYNONYMS_B": {"type": "string"},
+              "EXPERIMENTAL_SYSTEM": {"type": "string"},
+              "EXPERIMENTAL_SYSTEM_TYPE": {"type": "string"},
+              "PUBMED_ID": {"type": "integer"},
+              "THROUGHPUT": {"type": "string"},
+              "ORGANISM_A_ID": {"type": "integer"},
+              "ORGANISM_B_ID": {"type": "integer"}
+            }
+          }
+        },
+        {
+          "type": "object",
+          "description": "Error response",
+          "properties": {
+            "error": {"type": "string"}
+          }
         }
-      }
+      ]
     },
     "fields": {
       "endpoint": "/interactions/",
@@ -142,20 +153,31 @@
     },
     "required_api_keys": ["BIOGRID_ACCESS_KEY"],
     "return_schema": {
-      "type": "object",
-      "description": "BioGRID chemical-protein interaction data keyed by interaction ID.",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "BIOGRID_INTERACTION_ID": {"type": "integer"},
-          "OFFICIAL_SYMBOL_A": {"type": "string"},
-          "OFFICIAL_SYMBOL_B": {"type": "string"},
-          "EXPERIMENTAL_SYSTEM": {"type": "string"},
-          "EXPERIMENTAL_SYSTEM_TYPE": {"type": "string"},
-          "PUBMED_ID": {"type": "integer"},
-          "THROUGHPUT": {"type": "string"}
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "BioGRID chemical-protein interaction data keyed by interaction ID.",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "BIOGRID_INTERACTION_ID": {"type": "integer"},
+              "OFFICIAL_SYMBOL_A": {"type": "string"},
+              "OFFICIAL_SYMBOL_B": {"type": "string"},
+              "EXPERIMENTAL_SYSTEM": {"type": "string"},
+              "EXPERIMENTAL_SYSTEM_TYPE": {"type": "string"},
+              "PUBMED_ID": {"type": "integer"},
+              "THROUGHPUT": {"type": "string"}
+            }
+          }
+        },
+        {
+          "type": "object",
+          "description": "Error response",
+          "properties": {
+            "error": {"type": "string"}
+          }
         }
-      }
+      ]
     },
     "fields": {
       "endpoint": "/interactions/",
@@ -306,20 +328,31 @@
     },
     "required_api_keys": ["BIOGRID_ACCESS_KEY"],
     "return_schema": {
-      "type": "object",
-      "description": "BioGRID PTM data keyed by interaction ID. Each value contains modification details, interactors, and evidence.",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "BIOGRID_INTERACTION_ID": {"type": "integer"},
-          "OFFICIAL_SYMBOL_A": {"type": "string"},
-          "OFFICIAL_SYMBOL_B": {"type": "string"},
-          "EXPERIMENTAL_SYSTEM": {"type": "string"},
-          "EXPERIMENTAL_SYSTEM_TYPE": {"type": "string"},
-          "PUBMED_ID": {"type": "integer"},
-          "THROUGHPUT": {"type": "string"}
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "BioGRID PTM data keyed by interaction ID. Each value contains modification details, interactors, and evidence.",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "BIOGRID_INTERACTION_ID": {"type": "integer"},
+              "OFFICIAL_SYMBOL_A": {"type": "string"},
+              "OFFICIAL_SYMBOL_B": {"type": "string"},
+              "EXPERIMENTAL_SYSTEM": {"type": "string"},
+              "EXPERIMENTAL_SYSTEM_TYPE": {"type": "string"},
+              "PUBMED_ID": {"type": "integer"},
+              "THROUGHPUT": {"type": "string"}
+            }
+          }
+        },
+        {
+          "type": "object",
+          "description": "Error response",
+          "properties": {
+            "error": {"type": "string"}
+          }
         }
-      }
+      ]
     },
     "fields": {
       "endpoint": "/interactions/",

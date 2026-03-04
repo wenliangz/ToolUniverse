@@ -1,7 +1,7 @@
 [
   {
     "name": "HMDB_get_metabolite",
-    "description": "Get human metabolite information from HMDB by ID. Returns name, formula, SMILES, classification, pathways, and disease associations. HMDB contains 220,000+ metabolites. No authentication required.",
+    "description": "Get human metabolite information from HMDB by ID. Returns basic chemical properties via PubChem cross-reference: IUPAC name, molecular formula, SMILES, InChIKey, and molecular weight. Note: HMDB has no open API; data is retrieved from PubChem using the HMDB ID as a cross-reference. Classification, pathways, and disease associations are not available programmatically.",
     "type": "HMDBTool",
     "parameter": {
       "type": "object",
@@ -27,7 +27,7 @@
   },
   {
     "name": "HMDB_search",
-    "description": "Search HMDB for metabolites by name, formula, or mass. Returns matching metabolites with HMDB IDs and basic information. Essential for metabolite identification.",
+    "description": "Search for metabolites by name or formula using PubChem. Returns PubChem CIDs (not HMDB IDs) with name, formula, SMILES, and molecular weight. search_type='name' uses PubChem compound/name endpoint; search_type='formula' uses PubChem fastformula endpoint; search_type='mass' falls back to name search (mass-based search not supported). HMDB IDs are not included in results.",
     "type": "HMDBTool",
     "parameter": {
       "type": "object",
@@ -58,7 +58,7 @@
   },
   {
     "name": "HMDB_get_diseases",
-    "description": "Get disease and pathway associations for a metabolite from HMDB. Returns diseases linked to abnormal metabolite levels and metabolic pathways. Useful for biomarker discovery and metabolic disorder research.",
+    "description": "Attempts to get disease associations for a metabolite from HMDB. Note: HMDB does not provide an open API for disease data. This tool always returns an error directing users to the HMDB website. For disease-metabolite relationships, consider using CTD or DisGeNET databases instead.",
     "type": "HMDBTool",
     "parameter": {
       "type": "object",

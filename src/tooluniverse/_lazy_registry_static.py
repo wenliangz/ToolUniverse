@@ -37,6 +37,7 @@ STATIC_LAZY_REGISTRY = {
     "BioStudiesRESTTool": "biostudies_tool",
     "Boltz2DockingTool": "boltz_tool",
     "BridgeDbTool": "bridgedb_tool",
+    "CPICSearchPairsTool": "cpic_search_pairs_tool",
     "CADDTool": "cadd_tool",
     "CATHTool": "cath_tool",
     "CBioPortalRESTTool": "cbioportal_tool",

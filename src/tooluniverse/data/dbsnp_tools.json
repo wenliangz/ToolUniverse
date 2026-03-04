@@ -210,36 +210,36 @@
         },
         "data": {
           "type": "object",
-          "description": "Variant information from dbSNP",
+          "description": "Frequency data from dbSNP",
           "properties": {
-            "refsnp_id": {
-              "type": "string",
-              "description": "dbSNP reference ID"
-            },
-            "primary_snapshot_data": {
-              "type": "object",
-              "description": "Primary variant data"
-            }
-          }
-        },
-        "frequencies": {
-          "type": "array",
-          "description": "Array of allele frequency data",
-          "items": {
-            "type": "object",
-            "properties": {
-              "population": {
-                "type": "string",
-                "description": "Population name"
-              },
-              "allele": {
-                "type": "string",
-                "description": "Allele"
-              },
-              "frequency": {
-                "type": "number",
-                "description": "Allele frequency"
+            "frequencies": {
+              "type": "array",
+              "description": "Array of allele frequency data",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "study": {
+                    "type": "string",
+                    "description": "Study/population name"
+                  },
+                  "allele": {
+                    "type": "string",
+                    "description": "Allele"
+                  },
+                  "frequency": {
+                    "type": "number",
+                    "description": "Allele frequency"
+                  },
+                  "sample_count": {
+                    "type": "integer",
+                    "description": "Sample count"
+                  }
+                }
               }
+            },
+            "total_studies": {
+              "type": "integer",
+              "description": "Number of studies with frequency data"
             }
           }
         },

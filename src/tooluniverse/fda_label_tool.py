@@ -134,12 +134,16 @@ class FDALabelTool(BaseTool):
         if not drug_name:
             return {"error": "drug_name is required"}
 
+        dn_upper = drug_name.upper()
+
         # BUG-66B-004: "+" in openFDA means AND — try generic_name then brand_name.
+        # BUG-67B-005B: fetch multiple results and prefer exact brand/generic name match
+        # (e.g., "OPDIVO" should match canonical OPDIVO IV, not newer OPDIVO QVANTIG).
         for field in ("openfda.generic_name", "openfda.brand_name"):
             q = f'{field}:"{drug_name}"'
             resp = requests.get(
                 FDA_LABEL_URL,
-                params={"search": q, "limit": 1},
+                params={"search": q, "limit": 10},
                 timeout=20,
             )
             if resp.status_code == 404:
@@ -147,7 +151,17 @@ class FDALabelTool(BaseTool):
             resp.raise_for_status()
             results = resp.json().get("results", [])
             if results:
-                return _extract_label(results[0])
+                extracted = [_extract_label(r) for r in results]
+
+                def _match_score(r):
+                    brand = (r.get("brand_name") or "").upper()
+                    generic = (r.get("generic_name") or "").upper()
+                    if brand == dn_upper or generic == dn_upper:
+                        return 0
+                    return len(brand) or 999
+
+                extracted.sort(key=_match_score)
+                return extracted[0]
         return {"error": f"No FDA label found for '{drug_name}'"}
 
     def _list_classes(self, arguments: dict) -> Any:

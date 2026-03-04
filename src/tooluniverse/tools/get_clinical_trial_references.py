@@ -10,7 +10,7 @@ from ._shared_client import get_shared_client
 
 def get_clinical_trial_references(
     nct_ids: list[str],
-    references: str,
+    references: Optional[str] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
@@ -24,7 +24,7 @@ def get_clinical_trial_references(
     nct_ids : list[str]
         List of NCT IDs of the clinical trials (e.g., ['NCT04852770', 'NCT01728545']).
     references : str
-        Placeholder.
+        Unused filter parameter, kept for backward compatibility. Can be omitted or s...
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False

@@ -24,16 +24,22 @@
             }
         ],
         "return_schema": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "objCls": {"type": "string"},
-                    "id": {"type": "string"},
-                    "name": {"type": "string"},
-                    "inChi": {"type": "string"},
-                    "smiles": {"type": "string"},
-                    "types": {"type": "array", "items": {"type": "string"}}
+            "type": "object",
+            "properties": {
+                "status": {"type": "string"},
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "objCls": {"type": "string"},
+                            "id": {"type": "string"},
+                            "name": {"type": "string"},
+                            "inChi": {"type": "string"},
+                            "smiles": {"type": "string"},
+                            "types": {"type": "array", "items": {"type": "string"}}
+                        }
+                    }
                 }
             }
         }
@@ -99,17 +105,23 @@
             }
         ],
         "return_schema": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "objCls": {"type": "string"},
-                    "id": {"type": "string"},
-                    "symbol": {"type": "string"},
-                    "name": {"type": "string"},
-                    "chr": {"type": "object", "additionalProperties": true}
-                },
-                "additionalProperties": true
+            "type": "object",
+            "properties": {
+                "status": {"type": "string"},
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "objCls": {"type": "string"},
+                            "id": {"type": "string"},
+                            "symbol": {"type": "string"},
+                            "name": {"type": "string"},
+                            "chr": {"type": "object", "additionalProperties": true}
+                        },
+                        "additionalProperties": true
+                    }
+                }
             }
         }
     },
@@ -154,17 +166,17 @@
     },
     {
         "name": "PharmGKB_get_clinical_annotations",
-        "description": "Get clinical annotations showing gene-drug-phenotype relationships. Returns variant-level clinical significance data. Provide a specific 'annotation_id' if known.",
+        "description": "Get clinical annotations showing gene-drug-phenotype relationships. Returns variant-level clinical significance data. Always provide a specific 'annotation_id' — filtering by gene_id is unreliable and may return empty results.",
         "parameter": {
             "type": "object",
             "properties": {
                 "annotation_id": {
                     "type": "string",
-                    "description": "PharmGKB clinical annotation ID (e.g., '1449309855')."
+                    "description": "PharmGKB clinical annotation ID (e.g., '1449309855'). Required for reliable results."
                 },
                 "gene_id": {
                     "type": "string",
-                    "description": "PharmGKB Gene Accession ID (e.g., 'PA128')."
+                    "description": "PharmGKB Gene Accession ID (e.g., 'PA128'). NOTE: Filtering by gene_id is unreliable and may return empty results silently. Use annotation_id instead."
                 }
             },
             "required": []
@@ -220,36 +232,42 @@
             }
         ],
         "return_schema": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "objCls": {"type": "string"},
-                    "id": {"type": "string"},
-                    "name": {"type": "string"},
-                    "location": {"type": "object"},
-                    "gene": {"type": "object"}
-                },
-                "additionalProperties": true
+            "type": "object",
+            "properties": {
+                "status": {"type": "string"},
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "objCls": {"type": "string"},
+                            "id": {"type": "string"},
+                            "name": {"type": "string"},
+                            "location": {"type": "object"},
+                            "gene": {"type": "object"}
+                        },
+                        "additionalProperties": true
+                    }
+                }
             }
         }
     },
     {
         "name": "PharmGKB_get_dosing_guidelines",
-        "description": "Get pharmacogenetic dosing guidelines (CPIC/DPWG) from PharmGKB. Provide a specific 'guideline_id' if known.",
+        "description": "Get pharmacogenetic dosing guidelines (CPIC/DPWG) from PharmGKB by guideline_id. IMPORTANT: use the 'clinpgxid' field from CPIC_list_guidelines (e.g., 'PA166251454'), NOT the 'pharmgkbid' field — old-format pharmgkbid values (e.g., 'PA166104996') return HTTP 404. The test example PA166251465 is for the warfarin guideline.",
         "parameter": {
             "type": "object",
             "properties": {
                 "guideline_id": {
                     "type": "string",
-                    "description": "PharmGKB guideline ID (e.g., 'PA166124584')."
+                    "description": "PharmGKB ClinPGx guideline ID from CPIC_list_guidelines 'clinpgxid' field (e.g., 'PA166251465' for warfarin, 'PA166251454' for opioids/codeine, 'PA166251458' for tamoxifen). Use clinpgxid, NOT pharmgkbid."
                 },
                 "gene": {
                     "type": "string",
-                    "description": "Gene symbol (e.g., 'CYP2D6')."
+                    "description": "Gene symbol (e.g., 'CYP2D6'). NOTE: Filtering by gene symbol is unreliable and may return a generic prompt instead of actual guidelines. Use guideline_id instead."
                 }
             },
-            "required": []
+            "required": ["guideline_id"]
         },
         "fields": {
             "operation": "dosing_guidelines"

@@ -115,7 +115,7 @@
   {
     "type": "ClinVarGetVariantDetails",
     "name": "clinvar_get_variant_details",
-    "description": "Get detailed variant information from ClinVar by variant ID. Returns comprehensive variant data including clinical significance.",
+    "description": "Get variant summary information from ClinVar by variant ID. Returns accession, title, genes, clinical significance, review status, chromosome location, and variation name. For the same variant, this provides a different field view than clinvar_get_clinical_significance.",
     "parameter": {
       "type": "object",
       "properties": {
@@ -129,7 +129,7 @@
       ]
     },
     "fields": {
-      "endpoint": "/efetch.fcgi",
+      "endpoint": "/esummary.fcgi",
       "return_format": "JSON"
     },
     "return_schema": {
@@ -144,9 +144,9 @@
           "type": "object",
           "description": "Detailed variant information from ClinVar",
           "properties": {
-            "variation": {
+            "result": {
               "type": "object",
-              "description": "Variant data structure"
+              "description": "Variant data structure keyed by variant ID"
             }
           }
         },

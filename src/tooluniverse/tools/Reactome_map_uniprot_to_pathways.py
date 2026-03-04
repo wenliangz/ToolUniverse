@@ -9,7 +9,7 @@ from ._shared_client import get_shared_client
 
 
 def Reactome_map_uniprot_to_pathways(
-    id: str,
+    uniprot_id: str,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
@@ -20,8 +20,8 @@ def Reactome_map_uniprot_to_pathways(
 
     Parameters
     ----------
-    id : str
-        UniProt protein identifier (e.g., 'P04637')
+    uniprot_id : str
+        UniProt protein accession (e.g., 'P04637' for TP53, 'P00533' for EGFR)
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False
@@ -36,7 +36,7 @@ def Reactome_map_uniprot_to_pathways(
     # Handle mutable defaults to avoid B006 linting error
 
     # Strip None values so optional parameters don't trigger schema validation errors
-    _args = {k: v for k, v in {"id": id}.items() if v is not None}
+    _args = {k: v for k, v in {"uniprot_id": uniprot_id}.items() if v is not None}
     return get_shared_client().run_one_function(
         {
             "name": "Reactome_map_uniprot_to_pathways",

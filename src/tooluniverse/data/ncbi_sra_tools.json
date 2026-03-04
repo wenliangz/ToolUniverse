@@ -5,7 +5,7 @@
     "description": "Search NCBI Sequence Read Archive (SRA) for NGS/RNA-seq sequencing runs by study accession, organism, sequencing strategy (RNA-Seq, WGS, ChIP-Seq), platform (ILLUMINA, OXFORD_NANOPORE), or library source. Returns SRA UIDs which can be used with other SRA tools to retrieve metadata and download links. Essential for discovering high-throughput sequencing data from public repositories. Use this to find relevant sequencing experiments before accessing the actual FASTQ data files.",
     "parameter": {
       "type": "object",
-      "required": ["operation"],
+      "required": [],
       "properties": {
         "operation": {
           "const": "search",
@@ -137,7 +137,7 @@
     "description": "Get detailed metadata for SRA run accessions including sequencing platform (ILLUMINA, Oxford Nanopore), instrument model, library strategy (RNA-Seq, WGS), library source (genomic, transcriptomic), library layout (paired/single), sample information, study details, organism, and data statistics (total spots, bases). Essential for understanding experimental design and data characteristics before downloading large FASTQ files. Use SRA run accessions (SRR000001, ERR000001, DRR000001) from NCBI_SRA_search_runs or known accessions.",
     "parameter": {
       "type": "object",
-      "required": ["operation", "accessions"],
+      "required": ["accessions"],
       "properties": {
         "operation": {
           "const": "get_run_info",
@@ -243,7 +243,7 @@
     "description": "Get FTP and cloud storage URLs for downloading FASTQ sequencing data from SRA runs. Returns multiple access methods: NCBI FTP URLs for direct .sra file download, AWS S3 URLs for cloud-based access (faster for large-scale analysis), and NCBI web URLs for browser access. Note: Downloaded .sra files require SRA Toolkit (fastq-dump or fasterq-dump) to convert to standard FASTQ format. Essential for programmatic access to petabytes of public sequencing data. Works with SRR (NCBI), ERR (ENA), and DRR (DDBJ) accessions.",
     "parameter": {
       "type": "object",
-      "required": ["operation", "accessions"],
+      "required": ["accessions"],
       "properties": {
         "operation": {
           "const": "get_download_urls",
@@ -339,7 +339,7 @@
     "description": "Link SRA sequencing runs to their associated BioSample records to access biological sample metadata including sample attributes, tissue type, cell line, treatment conditions, donor information, and collection details. BioSample provides rich contextual information about the biological specimens used in sequencing experiments. Essential for understanding experimental context and sample provenance. Returns BioSample UIDs which can be used with NCBI BioSample API to retrieve detailed sample metadata. Works with SRA UIDs from NCBI_SRA_search_runs.",
     "parameter": {
       "type": "object",
-      "required": ["operation", "accessions"],
+      "required": ["accessions"],
       "properties": {
         "operation": {
           "const": "link_to_biosample",

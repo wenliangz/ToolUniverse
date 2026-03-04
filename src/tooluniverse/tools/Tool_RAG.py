@@ -10,7 +10,7 @@ from ._shared_client import get_shared_client
 
 def Tool_RAG(
     description: str,
-    limit: int,
+    limit: Optional[int] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
@@ -24,7 +24,7 @@ def Tool_RAG(
     description : str
         The description of the tool capability required.
     limit : int
-        The number of tools to retrieve
+        The number of tools to retrieve (default: 10)
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False

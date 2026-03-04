@@ -12,6 +12,10 @@ from typing import Dict, Optional
 # Initialize logger for this module
 logger = logging.getLogger("ToolRegistry")
 
+# Detect this module's package prefix (e.g. "tooluniverse" or "src.tooluniverse")
+# so that lazy imports use the same namespace as the running code.
+_PKG = __name__.rsplit(".", 1)[0]
+
 # Global registries
 _tool_registry = {}
 _config_registry = {}
@@ -181,9 +185,11 @@ def lazy_import_tool(tool_name):
     if tool_name in _lazy_registry:
         module_name = _lazy_registry[tool_name]
 
-        # Ensure we have the full module path
-        if not module_name.startswith("tooluniverse."):
-            full_module_name = f"tooluniverse.{module_name}"
+        # Ensure we have the full module path using the same package prefix
+        # as this registry module itself (handles both "tooluniverse." and
+        # "src.tooluniverse." namespaces in editable/dev installs).
+        if not module_name.startswith(_PKG + "."):
+            full_module_name = f"{_PKG}.{module_name}"
         else:
             full_module_name = module_name
 

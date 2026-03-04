@@ -3597,120 +3597,47 @@
       }
     ],
     "return_schema": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string"
-        },
-        "error_details": {
+      "oneOf": [
+        {
           "type": "object",
+          "description": "GraphQL response with drug pharmacogenomics data",
           "properties": {
-            "type": {
-              "type": "string"
-            },
-            "message": {
-              "type": "string"
-            },
-            "retriable": {
-              "type": "boolean"
-            },
-            "next_steps": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "details": {
+            "data": {
               "type": "object",
               "properties": {
-                "validation_error": {
-                  "type": "string"
-                },
-                "path": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "schema": {
+                "drug": {
                   "type": "object",
                   "properties": {
-                    "type": {
-                      "type": "string"
-                    },
-                    "properties": {
-                      "type": "object",
-                      "properties": {
-                        "chemblId": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "page": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            },
-                            "properties": {
-                              "type": "object",
-                              "properties": {
-                                "index": {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string"
-                                    },
-                                    "description": {
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "size": {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string"
-                                    },
-                                    "description": {
-                                      "type": "string"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "required": {
+                    "id": {"type": "string"},
+                    "name": {"type": "string"},
+                    "pharmacogenomics": {
                       "type": "array",
                       "items": {
-                        "type": "string"
+                        "type": "object",
+                        "properties": {
+                          "datasourceId": {"type": "string"},
+                          "evidenceLevel": {"type": "string"},
+                          "genotype": {"type": "string"},
+                          "genotypeAnnotationText": {"type": "string"},
+                          "pgxCategory": {"type": "string"},
+                          "phenotypeText": {"type": "string"},
+                          "variantRsId": {"type": "string"},
+                          "isDirectTarget": {"type": "boolean"}
+                        }
                       }
                     }
                   }
-                },
-                "parameter": {
-                  "type": "string"
-                },
-                "expected": {
-                  "type": "string"
                 }
               }
             }
-          }
+          },
+          "required": ["data"]
+        },
+        {
+          "type": "null",
+          "description": "Null returned when no data found or error occurred"
         }
-      }
+      ]
     }
   },
   {
