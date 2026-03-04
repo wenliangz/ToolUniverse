@@ -241,14 +241,39 @@ class CIViCTool(BaseTool):
 
         # BUG-40B-01: civic_search_evidence_items — warn on unsupported gene/variant params.
         # BUG-41A-03: also catch molecular_profile_id (integer) — no GraphQL binding.
-        # These parameters are not in the GraphQL schema and are silently ignored.
+        # BUG-61A-001: extend to catch ANY unrecognized parameter that would be silently
+        # ignored, causing unfiltered evidence dumps (e.g. description="ESR1", gene_id=38).
         if tool_name == "civic_search_evidence_items":
-            unsupported = [
+            _known_params = {
+                "molecular_profile",
+                "disease",
+                "disease_name",
+                "therapy",
+                "status",
+                "limit",
+                "evidence_type",
+                "significance",
+                "evidence_direction",
+                "after",
+                "operation",
+            }
+            # Also include names reachable via param_map and array_wrap
+            _known_params.update(self.param_map.keys())
+            _known_params.update(self.array_wrap.keys())
+            # Legacy unsupported params with specific hints
+            legacy_unsupported = [
                 p
                 for p in ("gene", "variant", "gene_name", "molecular_profile_id")
                 if arguments.get(p)
             ]
-            if unsupported:
+            # Any other unrecognized params
+            other_unknown = [
+                p
+                for p in arguments
+                if p not in _known_params
+                and p not in ("gene", "variant", "gene_name", "molecular_profile_id")
+            ]
+            if legacy_unsupported:
                 gene = arguments.get("gene") or arguments.get("gene_name")
                 variant = arguments.get("variant")
                 mol_id = arguments.get("molecular_profile_id")
@@ -263,9 +288,20 @@ class CIViCTool(BaseTool):
                         f"evidence ID, or civic_get_variant with the variant ID."
                     )
                 return {
-                    "error": f"Unsupported parameter(s) for civic_search_evidence_items: {', '.join(unsupported)}. "
+                    "error": f"Unsupported parameter(s) for civic_search_evidence_items: {', '.join(legacy_unsupported)}. "
                     "Supported filters: molecular_profile (string, e.g. 'BRAF V600E'), "
                     "therapy, disease, status." + profile_hint,
+                }
+            if other_unknown:
+                return {
+                    "status": "error",
+                    "error": (
+                        f"Unrecognized parameter(s) for civic_search_evidence_items:"
+                        f" {', '.join(sorted(other_unknown))}. These are silently ignored by"
+                        f" the CIViC GraphQL API, returning unfiltered results."
+                        f" Supported filters: molecular_profile, disease, therapy, status,"
+                        f" evidence_type, significance, limit."
+                    ),
                 }
 
         # civic_search_variants: if gene/gene_name provided, look up gene_id then get variants.

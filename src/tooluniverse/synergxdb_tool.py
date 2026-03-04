@@ -394,13 +394,32 @@ class SYNERGxDBTool(BaseTool):
                         "represented in SYNERGxDB's 9 screening studies, which focus on pairwise "
                         "in vitro cytotoxicity rather than clinically-validated regimens."
                     )
+                # BUG-61B-002: add irinotecan→SN-38 hint when irinotecan is one of the drugs
+                # in the two-drug failure path (previously only in the single-drug path).
+                _irinotecan_names = {
+                    "irinotecan",
+                    "camptosar",
+                    "cpt-11",
+                    "camptothecin-11",
+                }
+                _sn38_hint = ""
+                if (
+                    drug_name_1_lower in _irinotecan_names
+                    or drug_name_2_lower in _irinotecan_names
+                ):
+                    _sn38_hint = (
+                        " Note: Irinotecan is a prodrug; its active metabolite "
+                        "SN-38 is stored in SYNERGxDB as 'SN 38 Lactone' (drug ID 87, "
+                        "datasets: STANFORD, YALE-TNBC, MERCK, NCI-ALMANAC, YALE-PDAC). "
+                        "Try replacing irinotecan with drug_name='SN 38 Lactone' in your query."
+                    )
                 msg = (
                     f"No combination data found: drug IDs {drug_id_1} and {drug_id_2} were both "
                     "found in SYNERGxDB but this specific combination was not tested together in "
                     "any of the 9 integrated datasets (NCI-ALMANAC, MERCK, MIT-MELANOMA, VISAGE, "
                     "DECREASE, YALE-TNBC, YALE-PDAC, STANFORD, CLOUD). "
                     "Try SYNERGxDB_search_combos with only one drug_id to see what combinations "
-                    "each drug has been tested in." + folfox_hint
+                    "each drug has been tested in." + folfox_hint + _sn38_hint
                 )
             elif drug_id_1 or drug_id_2:
                 found_id = drug_id_1 or drug_id_2
@@ -410,7 +429,7 @@ class SYNERGxDBTool(BaseTool):
                 # in any tissue. Show available tissues so the user knows the real situation.
                 if sample or dataset:
                     probe = self._make_request(
-                        "combos/", {id_param: found_id, "page": 1, "perPage": 200}
+                        "combos/", {id_param: found_id, "page": 1, "perPage": 1000}
                     )
                     if probe.get("ok") and probe.get("data"):
                         probe_data = probe["data"]
@@ -434,7 +453,7 @@ class SYNERGxDBTool(BaseTool):
                         tissue_str = (
                             ", ".join(f"'{t}'" for t in tissues)
                             if tissues
-                            else "none in first 200 records"
+                            else "none in first 1000 records"
                         )
                         source_str = ", ".join(sources) if sources else "unknown"
                         # BUG-52B-004/006: for irinotecan specifically, hint that its
@@ -464,7 +483,7 @@ class SYNERGxDBTool(BaseTool):
                         msg = (
                             f"No combination data found for drug ID {found_id}{filter_desc}. "
                             f"This drug has no data for the requested filter. "
-                            f"Available tissues in the first 200 records: {tissue_str} "
+                            f"Available tissues in the first 1000 records: {tissue_str} "
                             f"(sources: {source_str}). "
                             f"Run SYNERGxDB_search_combos with only {id_param}={found_id} "
                             f"(no tissue/dataset filter) to see all available combinations."

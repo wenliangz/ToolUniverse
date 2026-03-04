@@ -322,7 +322,17 @@ class CancerPrognosisTool(BaseTool):
             }
 
         study_id = self._resolve_study(cancer)
-        limit = arguments.get("limit", 10000)
+        # BUG-61A-002: `limit` used to be passed directly as the cBioPortal API pageSize,
+        # causing severely truncated results when users passed limit=10 expecting max 10
+        # patients returned (not 10 raw clinical records fetched). Now: pageSize is always
+        # 10000 (enough to cover any study); `limit` is treated as alias for `max_patients`
+        # (output-level control), consistent with how other tools use `limit`.
+        _page_size = 10000  # internal fetch size — not user-configurable
+        if arguments.get("limit") is not None:
+            # Redirect user-facing limit to max_patients output control
+            if "max_patients" not in arguments:
+                arguments = dict(arguments)
+                arguments["max_patients"] = arguments["limit"]
 
         # BUG-47B-01: cBioPortal clinical-data endpoint does not paginate automatically.
         # Large studies (e.g., BRCA with 50,926 clinical records) may have OS data for only a
@@ -333,7 +343,7 @@ class CancerPrognosisTool(BaseTool):
             params={
                 "clinicalDataType": "PATIENT",
                 "projection": "SUMMARY",
-                "pageSize": min(limit, 100000),
+                "pageSize": _page_size,
             },
             timeout=60,
         )
@@ -552,7 +562,12 @@ class CancerPrognosisTool(BaseTool):
         # Not every sample has expression data for every gene (especially low-expressed genes
         # or genes absent from array studies). Fetch up to 5x more samples than requested
         # so we have enough raw data to fill the requested output size.
-        max_samples = min(int(arguments.get("max_samples", 500)), 2000)
+        # BUG-61A-003: accept max_patients as alias for max_samples (consistent with
+        # get_survival_data which uses max_patients as its output-size parameter).
+        max_samples = min(
+            int(arguments.get("max_samples") or arguments.get("max_patients") or 500),
+            2000,
+        )
         fetch_size = min(max(max_samples * 5, 500), 10000)
         samples = self._api_get(
             "/studies/{}/samples".format(study_id),

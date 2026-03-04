@@ -197,6 +197,12 @@ class GtoPdbRESTTool(BaseTool):
         url = None
         self._pending_ligand_id_filter = None  # BUG-38B-02: reset per call
 
+        # BUG-61B-001: GtoPdb species filter is case-sensitive ("Human" not "human").
+        # Normalize species to Title Case so users can pass any case variant.
+        if arguments.get("species"):
+            arguments = dict(arguments)
+            arguments["species"] = str(arguments["species"]).strip().title()
+
         # BUG-46A-04: gene_symbol convenience parameter for GtoPdb_get_interactions.
         # Auto-resolve gene symbol → targetId so users don't need a separate
         # GtoPdb_search_targets call before querying interactions.
