@@ -68,6 +68,7 @@ class EBIProteinsInteractionsTool(BaseTool):
         accession = arguments.get("accession", "")
         if not accession:
             return {"error": "accession is required (e.g., 'P04637')."}
+        limit = int(arguments.get("limit", 50))
 
         url = f"{EBI_PROTEINS_BASE_URL}/proteins/interaction/{accession}"
         response = requests.get(
@@ -112,15 +113,17 @@ class EBIProteinsInteractionsTool(BaseTool):
         unique_interactions = sorted(
             seen.values(), key=lambda x: x["experiments"], reverse=True
         )
+        truncated = unique_interactions[:limit]
 
         return {
             "data": {
                 "query_accession": accession,
-                "interactions": unique_interactions,
+                "interactions": truncated,
             },
             "metadata": {
                 "source": "EBI Proteins API / IntAct (ebi.ac.uk/proteins)",
                 "total_interactions": len(unique_interactions),
+                "returned": len(truncated),
             },
         }
 

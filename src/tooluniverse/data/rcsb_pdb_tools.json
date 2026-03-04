@@ -607,7 +607,7 @@
   },
   {
     "name": "get_mutation_annotations_by_pdb_id",
-    "description": "Retrieve mutation annotations for a given PDB structure. Returns mutation count, the pdbx_mutation flag (YES/NO), the details field (contains mutation identity like \"T790M\"), fragment description, and protein description.",
+    "description": "Retrieve mutation annotations for a given PDB structure. Returns mutation count, the pdbx_mutation flag (YES/NO), the details field (contains mutation identity like \"T790M\"), fragment description, and protein description. Note: if all returned fields are null, the structure has no annotated mutations in RCSB.",
     "label": [
       "Mutation",
       "Annotation",

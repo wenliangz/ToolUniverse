@@ -123,7 +123,17 @@ class PubMedRESTTool(BaseRESTTool):
             pub_year = pub_date.split()[0] if pub_date else ""
 
             elocationid = article_data.get("elocationid", "")
-            doi = elocationid.replace("doi: ", "") if "doi:" in elocationid else ""
+            # Extract DOI: handle formats like "doi: 10.1234/abc" and mixed
+            # "pii: 2026.02.14.705936. 10.64898/2026.02.14.705936" (preprints).
+            doi = ""
+            if "doi:" in elocationid:
+                # Find the "doi:" token and extract what follows it
+                doi_part = elocationid[elocationid.index("doi:") + 4 :].strip()
+                # Take the first token that contains '/' (valid DOI structure)
+                for token in doi_part.split():
+                    if "/" in token:
+                        doi = token.rstrip(".")
+                        break
             doi = doi or None
 
             journal = article_data.get(

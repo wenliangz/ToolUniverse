@@ -8,6 +8,11 @@
                 "accession": {
                     "type": "string",
                     "description": "UniProt accession of the query protein. Examples: 'P04637' (TP53), 'P00533' (EGFR), 'P38398' (BRCA1), 'P01308' (insulin)."
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Maximum number of interaction partners to return (default: 50, sorted by experiment count descending).",
+                    "default": 50
                 }
             },
             "required": ["accession"]

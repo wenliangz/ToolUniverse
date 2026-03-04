@@ -184,6 +184,9 @@ class CIViCTool(BaseTool):
                 node_id = node.get("id")
                 if node_id not in seen_ids:
                     seen_ids.add(node_id)
+                    # Strip leading/trailing whitespace from variant names (API artifact)
+                    if "name" in node and isinstance(node["name"], str):
+                        node["name"] = node["name"].strip()
                     deduped.append(node)
                     name = node.get("name", "")
                     name_count[name] = name_count.get(name, 0) + 1

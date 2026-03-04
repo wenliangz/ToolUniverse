@@ -2005,19 +2005,9 @@
         "associations": {
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "study": {
-                "type": "string"
-              },
-              "strongestRiskAllele": {
-                "type": "string"
-              },
-              "pvalue": {
-                "type": "number"
-              }
-            }
-          }
+            "type": "object"
+          },
+          "description": "Raw GWAS Catalog association objects (v2 API). Each may include fields such as association_id, beta, standard_error, range, p_value, p_value_exponent, p_value_mantissa, efo_traits, mapped_genes, strongest_risk_alleles, study_accession, risk_allele_frequency."
         },
         "total_found": {
           "type": "integer"
