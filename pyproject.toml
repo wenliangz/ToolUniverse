@@ -128,9 +128,7 @@ space = [
 bioinformatics = [
     "biopython>=1.80",
 ]
-circuit = [
-    "tooluniverse-circuit @ git+https://github.com/tooluniverse/circuit.git",
-]
+# circuit: install manually with `pip install git+https://github.com/tooluniverse/circuit.git`
 all = [
     "tooluniverse[dev,docs,graph,visualization,space,embedding,ml,bioinformatics]",
 ]
