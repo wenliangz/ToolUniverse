@@ -75,6 +75,16 @@ Execute a tool. Arguments can be ``key=value`` pairs or a JSON string.
    tu run list_tools mode=categories limit=5
    tu run list_tools '{"mode": "categories"}'   # JSON also works
 
+test
+~~~~
+
+Test a tool with example inputs and report pass/fail. Optionally provide custom input as a JSON string.
+
+.. code-block:: bash
+
+   tu test Dryad_search_datasets              # use built-in example inputs
+   tu test MyAPI_search '{"q": "test"}'       # custom input
+
 status
 ~~~~~~
 

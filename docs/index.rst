@@ -37,7 +37,7 @@ Get Started
 
 **Choose your path:**
 
-.. grid:: 1 1 2 2
+.. grid:: 1 1 3 3
    :gutter: 4
    :class-container: hero-grid
 
@@ -46,19 +46,29 @@ Get Started
       :link-type: doc
       :class-card: choice-card agent-card
       :shadow: lg
-      
+
       **Choose AI Agent User**
-      
+
       Integrate ToolUniverse with Claude, ChatGPT, Gemini, or other AI agents for interactive research.
+
+   .. grid-item-card:: Using the terminal?
+      :link: guide/tu_cli
+      :link-type: doc
+      :class-card: choice-card cli-card
+      :shadow: lg
+
+      **Choose CLI**
+
+      Discover, inspect, run, and test 1000+ tools directly from your shell with the ``tu`` command.
 
    .. grid-item-card:: Writing code?
       :link: guide/python_guide
       :link-type: doc
       :class-card: choice-card python-card
       :shadow: lg
-      
+
       **Choose Python Developer**
-      
+
       Use ToolUniverse's Python API directly in your code, Jupyter notebooks, or custom applications.
 
 What Can You Do?
@@ -195,6 +205,7 @@ Community & Support
 
    guide/python_guide
    guide/building_ai_scientists/index
+   guide/tu_cli
    guide/skills_showcase
    guide/api_keys
 

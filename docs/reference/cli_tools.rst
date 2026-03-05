@@ -1,11 +1,68 @@
 CLI Tools Reference
 ===================
 
-ToolUniverse provides several command-line tools for server management, diagnostics, and data management.
+ToolUniverse provides several command-line tools for tool discovery, execution, server management, and data management.
 
 .. contents:: Table of Contents
  :local:
  :depth: 2
+
+tu — ToolUniverse CLI
+---------------------
+
+The primary command-line interface for discovering, inspecting, running, and testing scientific tools.
+
+**Usage**::
+
+   tu [--verbose | --quiet] COMMAND [OPTIONS]
+
+**Commands**:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Command
+     - Description
+   * - ``tu list``
+     - List available tools (filter with ``--categories``)
+   * - ``tu grep PATTERN``
+     - Search tools by text or regex (``--field name|description|all``)
+   * - ``tu find QUERY``
+     - Natural-language tool search (``--limit N``)
+   * - ``tu info TOOL``
+     - Show tool details (parameters, description, examples)
+   * - ``tu run TOOL [ARGS]``
+     - Execute a tool (pass args as ``key=value`` or JSON)
+   * - ``tu test TOOL [INPUT]``
+     - Test a tool with example inputs and report pass/fail
+   * - ``tu status``
+     - Show ToolUniverse status (version, tool count, config)
+   * - ``tu build``
+     - Rebuild the static tool registry after adding built-in tools
+   * - ``tu serve``
+     - Start the MCP stdio server (identical to ``tooluniverse``)
+
+**Examples**::
+
+   # Browse and discover tools
+   tu list
+   tu list --categories uniprot
+   tu grep protein --field description
+   tu find "protein structure analysis" --limit 5
+
+   # Inspect and run a tool
+   tu info UniProt_get_entry_by_accession
+   tu run UniProt_get_entry_by_accession accession=P12345
+   tu run UniProt_get_entry_by_accession '{"accession": "P12345"}'
+
+   # Test and validate
+   tu test Dryad_search_datasets
+   tu test MyAPI_search '{"q": "test"}'
+
+   # Status and maintenance
+   tu status
+   tu build
 
 MCP Server Commands
 -------------------
