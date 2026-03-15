@@ -1524,6 +1524,10 @@ class ToolUniverse:
             )
             for _tool_type, config in discovered_configs.items():
                 if "name" in config and config["name"] not in existing_names:
+                    # Ensure the config has a "type" field so init_tool can find the class.
+                    # Make a shallow copy to avoid mutating the shared registry dict.
+                    if "type" not in config:
+                        config = {**config, "type": _tool_type}
                     self.all_tools.append(config)
                     existing_names.add(config["name"])
                     self.logger.debug(f"Added auto-discovered config: {config['name']}")
