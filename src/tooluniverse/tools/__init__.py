@@ -1,7 +1,7 @@
 """
 ToolUniverse Tools
 
-Type-safe Python interface to 2057 scientific tools.
+Type-safe Python interface to 2062 scientific tools.
 Each tool is in its own module for minimal import overhead.
 
 Usage:
@@ -272,6 +272,11 @@ from .Crossref_get_work import Crossref_get_work
 from .Crossref_list_funders import Crossref_list_funders
 from .Crossref_list_types import Crossref_list_types
 from .Crossref_search_works import Crossref_search_works
+from .CryoET_get_dataset import CryoET_get_dataset
+from .CryoET_list_annotations import CryoET_list_annotations
+from .CryoET_list_datasets import CryoET_list_datasets
+from .CryoET_list_runs import CryoET_list_runs
+from .CryoET_list_tomograms import CryoET_list_tomograms
 from .CxGDisc_get_collection import CxGDisc_get_collection
 from .CxGDisc_list_collections import CxGDisc_list_collections
 from .CxGDisc_search_datasets import CxGDisc_search_datasets
@@ -2805,6 +2810,11 @@ __all__ = [
     "Crossref_list_funders",
     "Crossref_list_types",
     "Crossref_search_works",
+    "CryoET_get_dataset",
+    "CryoET_list_annotations",
+    "CryoET_list_datasets",
+    "CryoET_list_runs",
+    "CryoET_list_tomograms",
     "CxGDisc_get_collection",
     "CxGDisc_list_collections",
     "CxGDisc_search_datasets",

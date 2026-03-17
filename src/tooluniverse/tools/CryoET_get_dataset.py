@@ -1,33 +1,30 @@
 """
-Enamine_search_smiles
+CryoET_get_dataset
 
-Search Enamine by chemical structure (SMILES). Supports exact match, substructure, and similarity...
+Get full metadata for a specific CryoET Data Portal dataset by its numeric ID. Returns complete d...
 """
 
 from typing import Any, Optional, Callable
 from ._shared_client import get_shared_client
 
 
-def Enamine_search_smiles(
-    smiles: str,
-    operation: Optional[str] = None,
-    search_type: Optional[str] = "similarity",
+def CryoET_get_dataset(
+    operation: str,
+    dataset_id: int,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> Any:
     """
-    Search Enamine by chemical structure (SMILES). Supports exact match, substructure, and similarity...
+    Get full metadata for a specific CryoET Data Portal dataset by its numeric ID. Returns complete d...
 
     Parameters
     ----------
     operation : str
-
-    smiles : str
-        SMILES string for the query compound
-    search_type : str
-        Search type: exact, substructure, similarity (default: similarity)
+        Operation type
+    dataset_id : int
+        Numeric dataset ID from the CryoET Data Portal (e.g. 10053, 10174, 10460).
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False
@@ -37,23 +34,19 @@ def Enamine_search_smiles(
 
     Returns
     -------
-    dict[str, Any]
+    Any
     """
     # Handle mutable defaults to avoid B006 linting error
 
     # Strip None values so optional parameters don't trigger schema validation errors
     _args = {
         k: v
-        for k, v in {
-            "operation": operation,
-            "smiles": smiles,
-            "search_type": search_type,
-        }.items()
+        for k, v in {"operation": operation, "dataset_id": dataset_id}.items()
         if v is not None
     }
     return get_shared_client().run_one_function(
         {
-            "name": "Enamine_search_smiles",
+            "name": "CryoET_get_dataset",
             "arguments": _args,
         },
         stream_callback=stream_callback,
@@ -62,4 +55,4 @@ def Enamine_search_smiles(
     )
 
 
-__all__ = ["Enamine_search_smiles"]
+__all__ = ["CryoET_get_dataset"]

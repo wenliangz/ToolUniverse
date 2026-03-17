@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def ols_search_terms(
-    operation: str,
     query: str,
+    operation: Optional[str] = None,
     rows: Optional[int] = 10,
     ontology: Optional[str] = None,
     exact_match: Optional[bool] = False,

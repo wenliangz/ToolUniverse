@@ -1,7 +1,7 @@
 """
 OpenTargets_target_disease_evidence
 
-Explore evidence that supports a specific target-disease association. Input is disease efoId and ...
+Explore IntOGen somatic driver evidence for a target-disease association (cancer mutation data on...
 """
 
 from typing import Any, Optional, Callable
@@ -17,7 +17,7 @@ def OpenTargets_target_disease_evidence(
     validate: bool = True,
 ) -> dict[str, Any]:
     """
-    Explore evidence that supports a specific target-disease association. Input is disease efoId and ...
+    Explore IntOGen somatic driver evidence for a target-disease association (cancer mutation data on...
 
     Parameters
     ----------

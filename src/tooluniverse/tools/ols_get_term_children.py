@@ -9,9 +9,9 @@ from ._shared_client import get_shared_client
 
 
 def ols_get_term_children(
-    operation: str,
     term_iri: str,
     ontology: str,
+    operation: Optional[str] = None,
     include_obsolete: Optional[bool] = False,
     size: Optional[int] = 20,
     *,

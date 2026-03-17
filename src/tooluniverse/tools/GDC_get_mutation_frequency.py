@@ -1,7 +1,7 @@
 """
 GDC_get_mutation_frequency
 
-Get mutation frequency statistics for a gene across all TCGA cancers. Returns SSM case count, CNV...
+Get mutation frequency statistics for a gene across all TCGA/GDC cancer projects. Returns total S...
 """
 
 from typing import Any, Optional, Callable
@@ -16,7 +16,7 @@ def GDC_get_mutation_frequency(
     validate: bool = True,
 ) -> dict[str, Any]:
     """
-    Get mutation frequency statistics for a gene across all TCGA cancers. Returns SSM case count, CNV...
+    Get mutation frequency statistics for a gene across all TCGA/GDC cancer projects. Returns total S...
 
     Parameters
     ----------

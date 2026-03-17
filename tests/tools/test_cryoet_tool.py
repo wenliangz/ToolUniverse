@@ -53,9 +53,10 @@ class TestCryoETToolDirect:
         result = tool.run({"operation": "list_datasets", "limit": 3})
 
         assert result["status"] == "success"
-        assert result["count"] == 3
-        assert len(result["datasets"]) == 3
-        first = result["datasets"][0]
+        data = result["data"]
+        assert data["count"] == 3
+        assert len(data["datasets"]) == 3
+        first = data["datasets"][0]
         assert "id" in first
         assert "title" in first
         assert "organismName" in first
@@ -69,8 +70,9 @@ class TestCryoETToolDirect:
         )
 
         assert result["status"] == "success"
-        assert result["count"] > 0
-        for ds in result["datasets"]:
+        data = result["data"]
+        assert data["count"] > 0
+        for ds in data["datasets"]:
             assert "Homo" in ds.get("organismName", ""), (
                 f"Expected 'Homo' in organism name, got: {ds.get('organismName')}"
             )
@@ -88,8 +90,9 @@ class TestCryoETToolDirect:
         )
 
         assert result["status"] == "success"
-        assert result["count"] == 0
-        assert result["datasets"] == []
+        data = result["data"]
+        assert data["count"] == 0
+        assert data["datasets"] == []
 
     def test_list_datasets_pagination_offset(self, tool_config, cryoet_tool_cls):
         """list_datasets with offset returns different datasets."""
@@ -100,8 +103,8 @@ class TestCryoETToolDirect:
 
         assert page1["status"] == "success"
         assert page2["status"] == "success"
-        ids1 = {ds["id"] for ds in page1["datasets"]}
-        ids2 = {ds["id"] for ds in page2["datasets"]}
+        ids1 = {ds["id"] for ds in page1["data"]["datasets"]}
+        ids2 = {ds["id"] for ds in page2["data"]["datasets"]}
         assert ids1.isdisjoint(ids2), "Paginated pages should not share dataset IDs"
 
     def test_list_datasets_large_limit(self, tool_config, cryoet_tool_cls):
@@ -111,7 +114,8 @@ class TestCryoETToolDirect:
         result = tool.run({"operation": "list_datasets", "limit": 100})
 
         assert result["status"] == "success"
-        assert result["count"] == len(result["datasets"])
+        data = result["data"]
+        assert data["count"] == len(data["datasets"])
 
     # ------------------------------------------------------------------ #
     # get_dataset
@@ -124,7 +128,7 @@ class TestCryoETToolDirect:
         result = tool.run({"operation": "get_dataset", "dataset_id": 10053})
 
         assert result["status"] == "success"
-        ds = result["dataset"]
+        ds = result["data"]["dataset"]
         assert ds["id"] == 10053
         assert "title" in ds
         assert "organismName" in ds
@@ -159,9 +163,10 @@ class TestCryoETToolDirect:
         result = tool.run({"operation": "list_runs", "dataset_id": 10053, "limit": 5})
 
         assert result["status"] == "success"
-        assert result["dataset_id"] == 10053
-        assert result["count"] > 0
-        run = result["runs"][0]
+        data = result["data"]
+        assert data["dataset_id"] == 10053
+        assert data["count"] > 0
+        run = data["runs"][0]
         assert "id" in run
         assert "name" in run
 
@@ -180,7 +185,7 @@ class TestCryoETToolDirect:
         result = tool.run({"operation": "list_runs", "dataset_id": 0})
 
         assert result["status"] == "success"
-        assert result["count"] == 0
+        assert result["data"]["count"] == 0
 
     # ------------------------------------------------------------------ #
     # list_tomograms
@@ -193,9 +198,10 @@ class TestCryoETToolDirect:
         result = tool.run({"operation": "list_tomograms", "run_id": 3430})
 
         assert result["status"] == "success"
-        assert result["run_id"] == 3430
-        assert result["count"] > 0
-        tomo = result["tomograms"][0]
+        data = result["data"]
+        assert data["run_id"] == 3430
+        assert data["count"] > 0
+        tomo = data["tomograms"][0]
         assert "id" in tomo
         assert "voxelSpacing" in tomo
         assert "isPortalStandard" in tomo
@@ -215,7 +221,7 @@ class TestCryoETToolDirect:
         result = tool.run({"operation": "list_tomograms", "run_id": 0})
 
         assert result["status"] == "success"
-        assert result["count"] == 0
+        assert result["data"]["count"] == 0
 
     # ------------------------------------------------------------------ #
     # list_annotations
@@ -228,9 +234,10 @@ class TestCryoETToolDirect:
         result = tool.run({"operation": "list_annotations", "run_id": 3430})
 
         assert result["status"] == "success"
-        assert result["run_id"] == 3430
-        assert result["count"] > 0
-        ann = result["annotations"][0]
+        data = result["data"]
+        assert data["run_id"] == 3430
+        assert data["count"] > 0
+        ann = data["annotations"][0]
         assert "id" in ann
         assert "objectName" in ann
 
@@ -248,7 +255,7 @@ class TestCryoETToolDirect:
 
         assert result["status"] == "success"
         # All returned annotations must be curator recommended
-        for ann in result.get("annotations", []):
+        for ann in result["data"].get("annotations", []):
             assert ann.get("isCuratorRecommended") is True
 
     def test_list_annotations_missing_run_id(self, tool_config, cryoet_tool_cls):
@@ -309,7 +316,7 @@ class TestCryoETToolViaRegistry:
             }
         )
         assert result["status"] == "success"
-        assert result["count"] == 3
+        assert result["data"]["count"] == 3
 
     def test_get_dataset_via_registry(self, tu):
         """CryoET_get_dataset works through ToolUniverse.run_one_function."""
@@ -320,7 +327,7 @@ class TestCryoETToolViaRegistry:
             }
         )
         assert result["status"] == "success"
-        assert result["dataset"]["id"] == 10053
+        assert result["data"]["dataset"]["id"] == 10053
 
     def test_list_runs_via_registry(self, tu):
         """CryoET_list_runs works through ToolUniverse.run_one_function."""
@@ -331,7 +338,7 @@ class TestCryoETToolViaRegistry:
             }
         )
         assert result["status"] == "success"
-        assert result["count"] > 0
+        assert result["data"]["count"] > 0
 
     def test_list_tomograms_via_registry(self, tu):
         """CryoET_list_tomograms works through ToolUniverse.run_one_function."""
@@ -342,7 +349,7 @@ class TestCryoETToolViaRegistry:
             }
         )
         assert result["status"] == "success"
-        assert result["count"] > 0
+        assert result["data"]["count"] > 0
 
     def test_list_annotations_via_registry(self, tu):
         """CryoET_list_annotations works through ToolUniverse.run_one_function."""
@@ -353,11 +360,11 @@ class TestCryoETToolViaRegistry:
             }
         )
         assert result["status"] == "success"
-        assert result["count"] > 0
+        assert result["data"]["count"] > 0
 
     def test_chained_workflow(self, tu):
-        """Real-world workflow: list datasets → get dataset → list runs → list tomograms → list annotations."""
-        # Step 1: Find a Homo sapiens dataset
+        """Real-world workflow: list datasets -> get dataset -> list runs -> list tomograms -> list annotations."""
+        # Step 1: Find a Coxiella dataset
         ds_result = tu.run_one_function(
             {
                 "name": "CryoET_list_datasets",
@@ -369,8 +376,8 @@ class TestCryoETToolViaRegistry:
             }
         )
         assert ds_result["status"] == "success"
-        assert len(ds_result["datasets"]) > 0
-        dataset_id = ds_result["datasets"][0]["id"]
+        assert len(ds_result["data"]["datasets"]) > 0
+        dataset_id = ds_result["data"]["datasets"][0]["id"]
 
         # Step 2: Get full dataset details
         detail = tu.run_one_function(
@@ -380,7 +387,7 @@ class TestCryoETToolViaRegistry:
             }
         )
         assert detail["status"] == "success"
-        assert detail["dataset"]["id"] == dataset_id
+        assert detail["data"]["dataset"]["id"] == dataset_id
 
         # Step 3: List runs
         runs = tu.run_one_function(
@@ -394,8 +401,8 @@ class TestCryoETToolViaRegistry:
             }
         )
         assert runs["status"] == "success"
-        assert runs["count"] > 0
-        run_id = runs["runs"][0]["id"]
+        assert runs["data"]["count"] > 0
+        run_id = runs["data"]["runs"][0]["id"]
 
         # Step 4: List tomograms for first run
         tomos = tu.run_one_function(
@@ -448,4 +455,8 @@ class TestCryoETTestExamples:
                 assert result.get("status") == "success", (
                     f"Tool '{tool_name}' example {i}: expected success, "
                     f"got {result.get('status')!r}. Error: {result.get('error')}"
+                )
+                assert "data" in result, (
+                    f"Tool '{tool_name}' example {i}: expected 'data' key in result, "
+                    f"got keys: {list(result.keys())}"
                 )

@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def GPCRdb_get_mutations(
-    operation: str,
     protein: str,
+    operation: Optional[str] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,

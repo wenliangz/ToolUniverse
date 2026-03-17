@@ -1,39 +1,36 @@
 """
-ols_get_term_ancestors
+CryoET_list_runs
 
-Get ancestor terms of a specific term in an ontology
+List the experimental tilt-series acquisition runs within a specific CryoET Data Portal dataset. ...
 """
 
 from typing import Any, Optional, Callable
 from ._shared_client import get_shared_client
 
 
-def ols_get_term_ancestors(
-    term_iri: str,
-    ontology: str,
-    operation: Optional[str] = None,
-    include_obsolete: Optional[bool] = False,
-    size: Optional[int] = 20,
+def CryoET_list_runs(
+    operation: str,
+    dataset_id: int,
+    limit: Optional[int] = 20,
+    offset: Optional[int] = 0,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> Any:
     """
-    Get ancestor terms of a specific term in an ontology
+    List the experimental tilt-series acquisition runs within a specific CryoET Data Portal dataset. ...
 
     Parameters
     ----------
     operation : str
-        The operation to perform (get_term_ancestors)
-    term_iri : str
-        The IRI of the term to retrieve ancestors for
-    ontology : str
-        The ontology ID
-    include_obsolete : bool
-        Include obsolete terms (default: false)
-    size : int
-        Number of results to return (default: 20)
+        Operation type
+    dataset_id : int
+        Numeric dataset ID (e.g. 10053).
+    limit : int
+        Maximum number of runs to return (default: 20).
+    offset : int
+        Number of runs to skip for pagination (default: 0).
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False
@@ -43,7 +40,7 @@ def ols_get_term_ancestors(
 
     Returns
     -------
-    dict[str, Any]
+    Any
     """
     # Handle mutable defaults to avoid B006 linting error
 
@@ -52,16 +49,15 @@ def ols_get_term_ancestors(
         k: v
         for k, v in {
             "operation": operation,
-            "term_iri": term_iri,
-            "ontology": ontology,
-            "include_obsolete": include_obsolete,
-            "size": size,
+            "dataset_id": dataset_id,
+            "limit": limit,
+            "offset": offset,
         }.items()
         if v is not None
     }
     return get_shared_client().run_one_function(
         {
-            "name": "ols_get_term_ancestors",
+            "name": "CryoET_list_runs",
             "arguments": _args,
         },
         stream_callback=stream_callback,
@@ -70,4 +66,4 @@ def ols_get_term_ancestors(
     )
 
 
-__all__ = ["ols_get_term_ancestors"]
+__all__ = ["CryoET_list_runs"]

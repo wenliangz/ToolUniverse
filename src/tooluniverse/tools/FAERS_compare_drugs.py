@@ -9,10 +9,10 @@ from ._shared_client import get_shared_client
 
 
 def FAERS_compare_drugs(
-    operation: str,
     drug1: str,
     drug2: str,
     adverse_event: str,
+    operation: Optional[str] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,

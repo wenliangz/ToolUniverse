@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def Orphanet_get_icd_mapping(
-    operation: str,
     orpha_code: str,
+    operation: Optional[str] = None,
     coding_system: Optional[str] = "all",
     lang: Optional[str] = "en",
     *,

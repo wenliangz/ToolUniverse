@@ -9,9 +9,9 @@ from ._shared_client import get_shared_client
 
 
 def ols_find_similar_terms(
-    operation: str,
     term_iri: str,
     ontology: str,
+    operation: Optional[str] = None,
     size: Optional[int] = 10,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,

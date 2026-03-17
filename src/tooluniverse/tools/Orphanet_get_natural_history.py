@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def Orphanet_get_natural_history(
-    operation: str,
     orpha_code: str,
+    operation: Optional[str] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,

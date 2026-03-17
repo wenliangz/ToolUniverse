@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def HMDB_search(
-    operation: str,
     query: str,
+    operation: Optional[str] = None,
     search_type: Optional[str] = "name",
     *,
     stream_callback: Optional[Callable[[str], None]] = None,

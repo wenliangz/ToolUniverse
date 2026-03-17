@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def Orphanet_get_classification(
-    operation: str,
     orpha_code: str,
+    operation: Optional[str] = None,
     lang: Optional[str] = "en",
     *,
     stream_callback: Optional[Callable[[str], None]] = None,

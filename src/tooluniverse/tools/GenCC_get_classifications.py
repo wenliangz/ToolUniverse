@@ -9,7 +9,7 @@ from ._shared_client import get_shared_client
 
 
 def GenCC_get_classifications(
-    operation: str,
+    operation: Optional[str] = None,
     submitter: Optional[str] = "",
     *,
     stream_callback: Optional[Callable[[str], None]] = None,

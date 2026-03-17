@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def ols_get_term_info(
-    operation: str,
     id: str,
+    operation: Optional[str] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,

@@ -1,7 +1,7 @@
 """
 search_clinical_trials
 
-Search for clinical trials registered on clinicaltrials.gov based on title, conditions, intervent...
+Search ClinicalTrials.gov for clinical trials by disease/condition, drug/intervention, or keyword...
 """
 
 from typing import Any, Optional, Callable
@@ -20,7 +20,7 @@ def search_clinical_trials(
     validate: bool = True,
 ) -> Any:
     """
-    Search for clinical trials registered on clinicaltrials.gov based on title, conditions, intervent...
+    Search ClinicalTrials.gov for clinical trials by disease/condition, drug/intervention, or keyword...
 
     Parameters
     ----------

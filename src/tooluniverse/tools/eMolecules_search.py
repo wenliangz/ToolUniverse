@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def eMolecules_search(
-    operation: str,
     query: str,
+    operation: Optional[str] = None,
     max_results: Optional[int] = 20,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,

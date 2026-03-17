@@ -1,7 +1,7 @@
 """
 GTEx_query_eqtl
 
-Query GTEx single-tissue eQTL associations for a gene. Use to identify regulatory variants (varia...
+Query GTEx single-tissue eQTL associations for a gene. Accepts gene symbols (TP53, BRCA1) or Ense...
 """
 
 from typing import Any, Optional, Callable
@@ -9,7 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def GTEx_query_eqtl(
-    ensembl_gene_id: str,
+    gene_symbol: Optional[str] = None,
+    ensembl_gene_id: Optional[str] = None,
     page: Optional[int] = 1,
     size: Optional[int] = 10,
     *,
@@ -18,12 +19,14 @@ def GTEx_query_eqtl(
     validate: bool = True,
 ) -> dict[str, Any]:
     """
-    Query GTEx single-tissue eQTL associations for a gene. Use to identify regulatory variants (varia...
+    Query GTEx single-tissue eQTL associations for a gene. Accepts gene symbols (TP53, BRCA1) or Ense...
 
     Parameters
     ----------
+    gene_symbol : str
+        Gene symbol (e.g., 'TP53', 'BRCA1'). Auto-resolved to versioned GENCODE ID.
     ensembl_gene_id : str
-        Ensembl gene identifier (e.g., 'ENSG00000141510').
+        Ensembl gene identifier (e.g., 'ENSG00000141510'). Use gene_symbol instead if...
     page : int
         Page number (1-based).
     size : int
@@ -45,6 +48,7 @@ def GTEx_query_eqtl(
     _args = {
         k: v
         for k, v in {
+            "gene_symbol": gene_symbol,
             "ensembl_gene_id": ensembl_gene_id,
             "page": page,
             "size": size,

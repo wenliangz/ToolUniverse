@@ -1,33 +1,27 @@
 """
-Enamine_search_smiles
+get_tool_page_url
 
-Search Enamine by chemical structure (SMILES). Supports exact match, substructure, and similarity...
+Get the public ToolUniverse web page URL for a tool by its exact tool name. Returns the URL of th...
 """
 
 from typing import Any, Optional, Callable
 from ._shared_client import get_shared_client
 
 
-def Enamine_search_smiles(
-    smiles: str,
-    operation: Optional[str] = None,
-    search_type: Optional[str] = "similarity",
+def get_tool_page_url(
+    tool_name: str,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
 ) -> dict[str, Any]:
     """
-    Search Enamine by chemical structure (SMILES). Supports exact match, substructure, and similarity...
+    Get the public ToolUniverse web page URL for a tool by its exact tool name. Returns the URL of th...
 
     Parameters
     ----------
-    operation : str
-
-    smiles : str
-        SMILES string for the query compound
-    search_type : str
-        Search type: exact, substructure, similarity (default: similarity)
+    tool_name : str
+        Exact ToolUniverse tool name (e.g. 'ADA_list_standards_sections', 'PubMed_sea...
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False
@@ -42,18 +36,10 @@ def Enamine_search_smiles(
     # Handle mutable defaults to avoid B006 linting error
 
     # Strip None values so optional parameters don't trigger schema validation errors
-    _args = {
-        k: v
-        for k, v in {
-            "operation": operation,
-            "smiles": smiles,
-            "search_type": search_type,
-        }.items()
-        if v is not None
-    }
+    _args = {k: v for k, v in {"tool_name": tool_name}.items() if v is not None}
     return get_shared_client().run_one_function(
         {
-            "name": "Enamine_search_smiles",
+            "name": "get_tool_page_url",
             "arguments": _args,
         },
         stream_callback=stream_callback,
@@ -62,4 +48,4 @@ def Enamine_search_smiles(
     )
 
 
-__all__ = ["Enamine_search_smiles"]
+__all__ = ["get_tool_page_url"]

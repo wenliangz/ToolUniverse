@@ -1,7 +1,7 @@
 """
 gwas_get_variants_for_trait
 
-Get all variants associated with a specific trait with pagination support.
+Search the GWAS Catalog for all genetic variants (SNPs) linked to a specific disease or trait. Ac...
 """
 
 from typing import Any, Optional, Callable
@@ -21,7 +21,7 @@ def gwas_get_variants_for_trait(
     validate: bool = True,
 ) -> dict[str, Any]:
     """
-    Get all variants associated with a specific trait with pagination support.
+    Search the GWAS Catalog for all genetic variants (SNPs) linked to a specific disease or trait. Ac...
 
     Parameters
     ----------

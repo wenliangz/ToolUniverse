@@ -23,7 +23,7 @@ def OpenFDA_search_drug_events(
     Parameters
     ----------
     search : str
-        Lucene query for adverse event reports (e.g., 'patient.drug.medicinalproduct:...
+        Lucene query for adverse event reports. Use AND/OR with spaces (not +AND+). E...
     limit : int | Any
         Maximum number of reports to return (default 1, max 100)
     count : str | Any

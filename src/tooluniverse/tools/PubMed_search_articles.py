@@ -15,11 +15,12 @@ def PubMed_search_articles(
     maxdate: Optional[str] = None,
     datetype: Optional[str] = "pdat",
     include_abstract: Optional[bool] = False,
+    sort: Optional[str] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> list[Any]:
+) -> Any:
     """
     Search PubMed biomedical literature database using NCBI E-utilities (esearch + esummary). Returns...
 
@@ -37,6 +38,8 @@ def PubMed_search_articles(
         Type of date to filter on: 'pdat' (publication date), 'edat' (Entrez date), o...
     include_abstract : bool
         If true, best-effort fetches abstracts via efetch (adds abstract/abstract_sou...
+    sort : str
+        Sort order for results. Valid values: 'pub_date' (newest first), 'Author' (al...
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False
@@ -46,7 +49,7 @@ def PubMed_search_articles(
 
     Returns
     -------
-    list[Any]
+    Any
     """
     # Handle mutable defaults to avoid B006 linting error
 
@@ -60,6 +63,7 @@ def PubMed_search_articles(
             "maxdate": maxdate,
             "datetype": datetype,
             "include_abstract": include_abstract,
+            "sort": sort,
         }.items()
         if v is not None
     }

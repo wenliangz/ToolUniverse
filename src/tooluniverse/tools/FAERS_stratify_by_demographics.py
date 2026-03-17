@@ -9,9 +9,9 @@ from ._shared_client import get_shared_client
 
 
 def FAERS_stratify_by_demographics(
-    operation: str,
     drug_name: str,
     adverse_event: str,
+    operation: Optional[str] = None,
     stratify_by: Optional[str] = "sex",
     *,
     stream_callback: Optional[Callable[[str], None]] = None,

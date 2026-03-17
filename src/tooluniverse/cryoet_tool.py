@@ -111,8 +111,10 @@ class CryoETTool(BaseTool):
             datasets = result.get("data", {}).get("datasets", [])
             return {
                 "status": "success",
-                "count": len(datasets),
-                "datasets": datasets,
+                "data": {
+                    "count": len(datasets),
+                    "datasets": datasets,
+                },
             }
         except Exception as e:
             return {"status": "error", "error": str(e)}
@@ -169,7 +171,7 @@ class CryoETTool(BaseTool):
                     "status": "error",
                     "error": f"Dataset {dataset_id} not found",
                 }
-            return {"status": "success", "dataset": datasets[0]}
+            return {"status": "success", "data": {"dataset": datasets[0]}}
         except Exception as e:
             return {"status": "error", "error": str(e)}
 
@@ -209,9 +211,11 @@ class CryoETTool(BaseTool):
             runs = result.get("data", {}).get("runs", [])
             return {
                 "status": "success",
-                "dataset_id": dataset_id,
-                "count": len(runs),
-                "runs": runs,
+                "data": {
+                    "dataset_id": dataset_id,
+                    "count": len(runs),
+                    "runs": runs,
+                },
             }
         except Exception as e:
             return {"status": "error", "error": str(e)}
@@ -267,9 +271,11 @@ class CryoETTool(BaseTool):
             tomograms = result.get("data", {}).get("tomograms", [])
             return {
                 "status": "success",
-                "run_id": run_id,
-                "count": len(tomograms),
-                "tomograms": tomograms,
+                "data": {
+                    "run_id": run_id,
+                    "count": len(tomograms),
+                    "tomograms": tomograms,
+                },
             }
         except Exception as e:
             return {"status": "error", "error": str(e)}
@@ -328,9 +334,11 @@ class CryoETTool(BaseTool):
             annotations = result.get("data", {}).get("annotations", [])
             return {
                 "status": "success",
-                "run_id": run_id,
-                "count": len(annotations),
-                "annotations": annotations,
+                "data": {
+                    "run_id": run_id,
+                    "count": len(annotations),
+                    "annotations": annotations,
+                },
             }
         except Exception as e:
             return {"status": "error", "error": str(e)}

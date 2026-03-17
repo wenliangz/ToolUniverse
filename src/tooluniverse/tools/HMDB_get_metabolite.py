@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def HMDB_get_metabolite(
-    operation: str,
     hmdb_id: str,
+    operation: Optional[str] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,

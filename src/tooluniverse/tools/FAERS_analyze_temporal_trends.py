@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def FAERS_analyze_temporal_trends(
-    operation: str,
     drug_name: str,
+    operation: Optional[str] = None,
     adverse_event: Optional[str] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,

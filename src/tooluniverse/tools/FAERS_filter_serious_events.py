@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def FAERS_filter_serious_events(
-    operation: str,
     drug_name: str,
+    operation: Optional[str] = None,
     seriousness_type: Optional[str] = "all",
     *,
     stream_callback: Optional[Callable[[str], None]] = None,

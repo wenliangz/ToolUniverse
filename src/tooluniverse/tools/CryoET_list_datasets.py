@@ -1,39 +1,39 @@
 """
-FDA_OrangeBook_search_drug
+CryoET_list_datasets
 
-Search FDA Drugs@FDA database by brand name, generic name, or application number. Returns approva...
+Search and list cryo-electron tomography (cryo-ET) datasets from the CZ BioHub CryoET Data Portal...
 """
 
 from typing import Any, Optional, Callable
 from ._shared_client import get_shared_client
 
 
-def FDA_OrangeBook_search_drug(
-    operation: Optional[str] = None,
-    brand_name: Optional[str] = None,
-    generic_name: Optional[str] = None,
-    application_number: Optional[str] = None,
+def CryoET_list_datasets(
+    operation: str,
+    organism_name: Optional[str | Any] = None,
+    tissue_name: Optional[str | Any] = None,
     limit: Optional[int] = 10,
+    offset: Optional[int] = 0,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> Any:
     """
-    Search FDA Drugs@FDA database by brand name, generic name, or application number. Returns approva...
+    Search and list cryo-electron tomography (cryo-ET) datasets from the CZ BioHub CryoET Data Portal...
 
     Parameters
     ----------
     operation : str
-        Operation type (fixed)
-    brand_name : str
-        Brand/trade name of drug (e.g., 'ADVIL', 'LIPITOR')
-    generic_name : str
-        Generic/active ingredient name (e.g., 'IBUPROFEN', 'ATORVASTATIN')
-    application_number : str
-        FDA application number (e.g., 'NDA020402', 'ANDA078394')
+        Operation type
+    organism_name : str | Any
+        Filter by organism name (case-insensitive substring match). Examples: 'Homo s...
+    tissue_name : str | Any
+        Filter by tissue or cell type name (case-insensitive substring match). Exampl...
     limit : int
-        Maximum number of results (1-100, default 10)
+        Maximum number of datasets to return (default: 10, max recommended: 50).
+    offset : int
+        Number of datasets to skip for pagination (default: 0).
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False
@@ -43,7 +43,7 @@ def FDA_OrangeBook_search_drug(
 
     Returns
     -------
-    dict[str, Any]
+    Any
     """
     # Handle mutable defaults to avoid B006 linting error
 
@@ -52,16 +52,16 @@ def FDA_OrangeBook_search_drug(
         k: v
         for k, v in {
             "operation": operation,
-            "brand_name": brand_name,
-            "generic_name": generic_name,
-            "application_number": application_number,
+            "organism_name": organism_name,
+            "tissue_name": tissue_name,
             "limit": limit,
+            "offset": offset,
         }.items()
         if v is not None
     }
     return get_shared_client().run_one_function(
         {
-            "name": "FDA_OrangeBook_search_drug",
+            "name": "CryoET_list_datasets",
             "arguments": _args,
         },
         stream_callback=stream_callback,
@@ -70,4 +70,4 @@ def FDA_OrangeBook_search_drug(
     )
 
 
-__all__ = ["FDA_OrangeBook_search_drug"]
+__all__ = ["CryoET_list_datasets"]

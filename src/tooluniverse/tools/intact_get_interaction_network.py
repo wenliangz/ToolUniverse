@@ -1,7 +1,7 @@
 """
 intact_get_interaction_network
 
-Get interaction network centered on a specific interactor. Returns network of interactions with c...
+Get interaction network centered on a specific interactor. Uses EBI Search API (IntAct domain) fo...
 """
 
 from typing import Any, Optional, Callable
@@ -18,7 +18,7 @@ def intact_get_interaction_network(
     validate: bool = True,
 ) -> list[Any]:
     """
-    Get interaction network centered on a specific interactor. Returns network of interactions with c...
+    Get interaction network centered on a specific interactor. Uses EBI Search API (IntAct domain) fo...
 
     Parameters
     ----------

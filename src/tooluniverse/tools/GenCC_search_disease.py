@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def GenCC_search_disease(
-    operation: str,
     disease: str,
+    operation: Optional[str] = None,
     classification: Optional[str] = "",
     *,
     stream_callback: Optional[Callable[[str], None]] = None,

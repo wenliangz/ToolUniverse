@@ -1,36 +1,39 @@
 """
-Orphanet_search_diseases
+CryoET_list_annotations
 
-Search Orphanet for rare diseases by keyword. Orphanet is the reference portal for rare diseases ...
+List biological annotations (segmentations, point annotations, surface meshes) for a specific cry...
 """
 
 from typing import Any, Optional, Callable
 from ._shared_client import get_shared_client
 
 
-def Orphanet_search_diseases(
-    query: str,
-    operation: Optional[str] = None,
+def CryoET_list_annotations(
+    operation: str,
+    run_id: int,
+    curator_recommended_only: Optional[bool] = False,
     limit: Optional[int] = 20,
-    lang: Optional[str] = "en",
+    offset: Optional[int] = 0,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> dict[str, Any]:
+) -> Any:
     """
-    Search Orphanet for rare diseases by keyword. Orphanet is the reference portal for rare diseases ...
+    List biological annotations (segmentations, point annotations, surface meshes) for a specific cry...
 
     Parameters
     ----------
     operation : str
-        Operation type (fixed: search_diseases)
-    query : str
-        Search query - disease name or keyword (e.g., 'Marfan', 'muscular dystrophy')
+        Operation type
+    run_id : int
+        Numeric run ID (e.g. 3430). Obtain from CryoET_list_runs.
+    curator_recommended_only : bool
+        If true, return only curator-recommended high-quality annotations (default: f...
     limit : int
-        Maximum number of results to return (default: 20, max: 200). The API may retu...
-    lang : str
-        Language code (en, fr, de, es, it, pt, pl, nl). Default: en
+        Maximum number of annotations to return (default: 20).
+    offset : int
+        Number of annotations to skip for pagination (default: 0).
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False
@@ -40,7 +43,7 @@ def Orphanet_search_diseases(
 
     Returns
     -------
-    dict[str, Any]
+    Any
     """
     # Handle mutable defaults to avoid B006 linting error
 
@@ -49,15 +52,16 @@ def Orphanet_search_diseases(
         k: v
         for k, v in {
             "operation": operation,
-            "query": query,
+            "run_id": run_id,
+            "curator_recommended_only": curator_recommended_only,
             "limit": limit,
-            "lang": lang,
+            "offset": offset,
         }.items()
         if v is not None
     }
     return get_shared_client().run_one_function(
         {
-            "name": "Orphanet_search_diseases",
+            "name": "CryoET_list_annotations",
             "arguments": _args,
         },
         stream_callback=stream_callback,
@@ -66,4 +70,4 @@ def Orphanet_search_diseases(
     )
 
 
-__all__ = ["Orphanet_search_diseases"]
+__all__ = ["CryoET_list_annotations"]

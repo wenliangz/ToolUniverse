@@ -1,7 +1,7 @@
 """
 proteins_api_search
 
-Search proteins in Proteins API by gene name, protein name, or accession. The search intelligentl...
+Search proteins in Proteins API by gene name, protein name, or accession. Defaults to human prote...
 """
 
 from typing import Any, Optional, Callable
@@ -19,7 +19,7 @@ def proteins_api_search(
     validate: bool = True,
 ) -> list[Any]:
     """
-    Search proteins in Proteins API by gene name, protein name, or accession. The search intelligentl...
+    Search proteins in Proteins API by gene name, protein name, or accession. Defaults to human prote...
 
     Parameters
     ----------

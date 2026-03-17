@@ -19,7 +19,7 @@ def EuropePMC_search_articles(
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
-) -> list[Any]:
+) -> Any:
     """
     Search for articles on Europe PMC including abstracts and metadata. Europe PMC supports fielded q...
 
@@ -46,7 +46,7 @@ def EuropePMC_search_articles(
 
     Returns
     -------
-    list[Any]
+    Any
     """
     # Handle mutable defaults to avoid B006 linting error
 

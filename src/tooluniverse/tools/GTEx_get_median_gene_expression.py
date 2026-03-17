@@ -32,7 +32,7 @@ def GTEx_get_median_gene_expression(
     tissue_site_detail_id : list[str]
         Optional: Tissue IDs to filter (e.g. ['Liver', 'Brain_Cortex']). Omit for all...
     dataset_id : str
-        GTEx dataset version (default: gtex_v8; v10 returns empty for median expression)
+        GTEx dataset version (default: gtex_v8; v10 returns empty for most endpoints)
     page : int
         Page number for pagination (0-based)
     items_per_page : int

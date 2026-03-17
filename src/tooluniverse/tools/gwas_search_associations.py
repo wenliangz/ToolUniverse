@@ -1,7 +1,7 @@
 """
 gwas_search_associations
 
-Search for GWAS associations by various criteria including disease trait, rs ID, accession ID, wi...
+Search the GWAS Catalog for genome-wide association study results by keyword. Accepts free-text d...
 """
 
 from typing import Any, Optional, Callable
@@ -25,7 +25,7 @@ def gwas_search_associations(
     validate: bool = True,
 ) -> dict[str, Any]:
     """
-    Search for GWAS associations by various criteria including disease trait, rs ID, accession ID, wi...
+    Search the GWAS Catalog for genome-wide association study results by keyword. Accepts free-text d...
 
     Parameters
     ----------

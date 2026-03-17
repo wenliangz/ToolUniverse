@@ -9,9 +9,9 @@ from ._shared_client import get_shared_client
 
 
 def OncoKB_annotate_variant(
-    operation: str,
     gene: str,
     variant: str,
+    operation: Optional[str] = None,
     tumor_type: Optional[str] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,

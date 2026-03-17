@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def Orphanet_search_by_name(
-    operation: str,
     name: str,
+    operation: Optional[str] = None,
     exact: Optional[bool] = False,
     lang: Optional[str] = "en",
     *,

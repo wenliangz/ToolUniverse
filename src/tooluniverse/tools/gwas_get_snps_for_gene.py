@@ -1,7 +1,7 @@
 """
 gwas_get_snps_for_gene
 
-Get all SNPs mapped to a specific gene.
+Get all GWAS Catalog SNPs mapped to a specific gene by gene name (e.g., 'BRCA1', 'TP53'). Returns...
 """
 
 from typing import Any, Optional, Callable
@@ -18,7 +18,7 @@ def gwas_get_snps_for_gene(
     validate: bool = True,
 ) -> dict[str, Any]:
     """
-    Get all SNPs mapped to a specific gene.
+    Get all GWAS Catalog SNPs mapped to a specific gene by gene name (e.g., 'BRCA1', 'TP53'). Returns...
 
     Parameters
     ----------

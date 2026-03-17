@@ -1,7 +1,7 @@
 """
 PubChem_get_CID_by_compound_name
 
-Retrieve corresponding CID list (IdentifierList) by chemical compound name. Note: This tool only ...
+Search PubChem by compound name to get CID(s). This is the PRIMARY tool for looking up a drug or ...
 """
 
 from typing import Any, Optional, Callable
@@ -16,7 +16,7 @@ def PubChem_get_CID_by_compound_name(
     validate: bool = True,
 ) -> dict[str, Any]:
     """
-    Retrieve corresponding CID list (IdentifierList) by chemical compound name. Note: This tool only ...
+    Search PubChem by compound name to get CID(s). This is the PRIMARY tool for looking up a drug or ...
 
     Parameters
     ----------

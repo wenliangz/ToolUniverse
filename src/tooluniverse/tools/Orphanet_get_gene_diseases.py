@@ -1,7 +1,7 @@
 """
 Orphanet_get_gene_diseases
 
-Get rare diseases associated with a gene from Orphanet. Search by gene name keyword (e.g., 'fibri...
+Get rare diseases associated with a gene from Orphanet. Accepts gene symbols (e.g., 'FBN1', 'BRCA...
 """
 
 from typing import Any, Optional, Callable
@@ -9,22 +9,22 @@ from ._shared_client import get_shared_client
 
 
 def Orphanet_get_gene_diseases(
-    operation: str,
     gene_name: str,
+    operation: Optional[str] = None,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
     use_cache: bool = False,
     validate: bool = True,
 ) -> dict[str, Any]:
     """
-    Get rare diseases associated with a gene from Orphanet. Search by gene name keyword (e.g., 'fibri...
+    Get rare diseases associated with a gene from Orphanet. Accepts gene symbols (e.g., 'FBN1', 'BRCA...
 
     Parameters
     ----------
     operation : str
         Operation type (fixed: get_gene_diseases)
     gene_name : str
-        Gene name keyword to search (e.g., 'fibrillin', 'huntingtin', 'collagen', 'dy...
+        Gene symbol (e.g., 'FBN1', 'BRCA1', 'HTT') or gene name keyword (e.g., 'fibri...
     stream_callback : Callable, optional
         Callback for streaming output
     use_cache : bool, default False

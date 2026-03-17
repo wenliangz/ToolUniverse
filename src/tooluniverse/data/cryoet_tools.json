@@ -40,28 +40,35 @@
           "type": "object",
           "properties": {
             "status": {"type": "string", "enum": ["success"]},
-            "count": {"type": "integer"},
-            "datasets": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {"type": "integer"},
-                  "title": {"type": "string"},
-                  "description": {"type": "string"},
-                  "organismName": {"type": "string"},
-                  "tissueName": {"type": "string"},
-                  "cellName": {"type": "string"},
-                  "sampleType": {"type": "string"},
-                  "depositionDate": {"type": "string"},
-                  "releaseDate": {"type": "string"},
-                  "s3Prefix": {"type": "string"},
-                  "httpsPrefix": {"type": "string"}
-                },
-                "additionalProperties": true
-              }
+            "data": {
+              "type": "object",
+              "properties": {
+                "count": {"type": "integer"},
+                "datasets": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "integer"},
+                      "title": {"type": "string"},
+                      "description": {"type": "string"},
+                      "organismName": {"type": "string"},
+                      "tissueName": {"type": "string"},
+                      "cellName": {"type": "string"},
+                      "sampleType": {"type": "string"},
+                      "depositionDate": {"type": "string"},
+                      "releaseDate": {"type": "string"},
+                      "s3Prefix": {"type": "string"},
+                      "httpsPrefix": {"type": "string"}
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "required": ["count", "datasets"]
             }
-          }
+          },
+          "required": ["status", "data"]
         },
         {
           "type": "object",
@@ -107,30 +114,37 @@
           "type": "object",
           "properties": {
             "status": {"type": "string", "enum": ["success"]},
-            "dataset": {
+            "data": {
               "type": "object",
               "properties": {
-                "id": {"type": "integer"},
-                "title": {"type": "string"},
-                "description": {"type": "string"},
-                "organismName": {"type": "string"},
-                "organismTaxid": {"type": "integer"},
-                "tissueName": {"type": "string"},
-                "cellName": {"type": "string"},
-                "sampleType": {"type": "string"},
-                "samplePreparation": {"type": "string"},
-                "gridPreparation": {"type": "string"},
-                "depositionDate": {"type": "string"},
-                "releaseDate": {"type": "string"},
-                "datasetPublications": {"type": "string"},
-                "relatedDatabaseEntries": {"type": "string"},
-                "s3Prefix": {"type": "string"},
-                "httpsPrefix": {"type": "string"},
-                "fileSize": {"type": "number"}
+                "dataset": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer"},
+                    "title": {"type": "string"},
+                    "description": {"type": "string"},
+                    "organismName": {"type": "string"},
+                    "organismTaxid": {"type": "integer"},
+                    "tissueName": {"type": "string"},
+                    "cellName": {"type": "string"},
+                    "sampleType": {"type": "string"},
+                    "samplePreparation": {"type": "string"},
+                    "gridPreparation": {"type": "string"},
+                    "depositionDate": {"type": "string"},
+                    "releaseDate": {"type": "string"},
+                    "datasetPublications": {"type": "string"},
+                    "relatedDatabaseEntries": {"type": "string"},
+                    "s3Prefix": {"type": "string"},
+                    "httpsPrefix": {"type": "string"},
+                    "fileSize": {"type": "number"}
+                  },
+                  "additionalProperties": true
+                }
               },
-              "additionalProperties": true
+              "required": ["dataset"]
             }
-          }
+          },
+          "required": ["status", "data"]
         },
         {
           "type": "object",
@@ -185,22 +199,29 @@
           "type": "object",
           "properties": {
             "status": {"type": "string", "enum": ["success"]},
-            "dataset_id": {"type": "integer"},
-            "count": {"type": "integer"},
-            "runs": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {"type": "integer"},
-                  "name": {"type": "string"},
-                  "datasetId": {"type": "integer"},
-                  "s3Prefix": {"type": "string"},
-                  "httpsPrefix": {"type": "string"}
+            "data": {
+              "type": "object",
+              "properties": {
+                "dataset_id": {"type": "integer"},
+                "count": {"type": "integer"},
+                "runs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "integer"},
+                      "name": {"type": "string"},
+                      "datasetId": {"type": "integer"},
+                      "s3Prefix": {"type": "string"},
+                      "httpsPrefix": {"type": "string"}
+                    }
+                  }
                 }
-              }
+              },
+              "required": ["dataset_id", "count", "runs"]
             }
-          }
+          },
+          "required": ["status", "data"]
         },
         {
           "type": "object",
@@ -256,30 +277,37 @@
           "type": "object",
           "properties": {
             "status": {"type": "string", "enum": ["success"]},
-            "run_id": {"type": "integer"},
-            "count": {"type": "integer"},
-            "tomograms": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {"type": "integer"},
-                  "name": {"type": "string"},
-                  "runId": {"type": "integer"},
-                  "voxelSpacing": {"type": "number"},
-                  "sizeX": {"type": "integer"},
-                  "sizeY": {"type": "integer"},
-                  "sizeZ": {"type": "integer"},
-                  "reconstructionMethod": {"type": "string"},
-                  "processing": {"type": "string"},
-                  "isPortalStandard": {"type": "boolean"},
-                  "s3OmezarrDir": {"type": "string"},
-                  "httpsMrcFile": {"type": "string"}
-                },
-                "additionalProperties": true
-              }
+            "data": {
+              "type": "object",
+              "properties": {
+                "run_id": {"type": "integer"},
+                "count": {"type": "integer"},
+                "tomograms": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "integer"},
+                      "name": {"type": "string"},
+                      "runId": {"type": "integer"},
+                      "voxelSpacing": {"type": "number"},
+                      "sizeX": {"type": "integer"},
+                      "sizeY": {"type": "integer"},
+                      "sizeZ": {"type": "integer"},
+                      "reconstructionMethod": {"type": "string"},
+                      "processing": {"type": "string"},
+                      "isPortalStandard": {"type": "boolean"},
+                      "s3OmezarrDir": {"type": "string"},
+                      "httpsMrcFile": {"type": "string"}
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "required": ["run_id", "count", "tomograms"]
             }
-          }
+          },
+          "required": ["status", "data"]
         },
         {
           "type": "object",
@@ -339,30 +367,37 @@
           "type": "object",
           "properties": {
             "status": {"type": "string", "enum": ["success"]},
-            "run_id": {"type": "integer"},
-            "count": {"type": "integer"},
-            "annotations": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {"type": "integer"},
-                  "objectName": {"type": "string"},
-                  "objectId": {"type": "string"},
-                  "objectDescription": {"type": "string"},
-                  "objectCount": {"type": "integer"},
-                  "annotationMethod": {"type": "string"},
-                  "annotationSoftware": {"type": "string"},
-                  "isCuratorRecommended": {"type": "boolean"},
-                  "methodType": {"type": "string"},
-                  "depositionDate": {"type": "string"},
-                  "s3MetadataPath": {"type": "string"},
-                  "httpsMetadataPath": {"type": "string"}
-                },
-                "additionalProperties": true
-              }
+            "data": {
+              "type": "object",
+              "properties": {
+                "run_id": {"type": "integer"},
+                "count": {"type": "integer"},
+                "annotations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "integer"},
+                      "objectName": {"type": "string"},
+                      "objectId": {"type": "string"},
+                      "objectDescription": {"type": "string"},
+                      "objectCount": {"type": "integer"},
+                      "annotationMethod": {"type": "string"},
+                      "annotationSoftware": {"type": "string"},
+                      "isCuratorRecommended": {"type": "boolean"},
+                      "methodType": {"type": "string"},
+                      "depositionDate": {"type": "string"},
+                      "s3MetadataPath": {"type": "string"},
+                      "httpsMetadataPath": {"type": "string"}
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "required": ["run_id", "count", "annotations"]
             }
-          }
+          },
+          "required": ["status", "data"]
         },
         {
           "type": "object",

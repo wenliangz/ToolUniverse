@@ -9,8 +9,8 @@ from ._shared_client import get_shared_client
 
 
 def SAbDab_search_structures(
-    operation: str,
     query: str,
+    operation: Optional[str] = None,
     limit: Optional[int] = 50,
     *,
     stream_callback: Optional[Callable[[str], None]] = None,
