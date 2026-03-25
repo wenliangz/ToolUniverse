@@ -47,7 +47,11 @@ class ARCHS4Tool(BaseTool):
         self.timeout = 30
 
     def run(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
-        operation = arguments.get("operation")
+        operation = (
+            arguments.get("operation")
+            or self.tool_config.get("fields", {}).get("operation")
+            or self.get_schema_const_operation()
+        )
         if not operation:
             return {"status": "error", "error": "Missing required parameter: operation"}
 

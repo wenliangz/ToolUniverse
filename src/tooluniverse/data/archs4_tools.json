@@ -6,41 +6,85 @@
     "parameter": {
       "type": "object",
       "properties": {
-        "operation": {
-          "type": "string",
-          "enum": ["get_gene_expression"],
-          "description": "Operation type"
-        },
         "gene": {
           "type": "string",
           "description": "Gene symbol (e.g., TP53, BRCA1, EGFR, MYC)"
         },
         "species": {
-          "type": ["string", "null"],
-          "enum": ["human", "mouse", null],
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "human",
+            "mouse",
+            null
+          ],
           "default": "human",
           "description": "Species: human or mouse (default: human)"
         },
         "type": {
-          "type": ["string", "null"],
-          "enum": ["tissue", "cellline", null],
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "tissue",
+            "cellline",
+            null
+          ],
           "default": "tissue",
           "description": "Expression type: tissue (organs/tissues) or cellline (cell lines). Default: tissue"
         }
       },
-      "required": ["operation", "gene"]
+      "required": [
+        "gene"
+      ]
     },
     "return_schema": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "tissue": {"type": "string", "description": "Tissue or cell line name (hierarchical: System.Organ.CellType)"},
-          "min": {"type": ["number", "null"], "description": "Minimum expression in log2(TPM+1)"},
-          "q1": {"type": ["number", "null"], "description": "First quartile (25th percentile)"},
-          "median": {"type": ["number", "null"], "description": "Median expression"},
-          "q3": {"type": ["number", "null"], "description": "Third quartile (75th percentile)"},
-          "max": {"type": ["number", "null"], "description": "Maximum expression"}
+          "tissue": {
+            "type": "string",
+            "description": "Tissue or cell line name (hierarchical: System.Organ.CellType)"
+          },
+          "min": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Minimum expression in log2(TPM+1)"
+          },
+          "q1": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "First quartile (25th percentile)"
+          },
+          "median": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Median expression"
+          },
+          "q3": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Third quartile (75th percentile)"
+          },
+          "max": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Maximum expression"
+          }
         }
       }
     },
@@ -51,7 +95,10 @@
         "species": "human",
         "type": "tissue"
       }
-    ]
+    ],
+    "fields": {
+      "operation": "get_gene_expression"
+    }
   },
   {
     "name": "ARCHS4_get_gene_correlations",
@@ -60,33 +107,42 @@
     "parameter": {
       "type": "object",
       "properties": {
-        "operation": {
-          "type": "string",
-          "enum": ["get_gene_correlations"],
-          "description": "Operation type"
-        },
         "gene": {
           "type": "string",
           "description": "Gene symbol (e.g., TP53, BRCA1, EGFR, MYC)"
         },
         "count": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 2,
           "maximum": 200,
           "default": 20,
           "description": "Number of top correlated genes to return (default: 20, max: 200)"
         }
       },
-      "required": ["operation", "gene"]
+      "required": [
+        "gene"
+      ]
     },
     "return_schema": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "gene": {"type": "string", "description": "Correlated gene symbol"},
-          "pearson_correlation": {"type": "number", "description": "Pearson correlation coefficient"},
-          "rank": {"type": "integer", "description": "Rank by correlation strength"}
+          "gene": {
+            "type": "string",
+            "description": "Correlated gene symbol"
+          },
+          "pearson_correlation": {
+            "type": "number",
+            "description": "Pearson correlation coefficient"
+          },
+          "rank": {
+            "type": "integer",
+            "description": "Rank by correlation strength"
+          }
         }
       }
     },
@@ -96,6 +152,9 @@
         "gene": "TP53",
         "count": 10
       }
-    ]
+    ],
+    "fields": {
+      "operation": "get_gene_correlations"
+    }
   }
 ]

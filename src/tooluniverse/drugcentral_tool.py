@@ -163,15 +163,39 @@ class DrugCentralTool(BaseTool):
             },
         }
 
+    def _resolve_name_to_id(self, name: str) -> str:
+        """Resolve drug name to MyChem.info ID via search."""
+        resp = requests.get(
+            f"{MYCHEM_BASE}/query",
+            params={
+                "q": f'drugcentral.structures.inn:"{name}"',
+                "fields": "_id",
+                "size": 1,
+            },
+            timeout=self.timeout,
+        )
+        resp.raise_for_status()
+        hits = resp.json().get("hits", [])
+        return hits[0]["_id"] if hits else ""
+
     def _get_drug(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
-        """Get detailed DrugCentral data for a drug by InChIKey or other ID."""
-        chem_id = arguments.get("chem_id", "") or arguments.get("inchikey", "")
+        """Get detailed DrugCentral data for a drug by InChIKey, ChEMBL ID, or drug name."""
+        chem_id = (
+            arguments.get("chem_id", "")
+            or arguments.get("inchikey", "")
+            or arguments.get("drug_name", "")
+        )
         if not chem_id:
             return {
                 "status": "error",
-                "error": "chem_id parameter is required. Use InChIKey (e.g., 'XZWYZXLIPXDOLR-UHFFFAOYSA-N' for metformin) "
-                "or ChEMBL ID (e.g., 'CHEMBL1431').",
+                "error": "chem_id parameter is required (InChIKey, ChEMBL ID, or drug name).",
             }
+        # If it looks like a drug name (no special chars), resolve to ID first
+        if chem_id.isalpha() or " " in chem_id:
+            resolved = self._resolve_name_to_id(chem_id)
+            if resolved:
+                chem_id = resolved
+            # else try as-is
 
         params = {"fields": DC_ALL_FIELDS}
         response = requests.get(
@@ -243,7 +267,15 @@ class DrugCentralTool(BaseTool):
 
     def _get_targets(self, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Get drug targets from DrugCentral bioactivity data."""
-        chem_id = arguments.get("chem_id", "") or arguments.get("inchikey", "")
+        chem_id = (
+            arguments.get("chem_id", "")
+            or arguments.get("inchikey", "")
+            or arguments.get("drug_name", "")
+        )
+        if chem_id and (chem_id.isalpha() or " " in chem_id):
+            resolved = self._resolve_name_to_id(chem_id)
+            if resolved:
+                chem_id = resolved
         if not chem_id:
             return {
                 "status": "error",
