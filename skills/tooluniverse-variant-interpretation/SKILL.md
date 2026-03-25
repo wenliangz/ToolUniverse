@@ -61,7 +61,7 @@ Tools: `clinvar_search_variants`, `gnomad_search_variants`, `gnomad_get_variant`
 
 > **gnomAD two-step workflow**: `gnomad_search_variants` only accepts rsIDs or variant IDs (not gene names). Search by rsID first, then use the returned `variant_id` with `gnomad_get_variant` to get population allele frequencies.
 >
-> **CIViC**: Use `civic_get_variants_by_gene` to find clinical evidence for variants in a gene, then `civic_search_evidence_items` for actionability details.
+> **CIViC**: Use `civic_search_genes(query="<gene_symbol>")` to find the CIViC gene ID dynamically (do NOT rely on a hardcoded lookup table). Then use `civic_get_variants_by_gene(gene_id=<id>)` and `civic_search_evidence_items` for actionability details. If `civic_search_genes` returns no results, the gene may not be curated in CIViC — note this gap.
 >
 > **OncoKB note**: Demo mode only supports BRAF, TP53, ROS1. For other genes, set `ONCOKB_API_TOKEN` environment variable.
 
@@ -83,7 +83,12 @@ Before full ACMG classification, check if the variant already has an expert pane
 
 **Primary approach:** `MyVariant_query_variants` with `fields=dbnsfp,clinvar,cadd,gnomad_genome` retrieves 15+ predictor scores (SIFT, PolyPhen, CADD, REVEL, AlphaMissense, MetaRNN, FATHMM, GERP, PhyloP, etc.) in a single call. This is usually sufficient.
 
-**Individual tools** (when specific scores are needed): `CADD_get_variant_score` (PHRED 0-99), `AlphaMissense_get_variant_score` (0-1, needs UniProt ID), `EVE_get_variant_score` (0-1), `EnsemblVEP_annotate_hgvs` (VEP with colocated variants, HGMD cross-references, and ancestry-specific gnomAD frequencies)
+**REVEL/AlphaMissense fallback**: If MyVariant returns no `dbnsfp` block (common for some variants), use individual tools:
+1. `CADD_get_variant_score` (PHRED 0-99) — works for most variants
+2. `AlphaMissense_get_variant_score` (0-1, needs UniProt ID) — missense only
+3. `EVE_get_variant_score` (0-1) — missense only
+4. `EnsemblVEP_annotate_hgvs` (VEP with colocated variants, HGMD cross-references, and ancestry-specific gnomAD frequencies) — includes SIFT/PolyPhen and can return REVEL via plugin
+5. If REVEL is still unavailable, note this as a limitation and rely on CADD + SIFT + PolyPhen consensus. REVEL absence does not prevent classification.
 
 Consensus: Run CADD (all variants) + AlphaMissense + EVE (missense). 2+ concordant damaging = strong PP3; 2+ concordant benign = strong BP4.
 
@@ -112,6 +117,32 @@ Always flag preprints as NOT peer-reviewed.
 ## Phase 6: ACMG Classification
 
 Apply all relevant evidence codes (PVS1, PS1, PS3, PM1, PM2, PM5, PP3, PP5 for pathogenic; BA1, BS1, BS3, BP4, BP7 for benign). See `ACMG_CLASSIFICATION.md` for the complete algorithm.
+
+### Gene-Specific Population Frequency Thresholds
+
+BS1 (allele frequency too high for disorder) requires gene-specific calibration, not a universal cutoff:
+- **High-penetrance genes** (BRCA1, TP53): BS1 threshold ~0.0001
+- **Moderate-penetrance genes** (PALB2, ATM, CHEK2): BS1 threshold ~0.001
+- **Low-penetrance/common disease genes**: BS1 threshold higher, depends on disease prevalence
+- **Formula**: BS1 threshold = (disease prevalence × max allelic contribution × max genetic contribution) / penetrance
+- When in doubt, compare the variant's AF to the highest AF of any known pathogenic variant in the same gene — if it exceeds that, BS1 is likely applicable.
+
+### Handling Conflicting Evidence: Functional vs Epidemiological
+
+This is one of the most challenging scenarios in variant interpretation. When a biochemical assay shows damage but population/epidemiological data shows no disease association:
+
+1. **Epidemiological data generally trumps in-vitro assays** for clinical classification. A variant found at ~0.1% frequency with no disease association in 40K+ cases is unlikely to be clinically significant, even if it reduces protein function in a tube.
+2. **Apply PS3/BS3 carefully**: ClinGen's SVI recommends that PS3 (functional evidence for pathogenicity) requires the assay to be validated against known pathogenic AND known benign controls. A single biochemical study without such validation is PS3_Supporting at best.
+3. **Hypomorphic variants**: Some variants genuinely reduce protein function (detectable in sensitive assays) but not enough to cause disease. This is biologically real and does not make them pathogenic.
+4. **Document the conflict explicitly** in the report. State: "Biochemical assay X shows [result], but case-control study Y with N cases found no significant disease association. Per ACMG guidelines, the epidemiological evidence is weighted more heavily for clinical classification."
+
+### Tool Failure Fallbacks
+
+If a primary tool fails, use these alternatives:
+- **ClinVar_search_variants returns 0 results**: Use `MyVariant_query_variants` with rsID or HGVS — the `clinvar` field in MyVariant is more reliable for variant lookup than NCBI Entrez search
+- **gnomAD_search_variants fails**: Use `EnsemblVEP_annotate_hgvs` which includes gnomAD frequency via colocated variants
+- **CADD_get_variant_score fails**: CADD PHRED is also available in the `dbnsfp` block from MyVariant
+- **AlphaFold prediction unavailable** (large proteins >2700aa): Use `PDBe_get_uniprot_mappings` for experimental structures
 
 ---
 

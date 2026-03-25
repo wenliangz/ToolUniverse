@@ -1,19 +1,20 @@
 ---
 name: tooluniverse-metagenomics-analysis
-description: Analyze microbiome and metagenomics data using MGnify, GTDB, GMrepo, and ENA. Covers study discovery, taxonomic profiling, genome quality assessment, functional annotation, and clinical phenotype associations. Use for 16S rRNA analysis, shotgun metagenomics, microbiome composition, taxonomic classification, and gut-health research.
+description: Analyze microbiome and metagenomics data using MGnify, GTDB, ENA, and literature tools. Search studies by biome/keyword, retrieve taxonomic profiles and functional annotations, classify genomes with GTDB taxonomy, and find related publications. Use for human gut microbiome, soil/ocean metagenomics, and environmental microbiology research.
 ---
 
 # Metagenomics & Microbiome Analysis
 
-Integrated pipeline for exploring microbiome studies, classifying taxa, assessing genome quality, and linking microbial composition to clinical phenotypes. Combines curated study databases (MGnify, ENA) with taxonomic references (GTDB) and clinical microbiome data (GMrepo).
+Integrated pipeline for exploring microbiome studies, classifying taxa, assessing genome quality, linking microbial composition to clinical phenotypes, and interpreting findings through pathway analysis and literature context.
 
 **Guiding principles**:
 1. **Study context first** -- understand the biome, sequencing method, and sample metadata before diving into taxa
 2. **Taxonomic consistency** -- use GTDB taxonomy as the reference standard; reconcile NCBI taxonomy where needed
 3. **Genome quality matters** -- CheckM completeness/contamination thresholds determine which MAGs are trustworthy
-4. **Clinical grounding** -- connect microbial signatures to human phenotypes via GMrepo
-5. **Progressive reporting** -- create the report file early and update it as phases complete
-6. **English-first queries** -- use English terms in tool calls; respond in the user's language
+4. **Interpretation over enumeration** -- don't just list taxa; explain what they mean for the biological question
+5. **Clinical grounding** -- connect microbial signatures to human phenotypes via GMrepo and literature
+6. **Progressive reporting** -- create the report file early and update it as phases complete
+7. **English-first queries** -- use English terms in tool calls; respond in the user's language
 
 ---
 
@@ -40,6 +41,9 @@ Typical triggers:
 | **GTDB** | Genome Taxonomy Database; standardized bacterial/archaeal taxonomy | Consistent taxonomic classification, species-level resolution |
 | **GMrepo** | Gut Microbiome Repository; curated phenotype-microbe associations | Linking gut species to human health conditions |
 | **ENA** | European Nucleotide Archive; raw sequencing data | Finding raw 16S/shotgun datasets and study metadata |
+| **KEGG** | Kyoto Encyclopedia of Genes and Genomes | Pathway mapping for microbial functional annotations |
+| **PubMed/EuropePMC** | Biomedical literature | Published studies on microbiome-disease associations |
+| **CTD** | Comparative Toxicogenomics Database | Chemical-microbiome-disease relationships |
 
 ---
 
@@ -58,14 +62,17 @@ Phase 2: Taxonomic Classification
 Phase 3: Genome Quality & MAG Assessment
   Search MGnify genomes; evaluate completeness/contamination
     |
-Phase 4: Functional & Ecological Context
-  MGnify analyses for functional annotations; biome classification
+Phase 4: Functional Annotation & Pathway Analysis
+  MGnify GO/InterPro terms + KEGG pathway mapping
     |
 Phase 5: Clinical Phenotype Associations
   GMrepo phenotype-species links; disease relevance
     |
-Phase 6: Report Synthesis
-  Integrate findings into structured report
+Phase 6: Literature & Disease Context
+  PubMed/EuropePMC for published evidence; CTD for gene-disease links
+    |
+Phase 7: Interpretation & Report Synthesis
+  Integrate findings with biological reasoning
 ```
 
 ---
@@ -97,7 +104,8 @@ If the query is ambiguous, clarify before proceeding. A species name might match
   - Output: hierarchical biome tree
 - `ENAPortal_search_studies` -- search ENA for raw sequencing studies
   - Input: `query` (keyword), optional `result_type`, `limit`
-  - Output: study accessions, titles, descriptions
+  - **IMPORTANT**: ENA search requires structured queries, not free text. Use field-based queries like `study_title="*IBD*"` or `tax_tree(408170)` for a taxon. Free-text keywords may return HTTP 400.
+  - If ENA search fails, fall back to MGnify (which indexes ENA studies with processed results).
 
 **Workflow**:
 1. Search MGnify for processed studies matching the query
@@ -156,22 +164,53 @@ If the query is ambiguous, clarify before proceeding. A species name might match
 - **Medium quality**: >= 50% complete, <= 10% contamination
 - **Low quality**: below medium thresholds -- flag but don't exclude without reason
 
-### Phase 4: Functional & Ecological Context
+### Phase 4: Functional Annotation & Pathway Analysis
 
-**Objective**: Extract functional annotations and ecological context from processed analyses.
+**Objective**: Extract functional annotations and map them to biological pathways for interpretation.
 
 **Tools**:
 - `MGnify_search_analyses` -- find analysis results for studies
   - Input: `study_accession` or `query`, optional `experiment_type`
   - Output: analysis accessions, pipeline version, experiment type
-- `MGnify_list_biomes` -- understand the biome classification hierarchy
-  - Output: nested biome tree with study counts
+- `MGnify_get_taxonomy` -- get taxonomic profile from an analysis
+  - Input: `accession` (analysis ID)
+  - Output: taxonomic composition at multiple ranks
+- `MGnify_get_go_terms` -- get GO functional annotations from an analysis
+  - Input: `accession` (analysis ID)
+  - Output: GO terms with counts
+- `kegg_search_pathway` -- search KEGG pathways by keyword
+  - Input: `query` (e.g., "butyrate metabolism", "lipopolysaccharide biosynthesis")
+  - Output: pathway IDs, names, descriptions
+- `KEGG_get_pathway_genes` -- get genes in a KEGG pathway
+  - Input: `pathway_id` (e.g., "map00650" for butanoate metabolism)
+  - Output: gene list with functions
+- `kegg_get_entry` -- get detailed KEGG entry (pathway, module, compound)
+  - Input: `entry_id` (e.g., "map00650", "M00357")
+  - Output: entry details, linked pathways, reactions
 
 **Workflow**:
-1. For studies from Phase 1, retrieve their analyses
-2. Note the analysis pipeline version (affects available annotations)
-3. Classify the ecological niche using the biome hierarchy
-4. Summarize functional profile if available (GO terms, InterPro, KEGG)
+1. For studies from Phase 1, retrieve their analyses via `MGnify_search_analyses`
+2. Get GO terms and taxonomic profiles from analyses
+3. **Interpret GO terms**: Group by biological process (metabolism, transport, virulence, stress response). Identify which functions are enriched in the study context.
+4. **Map to KEGG pathways**: For key functional categories, search KEGG pathways. For example:
+   - Short-chain fatty acid production: `kegg_search_pathway(query="butanoate metabolism")` → map00650
+   - LPS biosynthesis (inflammation): `kegg_search_pathway(query="lipopolysaccharide")` → map00540
+   - Amino acid metabolism: relevant pathways for tryptophan (map00380), bile acid (map00120)
+5. **Connect function to biology**: Don't just list GO terms. Explain what the functional profile means:
+   - Are butyrate producers enriched/depleted? (Relevant to gut barrier integrity)
+   - Is LPS biosynthesis capacity high? (Relevant to inflammation)
+   - Are bile salt hydrolase genes present? (Relevant to fat metabolism)
+
+**Interpretation framework for common microbiome contexts**:
+
+| Functional Category | Key KEGG Pathways | Biological Significance |
+|---|---|---|
+| SCFA production | map00650 (butanoate), map00640 (propanoate) | Gut barrier integrity, anti-inflammatory |
+| LPS biosynthesis | map00540 | Pro-inflammatory, endotoxemia |
+| Bile acid metabolism | map00120 | Fat absorption, FXR signaling |
+| Tryptophan metabolism | map00380 | Serotonin, AhR activation, immune |
+| Sulfur metabolism | map00920 | H2S production, epithelial damage |
+| Vitamin biosynthesis | map00730 (B1), map00740 (B6), map00760 (B12) | Host nutritional contribution |
 
 ### Phase 5: Clinical Phenotype Associations
 
@@ -185,6 +224,13 @@ If the query is ambiguous, clarify before proceeding. A species name might match
   - Input: `query` (species name or taxon ID)
   - Output: phenotype list with prevalence and abundance data
 
+**IMPORTANT**: GMrepo uses MeSH-style disease terms, not colloquial names.
+- "IBD" → search "Crohn Disease" and "Colitis, Ulcerative" separately
+- "obesity" → search "Obesity"
+- "diabetes" → search "Diabetes Mellitus, Type 2"
+- "colorectal cancer" → search "Colorectal Neoplasms"
+If a search returns 0 results, try the formal MeSH term or the NCBI taxon ID instead.
+
 **Workflow**:
 1. For key taxa identified in earlier phases, query GMrepo
 2. Get phenotype associations -- which diseases/conditions show enrichment or depletion
@@ -193,16 +239,71 @@ If the query is ambiguous, clarify before proceeding. A species name might match
 
 **Scope note**: GMrepo focuses on the human gut microbiome. For environmental metagenomics (soil, marine), this phase may be limited or skippable.
 
-### Phase 6: Report Synthesis
+### Phase 6: Literature & Disease Context
 
-Assemble findings into a structured report:
+**Objective**: Ground findings in published evidence and connect to disease mechanisms.
 
-1. **Study Landscape** -- number of studies found, biomes covered, sequencing methods
-2. **Taxonomic Profile** -- GTDB-standardized taxonomy, key lineages, naming discrepancies
-3. **Genome Catalog** -- available MAGs with quality tiers, representative genomes
-4. **Functional Summary** -- ecological context, functional annotations
-5. **Clinical Relevance** -- phenotype associations, disease links, prevalence data
-6. **Data Gaps** -- missing biomes, low-quality genomes, taxa without clinical data
+This phase is critical -- it transforms data collection into scientific interpretation.
+
+**Tools**:
+- `PubMed_search_articles` -- search biomedical literature
+  - Input: `query` (search terms), `max_results`
+  - Strategy: Search "[taxon] AND [disease]" and "[taxon] AND microbiome AND [condition]"
+- `EuropePMC_search_articles` -- broader literature including preprints
+  - Input: `query`, `page_size`
+  - Useful for recent/European studies not yet in PubMed
+- `DisGeNET_search_gene` -- gene-disease associations (for microbial gene products affecting host)
+  - Input: `query` (gene symbol)
+- `CTD_get_gene_disease_associations` -- chemical/gene-disease relationships
+  - Input: `gene_symbol` or `disease_name`
+  - Useful for: metabolite-disease links (e.g., butyrate → IBD, TMAO → cardiovascular)
+
+**Workflow**:
+1. For each key taxon-disease association from Phase 5, search PubMed for published evidence
+2. Look for systematic reviews and meta-analyses first (highest evidence)
+3. Search for mechanistic studies (how does this microbe contribute to disease?)
+4. Use CTD to find metabolite-disease connections (e.g., "butyrate" → protective in IBD, "trimethylamine" → cardiovascular risk)
+5. Synthesize: Is the association well-established (multiple studies, consistent direction) or preliminary (single study, conflicting)?
+
+**Evidence grading for microbiome associations**:
+
+| Grade | Criteria | Example |
+|---|---|---|
+| **Strong** | Meta-analysis or >5 independent studies, consistent direction | F. prausnitzii depletion in Crohn's disease |
+| **Moderate** | 2-5 studies with consistent direction, or 1 large cohort study | Akkermansia muciniphila and metabolic health |
+| **Preliminary** | Single study or conflicting results | Novel species-disease link from one cohort |
+| **Mechanistic only** | In vitro or animal model data, no human epidemiology | Specific metabolite pathway demonstrated in gnotobiotic mice |
+
+### Phase 7: Interpretation & Report Synthesis
+
+**Objective**: Synthesize all findings into a scientifically meaningful narrative, not just a data dump.
+
+This is what separates a useful analysis from a tool catalog. After collecting data from Phases 1-6, answer these questions:
+
+**For disease-microbiome studies**:
+1. **What changed?** Which taxa are enriched/depleted in disease vs control? (From Phase 2 + Phase 5)
+2. **Why does it matter?** What functional consequences follow from the compositional shift? (From Phase 4)
+   - e.g., "Depletion of F. prausnitzii reduces butyrate production → weakened gut barrier → increased intestinal permeability"
+3. **Is it cause or consequence?** Does the literature support a causal role or just correlation? (From Phase 6)
+4. **What's the mechanism?** Connect microbial functions to host pathways (Phase 4 + Phase 6)
+5. **How confident are we?** Grade the overall evidence (Phase 6 evidence grading)
+
+**For taxonomic/ecological studies**:
+1. **What's the community structure?** Dominant taxa, diversity, evenness
+2. **How does it compare to reference communities?** (GMrepo healthy baseline)
+3. **What functional capacity does the community have?** (KEGG pathway mapping)
+4. **Are there indicator species?** Taxa strongly associated with the biome or condition
+
+**Report structure**:
+
+1. **Executive Summary** -- One paragraph answering the user's question directly
+2. **Study Landscape** -- number of studies found, biomes covered, sequencing methods
+3. **Taxonomic Profile** -- GTDB-standardized taxonomy, key lineages, naming discrepancies
+4. **Functional Interpretation** -- pathway analysis results with biological significance (not just GO term lists)
+5. **Clinical Relevance** -- phenotype associations with evidence grading
+6. **Mechanistic Model** -- How do the identified taxa contribute to the condition? (diagram or narrative)
+7. **Genome Catalog** -- available MAGs with quality tiers, representative genomes
+8. **Data Gaps** -- missing biomes, low-quality genomes, taxa without clinical data, conflicting evidence
 
 ---
 
@@ -210,21 +311,25 @@ Assemble findings into a structured report:
 
 | Pattern | Description | Key Phases |
 |---------|-------------|------------|
-| **Species Deep-Dive** | Full profile of one species: taxonomy, genomes, clinical links | 0, 2, 3, 5 |
-| **Study Exploration** | Discover and summarize studies for a biome or disease | 0, 1, 4 |
+| **Species Deep-Dive** | Full profile of one species: taxonomy, genomes, clinical links, literature | 0, 2, 3, 5, 6 |
+| **Study Exploration** | Discover and summarize studies for a biome or disease | 0, 1, 4, 6 |
 | **MAG Quality Audit** | Evaluate genome quality for a set of species | 0, 2, 3 |
-| **Disease-Microbiome Link** | Find taxa associated with a clinical condition | 0, 1, 5 |
+| **Disease-Microbiome Link** | Find taxa associated with a clinical condition + mechanisms | 0, 1, 4, 5, 6, 7 |
 | **Taxonomic Reconciliation** | Compare GTDB vs NCBI classification for a lineage | 0, 2 |
+| **Functional Profiling** | What metabolic capacities exist in a community? | 0, 1, 4, 7 |
 
 ---
 
 ## Edge Cases & Fallbacks
 
 - **Taxon not in GTDB**: May be a recently described species or use outdated naming. Try partial search via `GTDB_search_taxon`, or fall back to MGnify which uses NCBI taxonomy
-- **No GMrepo data**: Normal for non-gut organisms. Note the gap and rely on literature
+- **No GMrepo data**: Normal for non-gut organisms. Note the gap and use literature search (Phase 6) instead
 - **MGnify study vs ENA study**: MGnify contains processed results; ENA has raw data. If MGnify lacks a study, ENA may still have the raw reads
+- **ENA search returns HTTP 400**: Use structured field queries, not free text. Try `MGnify_search_studies` as fallback
+- **GMrepo returns 0 results for disease term**: Use formal MeSH terms (e.g., "Crohn Disease" not "IBD", "Colitis, Ulcerative" not "UC"). Try NCBI taxon IDs for species
 - **Large result sets**: MGnify and ENA can return hundreds of studies. Use biome filters and limit parameters to focus results
 - **GTDB version differences**: Taxonomy changes between GTDB releases. Note the version when reporting classifications
+- **No KEGG pathway match**: Some microbial functions are poorly mapped in KEGG. Check MetaCyc or literature for pathway information
 
 ---
 
@@ -233,5 +338,7 @@ Assemble findings into a structured report:
 - **GMrepo**: Gut-only; no coverage for skin, oral, vaginal, or environmental microbiomes
 - **GTDB**: Bacteria and Archaea only; no eukaryotic microbes or viruses
 - **MGnify**: Functional annotations depend on pipeline version; older analyses may lack newer annotations
-- **ENA**: Raw data only; no processed taxonomic profiles
+- **ENA**: Raw data only; no processed taxonomic profiles. Query syntax is strict (not free-text friendly)
 - **No direct sequence analysis**: This skill queries databases, not raw FASTQ/FASTA files. For sequence processing, use external pipelines (QIIME2, MetaPhlAn) and bring results here for annotation
+- **No statistical comparison tools**: For differential abundance testing (DESeq2, ANCOM, LEfSe), process data externally and use this skill for annotation and interpretation of results
+- **Pathway mapping is approximate**: KEGG pathways represent reference pathways, not community-specific reconstructions. Use as interpretive framework, not definitive functional prediction

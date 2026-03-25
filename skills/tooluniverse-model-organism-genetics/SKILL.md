@@ -15,8 +15,9 @@ Map human genes to model organism orthologs and retrieve phenotype, expression, 
 4. **Negative results are data** - "No ortholog in yeast" is informative (gene may be metazoan-specific)
 5. **Evidence grading** - T1: direct experimental (knockout/KD phenotype), T2: genetic screen, T3: computational orthology, T4: sequence similarity only
 6. **Organism selection by question** - Not all organisms are relevant to all questions (see Organism Selection Guide)
-7. **Report progressively** - Create report file first, populate section by section
-8. **English-first queries** - Use English gene symbols in all tool calls; respond in user's language
+7. **Synthesize, don't enumerate** - The value is in connecting phenotypes across species, not listing them separately. Always end with a cross-species synthesis that answers "what does this gene do?" at a conceptual level
+8. **Report progressively** - Create report file first, populate section by section
+9. **English-first queries** - Use English gene symbols in all tool calls; respond in user's language
 
 ## When to Use
 
@@ -69,13 +70,23 @@ Map human gene to orthologs across all target species.
 EnsemblCompara_get_orthologues(
     gene="<ensembl_id>",        # e.g., "ENSG00000141510"
     species="human",
-    target_species="<species>"  # "mouse", "zebrafish", "fruitfly", "caenorhabditis_elegans", "saccharomyces_cerevisiae", "xenopus_tropicalis"
+    target_species="<species>"  # Use EXACT names below
 )
 ```
 
-**Fallback tools** (if Ensembl Compara returns no results):
-- `PANTHER_ortholog(gene_id="<gene_symbol>", organism=9606, target_organism=<taxon>)` - Taxon IDs: mouse=10090, fly=7227, worm=6239, zebrafish=7955, yeast=559292, frog=8364
-- `NCBIDatasets_get_orthologs(gene_id="<entrez_id>")` - Broad ortholog search
+**CRITICAL: Ensembl Compara species names** (these are the only accepted values):
+- Mouse: `"mouse"` or `"mus_musculus"`
+- Zebrafish: `"zebrafish"` or `"danio_rerio"`
+- Fly: `"drosophila_melanogaster"` (NOT "fruitfly" — that returns HTTP 400)
+- Worm: `"caenorhabditis_elegans"`
+- Yeast: `"saccharomyces_cerevisiae"`
+- Frog: `"xenopus_tropicalis"`
+
+**Fallback tools** (if Ensembl Compara returns no results or errors):
+1. `PANTHER_ortholog(gene_id="<gene_symbol>", organism=9606, target_organism=<taxon>)` - Taxon IDs: mouse=10090, fly=7227, worm=6239, zebrafish=7955, yeast=559292, frog=8364
+2. `NCBIDatasets_get_orthologs(gene_id="<entrez_id>")` - Broad ortholog search (vertebrates mainly)
+3. **For distant orthologs (especially fly)**: If automated tools fail, use `FlyMine_search(query="<human_gene_symbol>")` with text search. Distant orthologs (low overall sequence identity but conserved domains) often fail automated detection. FlyBase gene IDs can be found this way, then confirmed with `FlyBase_get_gene_orthologs`.
+4. **For worm**: `WormBase_get_gene(gene_id="<gene_symbol>")` may return ortholog information directly in the gene record.
 
 **Additional per-organism ortholog tools** (confirm/supplement):
 - `FlyBase_get_gene_orthologs(gene_id="FB:FBgnXXXXXXX")` - Fly-centric ortholog view
@@ -85,12 +96,20 @@ EnsemblCompara_get_orthologues(
 - `Monarch_search_gene(query="<gene_symbol>")` - Get Monarch gene entity
 - `MonarchV3_get_associations(subject="HGNC:<id>", category="biolink:GeneHomologAssociation")` - All orthologs via Monarch
 
+**Finding organism-specific gene IDs when ortholog mapping fails**:
+When automated ortholog mapping misses a hit (common for distant orthologs like fly or worm):
+1. Search the organism database directly by human gene symbol (e.g., `FlyBase_get_gene` with the expected fly gene name)
+2. Fly gene names often follow the pattern: human FOXP2 → fly FoxP (capitalization differs)
+3. If the gene family is known (e.g., forkhead), search by family name
+4. Use `FlyMine_search` or `WormMine_search` for text-based discovery
+
 **Output per ortholog**: Species, gene symbol, gene ID, homology type (1:1, 1:many, many:many), percent identity, confidence.
 
 **Key interpretation**:
 - **One-to-one**: Strong conservation; model organism gene likely has conserved function
 - **One-to-many**: Gene duplicated in target species; check subfunctionalization
-- **No ortholog**: Gene may be lineage-specific (e.g., adaptive immunity genes absent in invertebrates)
+- **No ortholog found by tools**: Try manual search (step 3-4 above) before concluding absence. Sequence divergence ≠ functional divergence — a gene can have a conserved role despite low sequence identity
+- **True absence**: Gene may be lineage-specific (e.g., adaptive immunity genes absent in invertebrates)
 
 ---
 
@@ -224,6 +243,66 @@ Assess whether the gene's pathway context is conserved.
 - **Metazoan-specific**: Ortholog in mouse/fish/fly/worm but not yeast
 - **Mammalian-specific**: Ortholog only in mouse (and frog sometimes)
 - **Human-specific**: No clear ortholog in any model organism
+
+---
+
+## Phase 7: Cross-Species Phenotype Synthesis (CRITICAL)
+
+This phase is what makes the skill useful — it transforms per-organism data into biological insight.
+
+**Objective**: Connect phenotypes across species to identify the gene's core function and evolutionary trajectory.
+
+### Step 1: Build a Cross-Species Phenotype Matrix
+
+| Feature | Human | Mouse | Fly | Worm | Zebrafish | Yeast |
+|---------|-------|-------|-----|------|-----------|-------|
+| Ortholog present? | -- | | | | | |
+| Lethality (LOF) | | | | | | |
+| Primary phenotype | | | | | | |
+| Expression domain | | | | | | |
+| Conserved pathway | | | | | | |
+
+### Step 2: Identify the Ancestral/Core Function
+
+Look for the phenotype that is most consistent across species. This is often more abstract than any single organism's phenotype:
+- Mouse "reduced vocalization" + Fly "defective courtship song" + Human "speech apraxia" → **Core function: motor circuit development and learned motor sequences**
+- Mouse "embryonic lethal" + Worm "lethal" + Yeast "essential" → **Core function: fundamental cell viability**
+- Mouse "cardiac defects" + Zebrafish "heart edema" + Human "cardiomyopathy" → **Core function: cardiac development**
+
+### Step 3: Map Phenotype Ontology Across Species
+
+Different species use different phenotype ontologies. To compare meaningfully:
+
+| Species | Ontology | Tool for Mapping |
+|---------|----------|-----------------|
+| Human | HPO (Human Phenotype Ontology) | `HPO_search_terms` |
+| Mouse | MP (Mammalian Phenotype) | `MGI_get_phenotypes` |
+| Fly | FBcv (FlyBase Controlled Vocabulary) | `FlyBase_get_gene` (phenotype descriptions) |
+| Worm | WBPhenotype | `WormBase_get_phenotypes` |
+| Zebrafish | ZP (Zebrafish Phenotype) | `ZFIN_get_gene_phenotypes` |
+
+**Cross-species phenotype matching**: Use `MonarchV3_phenotype_similarity_search` to find equivalent phenotypes across species via the uPheno ontology (which maps MP↔HPO↔ZP↔WBPhenotype↔FBcv).
+
+When automated mapping fails, use biological reasoning:
+- "Reduced ultrasonic vocalizations" (mouse) ≈ "Defective courtship song" (fly) ≈ "Speech apraxia" (human) — all are **disrupted learned motor sequences for communication**
+- "Embryonic lethal" (mouse) ≈ "Lethal" (worm) ≈ "Inviable" (yeast) — all are **essential for viability**
+- "Purkinje cell defects" (mouse) ≈ "Protocerebral bridge defects" (fly) — both are **motor coordination center malformation**
+
+### Step 4: Synthesize the Evolutionary Narrative
+
+Write a synthesis paragraph that answers:
+1. **What is this gene's fundamental role?** (Abstract from species-specific phenotypes)
+2. **How has the function been elaborated during evolution?** (e.g., motor circuit → vocal circuit → speech)
+3. **Which model organism best recapitulates the human condition?** (Consider phenotype match AND experimental tractability)
+4. **What are the key conserved vs divergent aspects?** (e.g., conserved neural expression but divergent behavioral output)
+
+### Step 5: Recommend the Best Model System
+
+Based on the synthesis, recommend which organism(s) to use for further study, considering:
+- **Phenotype match**: Which organism's phenotype most closely mirrors the human condition?
+- **Experimental tools**: Which organism has the best genetic tools for the question?
+- **Complementary models**: Often the best approach uses 2-3 organisms (e.g., mouse for physiology + fly for genetic screens)
+- **Practical considerations**: Cost, time, throughput, imaging capability
 
 ---
 

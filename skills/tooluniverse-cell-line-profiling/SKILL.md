@@ -276,17 +276,48 @@ CLUE_get_cell_lines(operation="get_cell_lines", cell_id="MCF7")
 
 ### 5B: Final Recommendation
 
-Synthesize all phases into a ranked recommendation. Score each candidate cell line on:
+Synthesize all phases into a ranked recommendation. **Don't just score — explain WHY one line is better than another for this specific use case.**
 
-| Criterion | Weight | Description |
-|-----------|--------|-------------|
-| Mutation match | High | Does the line carry the mutation of interest? |
-| Dependency score | High | Is the gene essential in this line? |
-| Drug sensitivity | Medium | Does the line respond to relevant drugs? |
-| Data availability | Medium | How many datasets cover this line? |
-| Practical factors | Low | Growth rate, culture conditions, availability |
+#### Decision Criteria with Concrete Thresholds
 
-**OUTPUT**: Ranked cell line table with scores and rationale.
+| Criterion | Weight | Score 3 (Best) | Score 2 (Acceptable) | Score 1 (Poor) |
+|-----------|--------|----------------|---------------------|----------------|
+| **Mutation match** | x3 | Exact mutation (e.g., KRAS G12D) | Same gene, different mutation | No mutation in gene of interest |
+| **Co-mutation simplicity** | x2 | Few co-mutations (cleaner background) | Moderate co-mutations | Complex background (3+ driver mutations) |
+| **Gene dependency** | x2 | DepMap score < -0.5 (essential) | Score -0.5 to -0.2 (moderately essential) | Score > -0.2 (not essential) |
+| **Drug sensitivity data** | x1 | In GDSC + CCLE + PRISM (3+ datasets) | In 1-2 datasets | No drug response data |
+| **Practical factors** | x1 | Adherent, well-characterized, widely used | Suspension or less common | Hard to culture, contamination-prone |
+
+**Total score** = sum of (criterion score × weight). Max = 27. Rank cell lines by total score.
+
+#### Use-Case-Specific Guidance
+
+The best cell line depends on what you're doing with it:
+
+| Use Case | Key Requirements | Extra Considerations |
+|----------|-----------------|---------------------|
+| **CRISPR knockout screen** | Adherent growth, good lentiviral transduction, pre-existing Cas9 clones (check Cellosaurus for "-Cas9" derivatives) | Doubling time matters for library coverage; <72h ideal |
+| **Drug sensitivity testing** | In PharmacoDB/GDSC, known IC50 for reference compounds | Check SYNERGxDB for combo data |
+| **Xenograft model** | Known tumorigenicity in mice, available PDX data | Check if line forms tumors in nude/NSG mice (Cellosaurus often notes this) |
+| **Mechanism of action** | Clean genetic background, gene dependency confirmed | Fewer co-mutations = easier to attribute phenotypes |
+| **Biomarker discovery** | Isogenic pairs available, well-characterized omics | Check if isogenic knockouts exist (Cellosaurus) |
+| **Drug combination** | In SYNERGxDB with combo data, known single-agent responses | ZIP score available for synergy assessment |
+
+#### Cellosaurus Derivative Lines
+
+**Check for pre-made derivatives** — this can save months of lab work:
+- `cellosaurus_search_cell_lines(q="ca:<PARENT_LINE>", size=20)` — finds all derivatives
+- Look for: Cas9-expressing clones, drug-resistant derivatives, knockout lines, fluorescent reporter lines
+- Example: PANC-1-Cas9-554 through PANC-1-Cas9-559 (CVCL_WL48-WL53) are pre-validated Cas9 clones
+
+#### DepMap API Fallbacks
+
+**If DepMap_get_gene_dependencies fails** (common for some genes):
+- The Sanger Cell Model Passports API may not index all genes. Note this limitation.
+- Recommend the user check DepMap portal (depmap.org) directly for CRISPR dependency data.
+- Use `cBioPortal_get_mutations(study_id="ccle_broad_2019", gene_list="<GENE>")` as an alternative source for cell line mutation data.
+
+**OUTPUT**: Ranked cell line table with total scores, per-criterion breakdown, and a text recommendation explaining the top pick and runner-up with biological reasoning.
 
 ---
 
