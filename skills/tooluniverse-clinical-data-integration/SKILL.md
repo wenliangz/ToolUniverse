@@ -151,6 +151,32 @@ Phase 6: Integrated Safety Report
 - `FAERS_calculate_disproportionality` uses `drug_name` param
 - MedDRA term levels differ between count and disproportionality tools; case counts may not match exactly
 
+**FAERS signal interpretation** — what the numbers mean:
+
+| Metric | Value | Interpretation |
+|--------|-------|---------------|
+| **PRR** (Proportional Reporting Ratio) | < 1.0 | Event reported LESS than expected (possible protective effect or underreporting) |
+| | 1.0-2.0 | No signal or weak signal |
+| | 2.0-5.0 | **Moderate signal** — warrants investigation |
+| | > 5.0 | **Strong signal** — likely real association (but still not proof of causation) |
+| **ROR** (Reporting Odds Ratio) | Similar to PRR but accounts for all other drugs | Same thresholds as PRR; slightly more robust |
+| **IC** (Information Component) | < 0 | No signal |
+| | 0-2 | Weak signal |
+| | > 2 | **Strong signal** |
+
+**Signal ≠ Causation**: A strong FAERS signal means the drug-event pair is reported more often than expected. This could be due to:
+- True causal relationship (most important)
+- Channeling bias (sicker patients get the drug)
+- Notoriety bias (media attention increases reporting)
+- Protopathic bias (drug prescribed for early symptoms of the event)
+
+**How to assess signal credibility**:
+1. Is the event in the FDA label? (Label confirmation = strongest evidence)
+2. Is there a plausible mechanism? (Drug's pharmacology explains the event)
+3. Is there a dose-response? (Higher doses → more events)
+4. Is there temporal consistency? (Event occurs after drug start, resolves after stop)
+5. Is there epidemiological confirmation? (Published case-control or cohort study)
+
 ### Phase 3: Pharmacogenomics
 
 **Objective**: Identify genetic factors that modify drug safety.

@@ -122,6 +122,19 @@ Phase 6: Report Synthesis
 ### Phase 1: Pathogen Identification
 Classify via NCBI Taxonomy (query param). Identify related pathogens with existing drugs for knowledge transfer. Determine genome/proteome availability.
 
+**Pathogen classification decision tree** — determines the repurposing strategy:
+
+| Pathogen Type | Drug Strategy | Key Targets | Example |
+|---------------|--------------|-------------|---------|
+| **RNA virus** | Polymerase inhibitors (nucleoside analogs), protease inhibitors | RdRp, main protease, helicase | SARS-CoV-2 → remdesivir, nirmatrelvir |
+| **DNA virus** | Polymerase inhibitors, kinase inhibitors | DNA pol, thymidine kinase | HSV → acyclovir |
+| **Gram-negative bacteria** | Cell wall (beta-lactams), ribosome (aminoglycosides), topoisomerase (fluoroquinolones) | PBPs, 30S/50S ribosome, DNA gyrase | E. coli → meropenem |
+| **Gram-positive bacteria** | Cell wall (vancomycin), ribosome (macrolides), cell membrane (daptomycin) | PBPs, 50S ribosome, membrane | MRSA → vancomycin |
+| **Fungal** | Ergosterol (azoles), cell wall (echinocandins), nucleic acid (flucytosine) | Lanosterol demethylase, glucan synthase | Candida → fluconazole |
+| **Parasite** | Variable by species; often metabolic targets | DHFR, proteasome, kinases | Plasmodium → artemisinin |
+
+**Knowledge transfer principle**: Drugs effective against related pathogens are the highest-priority repurposing candidates. A protease inhibitor for SARS-CoV-1 is immediately relevant to SARS-CoV-2.
+
 ### Phase 2: Target Identification
 Search UniProt for pathogen proteins (reviewed). Check ChEMBL for drug precedent. Score targets by: Essentiality (30%), Conservation (25%), Druggability (25%), Drug precedent (20%). Aim for 5+ targets.
 

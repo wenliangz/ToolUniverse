@@ -207,13 +207,20 @@ If the user provides a ranked list (e.g., by MAGeCK score or BAGEL BF), preserve
 
 Generate a ranked target list integrating all dimensions:
 
-**Ranking criteria** (weight as appropriate for the context):
-1. **Selective essentiality** (DepMap) -- selectively essential > pan-essential
-2. **Pathway convergence** -- hits in enriched pathways rank higher
-3. **Druggability** -- existing drugs > druggable category > undruggable
-4. **Clinical evidence** -- CIViC/COSMIC evidence boosts ranking
-5. **Constraint** -- high gnomAD constraint suggests biological importance
-6. **Literature support** -- published functional data validates the hit
+**Quantitative hit prioritization score (0-30)**:
+
+| Criterion | Score 3 | Score 2 | Score 1 | Score 0 |
+|-----------|---------|---------|---------|---------|
+| **Selective essentiality** | DepMap score < -0.5 in disease context AND > -0.2 in others | < -0.5 in disease, < -0.5 in some others | < -0.5 pan-essential | > -0.2 (not essential) |
+| **Pathway convergence** | 3+ hits in same pathway | 2 hits in same pathway | Gene in enriched pathway | Isolated hit, no pathway context |
+| **Druggability** | Approved drug exists | Druggable category (kinase, GPCR) | Chemical probes available | Not druggable |
+| **Clinical evidence** | CIViC therapeutic evidence | COSMIC driver gene (oncogene/TSG) | CIViC any evidence level | No clinical data |
+| **Constraint** | pLI > 0.9 (LOF intolerant) | pLI 0.5-0.9 | pLI < 0.5 but gene is annotated | No constraint data |
+| **Literature** | Multiple validation studies in context | 1 validation study | Published in different context | No publications |
+
+**Total**: Sum all rows. Max = 18. **Tier 1** (15-18): high-confidence target. **Tier 2** (10-14): promising, needs validation. **Tier 3** (5-9): speculative. **Tier 4** (<5): likely false positive or biologically uninteresting.
+
+**Key interpretation**: Pan-essential genes (score 0 in selectivity) are usually NOT good drug targets despite being "essential" — they are essential in healthy cells too, predicting toxicity. The most valuable hits have **selective** essentiality in the disease context.
 
 **Report structure**:
 1. **Screen Summary** -- type, model, phenotype, total hits

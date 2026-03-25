@@ -197,18 +197,42 @@ Identify from the user's request:
 3. Search PubMed for methodological papers and biological insights from the EM studies
 4. Cross-reference EMDB/PDB/EMPIAR accessions in publications
 
-### Phase 6: Report Synthesis
+### Phase 6: Interpretation & Recommendations
 
-Assemble findings:
+Don't just list maps — help the user choose the RIGHT map for their purpose.
+
+**Decision matrix: Which map should I use?**
+
+| Purpose | Best Resolution | Method | Priority Criteria |
+|---------|----------------|--------|-------------------|
+| **Atomic model building** | < 3.5A | Single particle | Highest resolution with fitted PDB model |
+| **Drug binding site analysis** | < 3.0A | Single particle | Must resolve side chains in binding pocket |
+| **Domain architecture** | 4-8A | Single particle or subtomogram avg | Large complexes where domains need fitting |
+| **Conformational states** | < 4.5A | Single particle (multiple classes) | Look for entries with multiple maps from same dataset |
+| **Cellular context** | 15-40A | Cryo-ET | Tomographic datasets showing in-situ arrangement |
+| **Reprocessing** | Any | Any | Must have EMPIAR raw data; prefer recent datasets (better detectors) |
+
+**Quality assessment checklist**:
+- Resolution reported is the "gold standard" FSC 0.143 cutoff? (some older entries use 0.5 cutoff — inflates resolution)
+- Map sharpened appropriately? (over-sharpened maps can look better but contain artifacts)
+- Fitting statistics available? (cross-correlation > 0.7 is acceptable)
+- Multiple maps from same sample? (suggests conformational heterogeneity — important for drug design)
+
+**Resolution trend analysis**: If multiple maps exist over time, note the resolution trajectory. Improvement from 6A (2015) to 2.8A (2023) suggests the sample is amenable to high-resolution single particle analysis with modern hardware.
+
+### Phase 7: Report Synthesis
+
+Assemble findings into an actionable report:
 
 1. **Target Overview** -- protein/complex identity, biological significance
 2. **EM Map Landscape** -- available maps with resolution, method, and year
-3. **Best Available Structures** -- highest resolution maps with fitted models
-4. **Raw Data Availability** -- EMPIAR datasets for reprocessing
-5. **Tomography Data** -- cellular context datasets if available
-6. **Structural Context** -- PDB models, AlphaFold predictions, comparison
-7. **Key Publications** -- methods papers, biological discoveries
-8. **Recommendations** -- best map for a given purpose (modeling, visualization, reprocessing)
+3. **Best Available Structures** -- highest resolution maps with fitted models, with quality assessment
+4. **Recommendation** -- which specific map/model to use for the user's purpose (with reasoning)
+5. **Raw Data Availability** -- EMPIAR datasets for reprocessing, with dataset sizes
+6. **Tomography Data** -- cellular context datasets if available
+7. **Structural Context** -- comparison with X-ray/NMR/AlphaFold structures
+8. **Key Publications** -- methods papers, biological discoveries
+9. **Data Gaps** -- missing conformational states, unresolved regions, need for higher resolution
 
 ---
 

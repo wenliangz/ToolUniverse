@@ -151,6 +151,17 @@ HLA nomenclature quick reference:
 
 **Important**: IEDB epitopes are experimentally validated, not predicted. The absence of an epitope does not mean it won't bind -- it may simply be untested.
 
+**Binding affinity interpretation** (for IC50 values from IEDB):
+
+| IC50 (nM) | Classification | Significance |
+|-----------|---------------|-------------|
+| < 50 | Strong binder | High likelihood of antigen presentation; good vaccine candidate |
+| 50-500 | Moderate binder | May be presented; worth investigating |
+| 500-5000 | Weak binder | Unlikely to be immunodominant; low priority |
+| > 5000 | Non-binder | Not relevant for this HLA allele |
+
+**Population coverage for vaccine design**: When selecting epitopes for a vaccine, check how common the restricting HLA allele is in the target population. An epitope restricted to HLA-A*02:01 covers ~50% of Europeans but <15% of some African populations. For broad population coverage, select epitopes across multiple HLA supertypes (A2, A3, B7, B44 cover >95% of most populations).
+
 ### Phase 4: Functional Annotation
 
 **Objective**: Get protein-level features for HLA molecules and related proteins.

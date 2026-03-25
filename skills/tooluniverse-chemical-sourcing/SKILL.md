@@ -179,15 +179,32 @@ Useful when:
 - Comparing analogs that might have different activity profiles
 - Verifying the compound has published bioactivity data
 
-### Phase 5: Order Summary
+### Phase 5: Decision & Order Summary
+
+**Vendor selection decision matrix** — don't just list vendors, recommend one:
+
+| Scenario | Best Vendor Strategy | Why |
+|----------|---------------------|-----|
+| **Need it this week** | In-stock vendor with fastest shipping | Make-on-demand takes 2-4 weeks minimum |
+| **Budget-constrained** | Cheapest per mg, accept lower purity (>95%) | Academic budgets are tight; >95% is fine for screening |
+| **High-throughput screen** | ZINC/Enamine for large libraries; mg quantities | Price per compound matters more than purity |
+| **Assay validation** | Highest purity (>98%) from reputable vendor | False positives from impurities waste months |
+| **Building blocks for synthesis** | Enamine (largest building block catalog) | Purpose-built for medicinal chemistry |
+| **Exact compound unavailable** | Analog search → check bioactivity (ChEMBL) → source best analog | Tanimoto > 0.85 likely retains activity; 0.7-0.85 may have different SAR |
+
+**Red flags when sourcing**:
+- Vendor has no published purity data → request CoA before ordering
+- Price is 10x lower than other vendors → may be a different salt form or impure
+- "In stock" but delivery estimate is 4+ weeks → likely not actually in stock
+- SMILES in vendor catalog differs from target SMILES → wrong compound
 
 Generate a final sourcing report:
 
 1. **Compound Identity** -- name, SMILES, MW, CAS (if known), PubChem CID
-2. **Vendor Comparison Table** -- all vendors with pricing, stock, purity
-3. **Recommended Source** -- best option based on price/availability/purity
-4. **Analogs** (if searched) -- alternative compounds with similarity scores
-5. **Notes** -- special handling requirements, storage conditions, hazard info if available
+2. **Vendor Comparison Table** -- all vendors with pricing, stock, purity, delivery time
+3. **Recommended Source** -- specific vendor with reasoning (not just cheapest)
+4. **Analogs** (if searched) -- alternative compounds with similarity scores and bioactivity comparison
+5. **Notes** -- special handling, storage conditions, salt form, stereochemistry considerations
 
 ---
 
