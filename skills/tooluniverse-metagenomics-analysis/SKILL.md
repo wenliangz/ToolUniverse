@@ -340,5 +340,57 @@ This is what separates a useful analysis from a tool catalog. After collecting d
 - **MGnify**: Functional annotations depend on pipeline version; older analyses may lack newer annotations
 - **ENA**: Raw data only; no processed taxonomic profiles. Query syntax is strict (not free-text friendly)
 - **No direct sequence analysis**: This skill queries databases, not raw FASTQ/FASTA files. For sequence processing, use external pipelines (QIIME2, MetaPhlAn) and bring results here for annotation
-- **No statistical comparison tools**: For differential abundance testing (DESeq2, ANCOM, LEfSe), process data externally and use this skill for annotation and interpretation of results
+- **Statistical comparison**: For differential abundance between groups, use the computational procedure below. For full DESeq2/ANCOM pipelines on raw count data, process externally and bring results here for annotation.
+
+### Computational Procedure: Differential Abundance Analysis
+
+When comparing taxa between conditions (e.g., IBD vs healthy), use this procedure with taxonomic profiles from MGnify or user-provided data:
+
+```python
+# Differential abundance analysis using scipy + pandas
+# Requires: pandas, scipy, numpy (all in ToolUniverse dependencies)
+import pandas as pd
+import numpy as np
+from scipy.stats import mannwhitneyu
+from scipy.stats import false_discovery_control
+
+# Input: abundance table (rows=samples, cols=taxa, values=relative abundance)
+# Columns: taxa names; last column or separate metadata has group labels
+# Example with MGnify data:
+abundance = pd.DataFrame({
+    'Faecalibacterium': [0.12, 0.15, 0.08, 0.02, 0.01, 0.03],
+    'Bacteroides': [0.20, 0.18, 0.22, 0.30, 0.28, 0.25],
+    'Akkermansia': [0.05, 0.03, 0.04, 0.01, 0.00, 0.02],
+    'group': ['healthy', 'healthy', 'healthy', 'IBD', 'IBD', 'IBD']
+})
+
+taxa_cols = [c for c in abundance.columns if c != 'group']
+results = []
+for taxon in taxa_cols:
+    healthy = abundance[abundance['group'] == 'healthy'][taxon]
+    disease = abundance[abundance['group'] == 'IBD'][taxon]
+    stat, pval = mannwhitneyu(healthy, disease, alternative='two-sided')
+    log2fc = np.log2((disease.mean() + 1e-6) / (healthy.mean() + 1e-6))
+    results.append({
+        'taxon': taxon,
+        'healthy_mean': healthy.mean(),
+        'disease_mean': disease.mean(),
+        'log2FC': log2fc,
+        'direction': 'depleted' if log2fc < 0 else 'enriched',
+        'pvalue': pval
+    })
+
+res_df = pd.DataFrame(results)
+# FDR correction
+res_df['padj'] = false_discovery_control(res_df['pvalue'], method='bh')
+res_df = res_df.sort_values('pvalue')
+print(res_df.to_string(index=False))
+
+# Interpretation:
+# - Depleted + padj < 0.05: taxon significantly reduced in disease
+# - Enriched + padj < 0.05: taxon significantly increased in disease
+# - |log2FC| > 1: biologically meaningful effect size
+```
+
+**When to use this**: After collecting taxonomic profiles from MGnify (Phase 4) or user-provided 16S/shotgun data. This replaces external tools like LEfSe for simple two-group comparisons. For multi-group or longitudinal designs, recommend ANCOM-BC2 or MaAsLin2 externally
 - **Pathway mapping is approximate**: KEGG pathways represent reference pathways, not community-specific reconstructions. Use as interpretive framework, not definitive functional prediction

@@ -158,6 +158,59 @@ After running Phases 1-4, synthesize by answering:
 5. **Mechanism over correlation**: Network proximity alone is insufficient — explain WHY the drug should work
 6. **Consider IP and formulation**: Generic drugs are easier to repurpose but harder to fund trials for
 
+### Computational Procedure: Drug-Target Dose Feasibility Check
+
+A drug that hits a new target only at 100x its approved dose is NOT a viable repurposing candidate. Use this procedure after identifying drug-target pairs:
+
+```python
+# Drug-target dose feasibility analysis
+# Uses ChEMBL bioactivity data from ToolUniverse
+from tooluniverse import ToolUniverse
+
+tu = ToolUniverse()
+tu.load_tools()
+
+def check_dose_feasibility(drug_name, original_target, new_target):
+    """
+    Compare drug's potency at original vs new target.
+    If new_target IC50 > 10x original_target IC50, flag as unlikely feasible.
+    """
+    # Get bioactivity for original target
+    orig = tu.run_one_function({
+        'name': 'ChEMBL_get_bioactivities',
+        'arguments': {
+            'molecule_chembl_id': drug_name,  # or search first
+            'target_chembl_id': original_target,
+            'limit': 10
+        }
+    })
+
+    # Get bioactivity for new target
+    new = tu.run_one_function({
+        'name': 'ChEMBL_get_bioactivities',
+        'arguments': {
+            'molecule_chembl_id': drug_name,
+            'target_chembl_id': new_target,
+            'limit': 10
+        }
+    })
+
+    # Extract IC50/Ki values and compare
+    # If new target requires >10x concentration → NOT FEASIBLE at safe doses
+    # If new target is within 3x → PROMISING
+    # If new target is within 1x → STRONG candidate
+    pass  # Parse actual values from results
+
+# Alternative: Quick Cmax check
+# If published Cmax at approved dose < IC50 for new target → NOT FEASIBLE
+# Cmax data can be found in:
+#   - DrugBank pharmacology section
+#   - DailyMed clinical pharmacology section
+#   - PubMed PK studies
+```
+
+**Key principle**: The most common reason repurposing fails is insufficient drug exposure at the new target. Always check whether the drug's concentration at approved doses reaches the IC50 for the new target.
+
 ---
 
 ## Troubleshooting

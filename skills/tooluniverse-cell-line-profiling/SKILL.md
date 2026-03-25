@@ -216,6 +216,34 @@ CellMarker_search_by_gene(operation="search_by_gene", gene_symbol="EGFR", specie
 
 **OUTPUT**: Gene validation + mutation status per cell line. Note DepMap portal as source for full dependency data.
 
+**Computational procedure: DepMap dependency from downloaded data**
+
+When the API can't deliver CRISPR scores, download the data directly:
+
+```python
+# DepMap CRISPR dependency analysis for cell line selection
+import pandas as pd
+
+# Download from https://depmap.org/portal/download/all/
+# File: CRISPRGeneEffect.csv (Chronos scores, ~300MB)
+# File: Model.csv (cell line metadata)
+df = pd.read_csv("CRISPRGeneEffect.csv", index_col=0)
+meta = pd.read_csv("Model.csv")
+
+# Find your gene (e.g., KRAS)
+gene_col = [c for c in df.columns if c.startswith("KRAS ")]
+if gene_col:
+    scores = df[gene_col[0]].dropna()
+    # Merge with cell line metadata
+    merged = pd.DataFrame({'score': scores}).join(
+        meta.set_index('ModelID')[['CellLineName', 'OncotreeLineage', 'OncotreePrimaryDisease']]
+    )
+    # Filter to pancreatic
+    panc = merged[merged['OncotreeLineage'] == 'Pancreas']
+    print(panc.sort_values('score')[['CellLineName', 'score']].head(10))
+    # Most negative score = most KRAS-dependent line
+```
+
 ---
 
 ## Phase 4: Drug Sensitivity

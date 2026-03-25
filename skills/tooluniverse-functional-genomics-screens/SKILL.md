@@ -120,6 +120,49 @@ If the user provides a ranked list (e.g., by MAGeCK score or BAGEL BF), preserve
 - Chronos score < -1.0: strongly essential
 - Compare to median across all lines to assess selectivity
 
+**DepMap API limitation and workaround**: The `DepMap_get_gene_dependencies` tool returns gene metadata only (not per-cell-line CRISPR scores). For actual dependency data, use the DepMap data download approach:
+
+```python
+# Computational procedure: DepMap CRISPR dependency analysis
+# Requires: pandas (included in ToolUniverse dependencies)
+import pandas as pd
+
+# Download CRISPRGeneEffect.csv from DepMap portal (one-time setup)
+# https://depmap.org/portal/download/all/ → CRISPR (DepMap Public 24Q4)
+# File: CRISPRGeneEffect.csv (~300MB)
+depmap_url = "https://ndownloader.figshare.com/files/XXXXX"  # check depmap.org for current URL
+
+# Load and query
+df = pd.read_csv("CRISPRGeneEffect.csv", index_col=0)
+# Columns are "GENE (ENTREZ_ID)" format, e.g., "SOD1 (6647)"
+# Rows are DepMap model IDs, e.g., "ACH-000001"
+
+# Find your gene
+gene_col = [c for c in df.columns if c.startswith("PTPN11 ")]  # SHP2
+if gene_col:
+    scores = df[gene_col[0]].dropna()
+
+    # Selective essentiality analysis
+    median_score = scores.median()
+    # Load cell line metadata to filter by lineage
+    meta = pd.read_csv("Model.csv")  # from same DepMap download
+    lung_ids = meta[meta['OncotreeLineage'] == 'Lung']['ModelID']
+
+    lung_scores = scores[scores.index.isin(lung_ids)]
+    other_scores = scores[~scores.index.isin(lung_ids)]
+
+    print(f"Median (all): {median_score:.3f}")
+    print(f"Median (lung): {lung_scores.median():.3f}")
+    print(f"Median (other): {other_scores.median():.3f}")
+
+    # Selectivity = difference between lineage and pan-cancer
+    from scipy.stats import mannwhitneyu
+    stat, pval = mannwhitneyu(lung_scores, other_scores, alternative='less')
+    print(f"Selective in lung? p={pval:.2e}")
+```
+
+This procedure replaces the broken API call and delivers the actual selectivity analysis the skill needs. If DepMap CSV is not available locally, note the gap and rely on literature + gnomAD constraint for scoring.
+
 ### Phase 2: Pathway & Network Context
 
 **Objective**: Identify convergent biological themes in the hit list.

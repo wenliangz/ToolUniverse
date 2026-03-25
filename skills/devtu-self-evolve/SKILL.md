@@ -99,6 +99,39 @@ python3 -m tooluniverse.cli run <ToolName> '<json_args>'
 
 Anti-patterns: hint text instead of validation, parameter aliases instead of fixing naming, post-hoc probing instead of pre-validation.
 
+### Skill Usefulness Testing (NEW — beyond tool testing)
+
+Standard testing verifies tools work. Usefulness testing verifies skills actually solve scientist problems. Run this after standard testing:
+
+1. **Pick a real research question** that the skill claims to answer (not a tool-level test)
+2. **Launch an agent** following the skill workflow on the real question
+3. **Assess honestly**: Does the skill produce an actionable answer, or just a data dump?
+
+**Score 1-10 rubric**:
+- 1-3: Tool catalog — lists tools without interpretation
+- 4-6: Data collector — gathers data but doesn't help combine/interpret
+- 7-8: Reasoning framework — guides interpretation with tables/scoring/synthesis
+- 9-10: Decision engine — produces concrete, defensible recommendations
+
+**Common failure patterns found in usefulness tests**:
+
+| Pattern | Score Impact | Fix |
+|---------|-------------|-----|
+| "Call A, then B, then C" without explaining what to DO with results | -3 | Add interpretation tables |
+| Tool params wrong (tool works but skill documents wrong names) | -2 | Verify ALL tool params via `get_tool_info()` |
+| Promises data the API can't deliver (e.g., DepMap CRISPR scores) | -2 | Be honest about limitations; add computational procedure workaround |
+| No synthesis phase at the end | -2 | Add "so what?" phase that combines all evidence |
+| No evidence grading | -1 | Add T1-T4 or similar confidence tiers |
+| No computational procedures for things tools can't do | -1 | Add Python code blocks using scipy/pandas/numpy |
+
+**When tools can't help, add computational procedures**: Some analyses need Python code, not API calls. Skills should include working code blocks for:
+- Statistical testing (scipy.stats, FDR correction)
+- Data analysis from downloaded files (pandas + CSV from DepMap, TCGA, etc.)
+- Scoring algorithms (ACMG classification, viability scores)
+- Sequence analysis (Biopython)
+
+See `devtu-optimize-skills` Patterns 14-15 for full guidance.
+
 ## Phase 4: Fix & Commit
 
 1. Implement verified fixes (see [references/bug-patterns.md](references/bug-patterns.md) for code-level patterns)

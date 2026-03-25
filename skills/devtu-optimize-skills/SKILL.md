@@ -59,6 +59,68 @@ Full details: [references/testing-standards.md](references/testing-standards.md)
 - Distinguish transient errors (retry) from real bugs (fix)
 - API docs are often wrong — always verify with actual calls
 
+## Pattern 14: Reasoning Frameworks Over Tool Catalogs (CRITICAL)
+
+Skills that just list tools ("call A, then B, then C") score 3-5/10 in usefulness tests. Skills that explain HOW to interpret and combine data score 7-9/10. Every skill MUST include:
+
+### 14a. Interpretation Tables
+Map raw API data to biological/clinical meaning. Don't just retrieve — explain.
+
+| Bad (tool catalog) | Good (reasoning framework) |
+|---|---|
+| "Get GO terms from MGnify" | GO terms → interpretation table: butyrate genes = barrier integrity, LPS genes = inflammation |
+| "Get DepMap dependency scores" | Score < -0.5 = essential, but pan-essential = bad drug target (toxicity); selective = good target |
+| "Get FAERS counts" | PRR > 5 = strong signal, but signal ≠ causation (channeling bias, notoriety bias) |
+
+### 14b. Synthesis Phases
+Every multi-phase skill needs a final phase that answers "so what?" — not just collecting data:
+- "What changed and why does it matter?"
+- "Is this cause or consequence?"
+- "What's the actionable recommendation?"
+
+### 14c. Honest Limitations
+If a tool API can't deliver what the skill promises, say so explicitly. Don't describe aspirational capabilities. Example: "DepMap_get_gene_dependencies returns gene metadata only, NOT per-cell-line CRISPR scores."
+
+## Pattern 15: Computational Procedures When Tools Can't Help
+
+Some scientific analyses require computation, not just API queries. When no tool exists for a capability, embed a Python code procedure directly in the skill using packages available in ToolUniverse (pandas, scipy, numpy, statsmodels, biopython, networkx).
+
+### When to use computational procedures:
+| Gap | Procedure | Packages |
+|-----|-----------|----------|
+| API doesn't return needed data (e.g., DepMap scores) | Download CSV + pandas analysis | pandas |
+| Statistical testing (differential abundance, enrichment) | scipy.stats + FDR correction | scipy, statsmodels |
+| Sequence analysis (alignment, conservation) | Biopython SeqIO + pairwise alignment | biopython |
+| Chemical similarity (analog search, fingerprints) | RDKit fingerprints + Tanimoto | rdkit (visualization extra) |
+| Network analysis (hub genes, clustering) | NetworkX graph metrics | networkx |
+| Scoring algorithms (ACMG classification, viability scores) | Custom Python functions | built-in |
+| Dose feasibility (Cmax vs IC50 comparison) | Numerical comparison + PK data | pandas, numpy |
+
+### Template for computational procedures in skills:
+```markdown
+**Computational procedure: [Name]**
+[When to use this: explain the gap it fills]
+
+\`\`\`python
+# [What this computes]
+# Requires: [packages] (included in ToolUniverse dependencies)
+import pandas as pd
+from scipy.stats import mannwhitneyu
+
+# Input: [describe expected input format]
+# Output: [describe output]
+# [Full working code with example data]
+\`\`\`
+
+[Interpretation guidance for the output]
+```
+
+### Key rules for computational procedures:
+1. **Only use packages in ToolUniverse dependencies** (pyproject.toml): pandas, scipy, numpy, networkx, requests, biopython (optional extra)
+2. **Include example data** so the procedure is immediately testable
+3. **Explain the output** — a code block without interpretation is useless
+4. **Note when external data download is needed** (e.g., DepMap CSV from depmap.org)
+
 ## Common Anti-Patterns
 
 | Anti-Pattern | Fix |
@@ -73,6 +135,9 @@ Full details: [references/testing-standards.md](references/testing-standards.md)
 | GTEx returns nothing | Try versioned ID `ENSG*.version` |
 | No foundation layer | Query aggregator first |
 | Untested tool calls | Test-driven: test script FIRST |
+| **Tool catalog without interpretation** | **Add interpretation tables explaining what data means** |
+| **Aspirational capabilities** | **Be honest when APIs can't deliver; add computational procedure instead** |
+| **Missing statistical analysis** | **Add scipy/pandas code procedure for computation the tools can't do** |
 
 ## Quick Fixes for User Complaints
 

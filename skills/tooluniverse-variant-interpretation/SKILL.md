@@ -157,6 +157,76 @@ Modern clinical labs use a point-based system instead of the original rule-count
 
 This system handles conflicting evidence naturally — a variant with PS3 (+4) and BS1 (-4) and BP4 (-1) nets -1, which is VUS. The original rule-based approach struggles with this scenario.
 
+**Computational procedure: ACMG Bayesian classification**
+
+```python
+# Automated ACMG point calculation
+# Input: dict of evidence codes with their applied strength
+
+def classify_acmg(evidence: dict) -> dict:
+    """
+    Classify a variant using the Bayesian ACMG point system.
+
+    Args:
+        evidence: dict mapping ACMG codes to strength levels.
+            Pathogenic codes: 'very_strong', 'strong', 'moderate', 'supporting'
+            Benign codes: 'stand_alone', 'strong', 'supporting'
+
+    Example:
+        evidence = {
+            'BS1': 'strong',       # AF too high
+            'BS3': 'supporting',   # Epidemiological evidence against pathogenicity
+            'BP6': 'supporting',   # ClinVar benign consensus
+            'PP3': 'supporting',   # Computational predictors say damaging
+        }
+    """
+    pathogenic_points = {
+        'very_strong': 8, 'strong': 4, 'moderate': 2, 'supporting': 1
+    }
+    benign_points = {
+        'stand_alone': -8, 'strong': -4, 'supporting': -1
+    }
+
+    total = 0
+    details = []
+    for code, strength in evidence.items():
+        if code.startswith(('PVS', 'PS', 'PM', 'PP')):
+            pts = pathogenic_points.get(strength, 0)
+        elif code.startswith(('BA', 'BS', 'BP')):
+            pts = benign_points.get(strength, 0)
+        else:
+            pts = 0
+        total += pts
+        details.append(f"{code} ({strength}): {pts:+d}")
+
+    if total >= 10:
+        classification = "Pathogenic"
+    elif 6 <= total <= 9:
+        classification = "Likely Pathogenic"
+    elif -5 <= total <= 5:
+        classification = "VUS"
+    elif -9 <= total <= -6:
+        classification = "Likely Benign"
+    else:
+        classification = "Benign"
+
+    return {
+        'classification': classification,
+        'total_points': total,
+        'evidence_breakdown': details
+    }
+
+# Example: PALB2 c.2816T>G (from test case)
+result = classify_acmg({
+    'BS1': 'strong',       # gnomAD AF 0.00105 exceeds threshold
+    'BS3': 'supporting',   # Case-control study shows no association
+    'BP6': 'supporting',   # ClinVar 13 submitters say benign/likely benign
+})
+# Output: Likely Benign, total_points=-6, evidence: BS1(strong):-4, BS3(supporting):-1, BP6(supporting):-1
+```
+
+Use this procedure after collecting all evidence from Phases 1-5 to compute the final classification.
+
 ### Gene-Specific VCEP Criteria
 
 ClinGen Variant Curation Expert Panels (VCEPs) publish gene-specific ACMG modifications. Before classifying, check if a VCEP exists:
