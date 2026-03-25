@@ -130,7 +130,7 @@ If the query is ambiguous, clarify before proceeding. A species name might match
   - Input: `taxon` (e.g., "g__Bacteroides")
   - Output: rank, parent lineage, child taxa, genome count
 - `GTDB_search_taxon` -- search for taxa by partial name
-  - Input: `query` (partial name), optional `rank`
+  - Input: `operation="search_taxon"` (REQUIRED), `query` (partial name), optional `rank`
   - Output: matching taxa with lineage
 
 **Workflow**:

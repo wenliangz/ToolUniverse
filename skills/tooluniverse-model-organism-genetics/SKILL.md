@@ -111,6 +111,11 @@ When automated ortholog mapping misses a hit (common for distant orthologs like 
 - **No ortholog found by tools**: Try manual search (step 3-4 above) before concluding absence. Sequence divergence ≠ functional divergence — a gene can have a conserved role despite low sequence identity
 - **True absence**: Gene may be lineage-specific (e.g., adaptive immunity genes absent in invertebrates)
 
+**Paralog contamination warning**: Gene families (e.g., FOXP1/FOXP2/FOXP3/FOXP4, or HOX clusters) generate false ortholog hits. To distinguish true orthologs from paralogs:
+- Check synteny (conserved gene order in the genome neighborhood)
+- Verify the ortholog mapping is 1:1 (paralogs show 1:many or many:many)
+- If the target species has a single gene in the family (e.g., Drosophila has one FoxP vs four human FOXPs), it is the co-ortholog of all human paralogs — note this explicitly
+
 ---
 
 ### Phase 2: Mouse Phenotypes (MGI)
