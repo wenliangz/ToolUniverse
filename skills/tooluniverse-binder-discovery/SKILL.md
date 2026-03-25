@@ -119,9 +119,9 @@ tool_info = tu.tools.get_tool_info(tool_name="ChEMBL_get_target_activities")
 | Tool | WRONG Parameter | CORRECT Parameter |
 |------|-----------------|-------------------|
 | `OpenTargets_*` | `ensembl_id` | `ensemblId` (camelCase) |
-| `ChEMBL_get_target_activities` | `chembl_target_id` | `target_chembl_id` |
+| `ChEMBL_get_target_activities` | `target_chembl_id` | `target_chembl_id__exact` |
 | `ChEMBL_search_similar_molecules` | `smiles` | `molecule` (accepts SMILES, ChEMBL ID, or name) |
-| `alphafold_get_prediction` | `uniprot` | `accession` |
+| `alphafold_get_prediction` | `uniprot` | `qualifier` |
 | `ADMETAI_*` | `smiles="..."` | `smiles=["..."]` (must be list) |
 | `NvidiaNIM_alphafold2` | `seq` | `sequence` |
 | `NvidiaNIM_genmol` | `smiles="C..."` | `smiles="C...[*{1-3}]..."` (must have mask) |
@@ -177,7 +177,7 @@ Always report pLDDT confidence scores (>=90 very high, 70-90 confident, <70 caut
 |--------|------|-----------|
 | ChEMBL | `ChEMBL_get_target_activities` | Curated, SAR-ready |
 | BindingDB | `BindingDB_get_ligands_by_uniprot` | Direct Ki/Kd, literature links |
-| GtoPdb | `GtoPdb_get_target_interactions` | Pharmacology focus (GPCRs, channels) |
+| GtoPdb | `GtoPdb_search_ligands` | Pharmacology focus (GPCRs, channels) |
 | PubChem | `PubChem_search_assays_by_target_gene` | HTS screens, novel scaffolds |
 | Open Targets | `OpenTargets_get_chemical_probes_by_target_ensemblID` | Validated probes |
 
@@ -200,7 +200,7 @@ Always report pLDDT confidence scores (>=90 very high, 70-90 confident, <70 caut
 - `get_binding_affinity_by_pdb_id(pdb_id)` - co-crystal ligand affinities
 - `get_ligand_smiles_by_chem_comp_id(chem_comp_id)` - ligand SMILES from PDB
 - `emdb_search(query)` - cryo-EM structures (prefer for GPCRs, ion channels)
-- `alphafold_get_prediction(accession)` - AlphaFold DB fallback
+- `alphafold_get_prediction(qualifier)` - AlphaFold DB fallback
 
 ### Phase 3.5: Docking Validation (NVIDIA NIM)
 
